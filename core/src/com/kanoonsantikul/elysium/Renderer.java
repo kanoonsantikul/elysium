@@ -20,19 +20,29 @@ public class Renderer{
 
         batcher.begin();
         renderBoard();
+        renderCharacter();
         batcher.end();
     }
 
     private void renderBoard(){
-        Tile[][] tiles = world.getTiles();
+        Tile[] tiles = world.getTiles();
         Tile tile;
         for(int i=0; i<(World.BOARD_SIZE * World.BOARD_SIZE); i++){
-            tile = tiles[i / World.BOARD_SIZE][i % World.BOARD_SIZE];
+            tile = tiles[i];
             batcher.draw(Assets.tile,
-                    tile.getX(),
-                    tile.getY(),
+                    tile.getPosition().x,
+                    tile.getPosition().y,
                     Tile.WIDTH,
                     Tile.HEIGHT);
         }
+    }
+
+    private void renderCharacter(){
+        Character character = world.getCharacter();
+        batcher.draw(Assets.character,
+                character.getPosition().x,
+                character.getPosition().y,
+                Character.WIDTH,
+                Character.HEIGHT);
     }
 }
