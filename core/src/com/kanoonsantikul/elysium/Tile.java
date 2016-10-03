@@ -1,38 +1,24 @@
 package com.kanoonsantikul.elysium;
 
-public class Tile{
-    public static final float WIDTH = Assets.tile.getWidth() * World.DEVICE_RATIO;
-    public static final float HEIGHT = Assets.tile.getHeight() * World.DEVICE_RATIO;
+import com.badlogic.gdx.math.Vector2;
 
-    private float x;
-    private float y;
+public class Tile extends GameObject{
+    public static float WIDTH = Assets.tile.getWidth() * World.DEVICE_RATIO;
+    public static float HEIGHT = Assets.tile.getHeight() * World.DEVICE_RATIO;
 
     public Tile(float x, float y){
-        setX(x);
-        setY(y);
+        setPosition(new Vector2(x, y));
     }
 
-    public void setX(float x){
-        this.x = x;
+    public Tile(Vector2 position){
+        setPosition(position);
     }
 
-    public float getX(){
-        return x;
+    public float getWidth(){
+        return WIDTH;
     }
 
-    public void setY(float y){
-        this.y = y;
-    }
-
-    public float getY(){
-        return y;
-    }
-
-    public float getCenterX(){
-        return x += WIDTH/2;
-    }
-
-    public float getCenterY(){
-        return y += HEIGHT/2;
+    public float getHeight(){
+        return HEIGHT;
     }
 }
