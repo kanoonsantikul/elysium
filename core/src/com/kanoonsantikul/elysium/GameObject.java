@@ -27,4 +27,12 @@ public abstract class GameObject{
         float y = position.y - getHeight()/2;
         setPosition(new Vector2(x, y));
     }
+
+    public boolean isInBound(float x, float y){
+        if(x >= position.x && x <= position.x + getWidth()
+                && y >= position.y && y <= position.y + getHeight()){
+            return true;
+        }
+        return false;
+    }
 }
