@@ -13,7 +13,7 @@ public abstract class GameObject{
     }
 
     public Vector2 getPosition(){
-        return this.position;
+        return new Vector2(position);
     }
 
     public Vector2 getCenter(){
