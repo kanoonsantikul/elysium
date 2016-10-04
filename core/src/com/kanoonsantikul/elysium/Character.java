@@ -3,8 +3,8 @@ package com.kanoonsantikul.elysium;
 import com.badlogic.gdx.math.Vector2;
 
 public class Character extends GameObject{
-    public static float WIDTH = Assets.character.getWidth() * World.DEVICE_RATIO;
-    public static float HEIGHT = Assets.character.getHeight() * World.DEVICE_RATIO;
+    public static final float WIDTH = Assets.character.getWidth() * World.DEVICE_RATIO;
+    public static final float HEIGHT = Assets.character.getHeight() * World.DEVICE_RATIO;
 
     public Character(float x, float y){
         new Character(new Vector2(x, y));
@@ -14,11 +14,11 @@ public class Character extends GameObject{
         setCenter(position);
     }
 
-    public float getWidth(){
+    public static float getWidth(){
         return WIDTH;
     }
 
-    public float getHeight(){
+    public static float getHeight(){
         return HEIGHT;
     }
 }

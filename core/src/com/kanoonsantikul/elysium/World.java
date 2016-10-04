@@ -1,9 +1,12 @@
 package com.kanoonsantikul.elysium;
 
+import com.badlogic.gdx.utils.Queue;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.Gdx;
 
-public class World{
+public class World implements InputHandler.InputListener{
     public static final float DEVICE_RATIO = 0.7f;
 
     private Tile[] tiles;
@@ -13,11 +16,29 @@ public class World{
 
     private Character character;
 
+    private Array<GameObject> gameObjects;
+
+    private Queue<Action> actionQueue;
+
     public World(){
         tiles = new Tile[BOARD_SIZE * BOARD_SIZE];
         createBoard();
 
         character = new Character(tiles[0].getCenter());
+
+        gameObjects = new Array<GameObject>();
+        gameObjects.add(character);
+        gameObjects.addAll(tiles);
+
+        actionQueue = new Queue();
+    }
+
+    @Override
+    public void onClicked(float x, float y){
+        GameObject object = getObjectAt(x, y);
+        if(object != null){
+            Gdx.app.log("log", object.toString());
+        }
     }
 
     public Tile[] getTiles(){
@@ -26,6 +47,16 @@ public class World{
 
     public Character getCharacter(){
         return character;
+    }
+
+    public GameObject getObjectAt(float x, float y){
+        for(int i=0; i<gameObjects.size; i++){
+            if(gameObjects.get(i).isInBound(x, y)){
+                return gameObjects.get(i);
+            }
+        }
+
+        return null;
     }
 
     private void createBoard(){
