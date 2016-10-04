@@ -14,11 +14,11 @@ public class Character extends GameObject{
         setCenter(position);
     }
 
-    public static float getWidth(){
+    public float getWidth(){
         return WIDTH;
     }
 
-    public static float getHeight(){
+    public float getHeight(){
         return HEIGHT;
     }
 }
