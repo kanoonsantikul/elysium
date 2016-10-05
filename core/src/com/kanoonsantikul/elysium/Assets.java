@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 
 public class Assets{
     public static Texture tile;
+    public static Texture alphaTile;
     public static Texture character;
 
     public static Texture loadTexture (String file) {
@@ -13,6 +14,7 @@ public class Assets{
 
     public static void load(){
         tile = loadTexture("tile.png");
+        alphaTile = loadTexture("alpha-tile.png");
         character = loadTexture("character.png");
     }
 }

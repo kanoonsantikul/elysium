@@ -1,5 +1,8 @@
 package com.kanoonsantikul.elysium;
 
+import java.util.List;
+import java.util.LinkedList;
+
 import com.badlogic.gdx.utils.Queue;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.graphics.Texture;
@@ -9,16 +12,18 @@ import com.badlogic.gdx.Gdx;
 public class World implements InputHandler.InputListener{
     public static final float DEVICE_RATIO = 0.7f;
 
-    private Tile[] tiles;
     public static final int BOARD_SIZE = 7;
     public static final int BOARD_X_INIT = 9;
     public static final int BOARD_Y_INIT = 150;
+    private Tile[] tiles;
 
     private Character character;
 
     private Array<GameObject> gameObjects;
 
     private Queue<Action> actionQueue;
+    private LinkedList<Tile> pathTracker;
+    private Character activeCharacter;
 
     public World(){
         tiles = new Tile[BOARD_SIZE * BOARD_SIZE];
@@ -30,23 +35,42 @@ public class World implements InputHandler.InputListener{
         gameObjects.add(character);
         gameObjects.addAll(tiles);
 
-        actionQueue = new Queue();
+        actionQueue = new Queue<Action>();
+        pathTracker = new LinkedList<Tile>();
     }
 
     @Override
     public void onClicked(float x, float y){
+    }
+
+    @Override
+    public void onDragStart(float x, float y){
         GameObject object = getObjectAt(x, y);
         if(object != null){
-            Gdx.app.log("log", object.toString());
+            if(object instanceof Character){
+                activeCharacter = (Character)object;
+            }
         }
     }
 
-    public Tile[] getTiles(){
-        return tiles;
+    @Override
+    public void onDragEnd(float x, float y){
+        if(activeCharacter != null){
+            //move
+        }
+
+        activeCharacter = null;
+        pathTracker.clear();
     }
 
-    public Character getCharacter(){
-        return character;
+    @Override
+    public void onDragged(float x, float y){
+        GameObject object = getObjectAt(x, y);
+        if(object != null){
+            if(activeCharacter != null && object instanceof Tile){
+                updatePath((Tile)object);
+            }
+        }
     }
 
     public GameObject getObjectAt(float x, float y){
@@ -57,6 +81,43 @@ public class World implements InputHandler.InputListener{
         }
 
         return null;
+    }
+
+    public Tile[] getTiles(){
+        return tiles;
+    }
+
+    public Tile getTile(int row, int collum){
+        return getTile(row * BOARD_SIZE + collum);
+    }
+
+    public Tile getTile(int number){
+        return tiles[number];
+    }
+
+    public Character getCharacter(){
+        return character;
+    }
+
+    public LinkedList<Tile> getPathTracker(){
+        return pathTracker;
+    }
+
+    private void updatePath(Tile tile){
+        if(!pathTracker.contains(tile)){
+            if(pathTracker.size() == 0 ||
+                    pathTracker.getLast().getNeighbors(this, false).contains(tile))
+            pathTracker.add(tile);
+        } else{
+            int listPosition = pathTracker.indexOf(tile);
+            List subPath = pathTracker.subList(0, listPosition + 1);
+            pathTracker = new LinkedList(subPath);
+        }
+
+        // String log ="";
+        // for(int i=0;i<pathTracker.size();i++)
+        //     log += pathTracker.get(i).hashCode() + " ";
+        // Gdx.app.log("",log);
     }
 
     private void createBoard(){
@@ -70,7 +131,7 @@ public class World implements InputHandler.InputListener{
                 y = BOARD_Y_INIT + Tile.HEIGHT * (i / BOARD_SIZE);
             }
             x = BOARD_X_INIT + Tile.WIDTH * (i % BOARD_SIZE);
-            tiles[i] = new Tile(x, y);
+            tiles[i] = new Tile(x, y, i);
         }
     }
 }
