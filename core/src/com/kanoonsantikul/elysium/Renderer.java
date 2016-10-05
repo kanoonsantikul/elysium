@@ -1,5 +1,7 @@
 package com.kanoonsantikul.elysium;
 
+import java.util.LinkedList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -20,6 +22,7 @@ public class Renderer{
 
         batcher.begin();
         renderBoard();
+        renderPathTracker();
         renderCharacter();
         batcher.end();
     }
@@ -32,6 +35,19 @@ public class Renderer{
             batcher.draw(Assets.tile,
                     tile.getPosition().x,
                     tile.getPosition().y,
+                    Tile.WIDTH,
+                    Tile.HEIGHT);
+        }
+    }
+
+    private void renderPathTracker(){
+        LinkedList<Tile> pathTracker = world.getPathTracker();
+        Tile alphaTile;
+        for(int i=0 ;i<pathTracker.size(); i++){
+            alphaTile = pathTracker.get(i);
+            batcher.draw(Assets.alphaTile,
+                    alphaTile.getPosition().x,
+                    alphaTile.getPosition().y,
                     Tile.WIDTH,
                     Tile.HEIGHT);
         }

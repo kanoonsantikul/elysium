@@ -7,6 +7,5 @@ public class MoveAction extends Action{
 
     @Override
     public void act(){
-        
     }
 }
