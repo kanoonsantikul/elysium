@@ -45,6 +45,8 @@ public class World implements InputHandler.InputListener{
 
     @Override
     public void onDragStart(float x, float y){
+        pathTracker.clear();
+
         GameObject object = getObjectAt(x, y);
         if(object != null){
             if(object instanceof Character){
@@ -56,11 +58,11 @@ public class World implements InputHandler.InputListener{
     @Override
     public void onDragEnd(float x, float y){
         if(activeCharacter != null){
-            //move
+            actionQueue.addLast(
+                    new MoveAction(activeCharacter, pathTracker));
         }
 
         activeCharacter = null;
-        pathTracker.clear();
     }
 
     @Override
@@ -71,6 +73,10 @@ public class World implements InputHandler.InputListener{
                 updatePath((Tile)object);
             }
         }
+    }
+
+    public void act(){
+        updateActionQueue();
     }
 
     public GameObject getObjectAt(float x, float y){
@@ -101,6 +107,17 @@ public class World implements InputHandler.InputListener{
 
     public LinkedList<Tile> getPathTracker(){
         return pathTracker;
+    }
+
+    private void updateActionQueue(){
+        if(actionQueue.size > 0){
+            Action action = actionQueue.first();
+            if(action.isActed()){
+                actionQueue.removeFirst();
+            } else{
+                action.act();
+            }
+        }
     }
 
     private void updatePath(Tile tile){
