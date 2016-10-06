@@ -10,20 +10,21 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.Gdx;
 
 public class World implements InputHandler.InputListener{
-    public static final float DEVICE_RATIO = 0.7f;
-
     public static final int BOARD_SIZE = 7;
     public static final int BOARD_X_INIT = 9;
     public static final int BOARD_Y_INIT = 150;
-    private Tile[] tiles;
+    public Tile[] tiles;
 
-    private Character character;
+    public Character character;
+
+    public EndTurnButton endTurnButton;
+    public CardBar cardBar;
+
+    public LinkedList<Tile> pathTracker;
+    private Character activeCharacter;
+    private Queue<Action> actionQueue;
 
     private Array<GameObject> gameObjects;
-
-    private Queue<Action> actionQueue;
-    private LinkedList<Tile> pathTracker;
-    private Character activeCharacter;
 
     public World(){
         tiles = new Tile[BOARD_SIZE * BOARD_SIZE];
@@ -31,9 +32,13 @@ public class World implements InputHandler.InputListener{
 
         character = new Character(tiles[0].getCenter());
 
+        endTurnButton = new EndTurnButton(true);
+        cardBar = new CardBar(true);
+
         gameObjects = new Array<GameObject>();
         gameObjects.add(character);
         gameObjects.addAll(tiles);
+        gameObjects.add(endTurnButton);
 
         actionQueue = new Queue<Action>();
         pathTracker = new LinkedList<Tile>();
@@ -41,6 +46,10 @@ public class World implements InputHandler.InputListener{
 
     @Override
     public void onClicked(float x, float y){
+        GameObject object = getObjectAt(x, y);
+        if(object instanceof EndTurnButton){
+
+        }
     }
 
     @Override
@@ -75,10 +84,6 @@ public class World implements InputHandler.InputListener{
         }
     }
 
-    public void act(){
-        updateActionQueue();
-    }
-
     public GameObject getObjectAt(float x, float y){
         for(int i=0; i<gameObjects.size; i++){
             if(gameObjects.get(i).isInBound(x, y)){
@@ -89,24 +94,12 @@ public class World implements InputHandler.InputListener{
         return null;
     }
 
-    public Tile[] getTiles(){
-        return tiles;
+    public void update(){
+        updateActionQueue();
     }
 
     public Tile getTile(int row, int collum){
-        return getTile(row * BOARD_SIZE + collum);
-    }
-
-    public Tile getTile(int number){
-        return tiles[number];
-    }
-
-    public Character getCharacter(){
-        return character;
-    }
-
-    public LinkedList<Tile> getPathTracker(){
-        return pathTracker;
+        return tiles[row * BOARD_SIZE + collum];
     }
 
     private void updateActionQueue(){

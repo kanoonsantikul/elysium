@@ -7,8 +7,8 @@ public class InputHandler extends GestureDetector{
     private boolean isDragged = false;
 
     public interface InputListener{
-        public void onClicked(float x, float y);
         public void onDragStart(float x, float y);
+        public void onClicked(float x, float y);
         public void onDragEnd(float x, float y);
         public void onDragged(float x, float y);
     }
@@ -32,7 +32,7 @@ public class InputHandler extends GestureDetector{
             }
         } else{
             isDragged = false;
-            listener.onDragEnd(x, flipAxis(y));
+            listener.onDragEnd(x, y);
         }
         return true;
     }

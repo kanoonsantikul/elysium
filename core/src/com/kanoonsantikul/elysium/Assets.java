@@ -6,7 +6,10 @@ import com.badlogic.gdx.graphics.Texture;
 public class Assets{
     public static Texture tile;
     public static Texture alphaTile;
-    public static Texture character;
+    public static Texture player1;
+    public static Texture player2;
+    public static Texture endTurnButton;
+    public static Texture cardBar;
 
     public static Texture loadTexture (String file) {
 		return new Texture(Gdx.files.internal(file));
@@ -15,6 +18,9 @@ public class Assets{
     public static void load(){
         tile = loadTexture("tile.png");
         alphaTile = loadTexture("alpha-tile.png");
-        character = loadTexture("character.png");
+        player1 = loadTexture("player1.png");
+        player2 = loadTexture("player2.png");
+        endTurnButton = loadTexture("end-turn-button.png");
+        cardBar = loadTexture("card-bar.png");
     }
 }
