@@ -1,14 +1,13 @@
 package com.kanoonsantikul.elysium;
 
 public class Action{
-    private GameObject actor;
-    private GameObject target;
+    protected GameObject actor;
 
-    private boolean acted;
+    protected boolean acted;
 
-    public Action(GameObject actor, GameObject target){
+    public Action(GameObject actor){
         this.actor = actor;
-        this.target = target;
+        setActed(false);
     }
 
     public void act(){
@@ -16,5 +15,9 @@ public class Action{
 
     public void setActed(boolean acted){
         this.acted = acted;
+    }
+
+    public boolean isActed(){
+        return acted;
     }
 }
