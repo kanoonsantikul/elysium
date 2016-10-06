@@ -5,8 +5,8 @@ import java.util.LinkedList;
 import com.badlogic.gdx.math.Vector2;
 
 public class Tile extends GameObject{
-    public static final float WIDTH = Assets.tile.getWidth() * World.DEVICE_RATIO;
-    public static final float HEIGHT = Assets.tile.getHeight() * World.DEVICE_RATIO;
+    public static final float WIDTH = Assets.tile.getWidth() * Elysium.DEVICE_RATIO;
+    public static final float HEIGHT = Assets.tile.getHeight() * Elysium.DEVICE_RATIO;
 
     private int number;
 

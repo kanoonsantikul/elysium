@@ -10,7 +10,10 @@ public class AndroidLauncher extends AndroidApplication {
 	@Override
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
+		config.hideStatusBar = true;
+
 		initialize(new Elysium(), config);
 	}
 }

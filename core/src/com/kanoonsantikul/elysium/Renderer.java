@@ -22,13 +22,32 @@ public class Renderer{
 
         batcher.begin();
         renderBoard();
-        renderPathTracker();
-        renderCharacter();
+        renderUI();
         batcher.end();
     }
 
     private void renderBoard(){
-        Tile[] tiles = world.getTiles();
+        renderTiles();
+        renderPathTracker();
+        renderCharacter();
+    }
+
+    private void renderUI(){
+        batcher.draw(Assets.cardBar,
+                world.cardBar.getPosition().x,
+                world.cardBar.getPosition().y,
+                CardBar.WIDTH,
+                CardBar.HEIGHT);
+
+        batcher.draw(Assets.endTurnButton,
+                world.endTurnButton.getPosition().x,
+                world.endTurnButton.getPosition().y,
+                EndTurnButton.WIDTH,
+                EndTurnButton.HEIGHT);
+    }
+
+    private void renderTiles(){
+        Tile[] tiles = world.tiles;
         Tile tile;
         for(int i=0; i<(World.BOARD_SIZE * World.BOARD_SIZE); i++){
             tile = tiles[i];
@@ -41,7 +60,7 @@ public class Renderer{
     }
 
     private void renderPathTracker(){
-        LinkedList<Tile> pathTracker = world.getPathTracker();
+        LinkedList<Tile> pathTracker = world.pathTracker;
         Tile alphaTile;
         for(int i=0 ;i<pathTracker.size(); i++){
             alphaTile = pathTracker.get(i);
@@ -54,8 +73,8 @@ public class Renderer{
     }
 
     private void renderCharacter(){
-        Character character = world.getCharacter();
-        batcher.draw(Assets.character,
+        Character character = world.character;
+        batcher.draw(Assets.player1,
                 character.getPosition().x,
                 character.getPosition().y,
                 Character.WIDTH,

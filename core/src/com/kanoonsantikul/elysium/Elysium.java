@@ -3,8 +3,10 @@ package com.kanoonsantikul.elysium;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.Application.ApplicationType;
 
 public class Elysium extends Game {
+	public static float DEVICE_RATIO;
 	public static int WIDTH;
 	public static int HEIGHT;
 
@@ -12,8 +14,9 @@ public class Elysium extends Game {
 
 	@Override
 	public void create () {
-			WIDTH = Gdx.graphics.getWidth();
-			HEIGHT = Gdx.graphics.getHeight();
+		DEVICE_RATIO = getDeviceRatio();
+		WIDTH = Gdx.graphics.getWidth();
+		HEIGHT = Gdx.graphics.getHeight();
 
 		batcher = new SpriteBatch();
 
@@ -33,4 +36,15 @@ public class Elysium extends Game {
 	public void dispose () {
 		batcher.dispose();
 	}
+
+	public float getDeviceRatio(){
+		ApplicationType type = Gdx.app.getType();
+		if(type == ApplicationType.Android){
+			return 1f;
+		} else if(type == ApplicationType.Desktop){
+			return 0.35f;
+		}
+		return 0f;
+	}
+
 }
