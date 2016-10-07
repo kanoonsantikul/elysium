@@ -23,19 +23,17 @@ public class MoveAction extends Action{
     public void act(){
         if(paths.size() > 0){
             if(currentTargetPosition == null){
-                prepareNextMove();
-            } else{
-                if(!move()){
-                    currentTargetPosition = null;
-                    paths.poll();
-                }
+                changeDirection();
+            } else if(!move()){
+                currentTargetPosition = null;
+                paths.poll();
             }
         } else{
             setActed(true);
         }
     }
 
-    private void prepareNextMove(){
+    private void changeDirection(){
         currentTargetPosition = paths.peek().getCenter();
         speedX = SPEED;
         speedY = SPEED;
@@ -48,20 +46,30 @@ public class MoveAction extends Action{
     }
 
     private boolean move(){
-        boolean reachedX = !((speedX > 0 && actor.getCenter().x < currentTargetPosition.x) ||
+        boolean reachedX = !(
+                (speedX > 0 && actor.getCenter().x < currentTargetPosition.x) ||
                 (speedX < 0 && actor.getCenter().x > currentTargetPosition.x));
-        boolean reachedY = !((speedY > 0 && actor.getCenter().y < currentTargetPosition.y) ||
+        boolean reachedY = !(
+                (speedY > 0 && actor.getCenter().y < currentTargetPosition.y) ||
                 (speedY < 0 && actor.getCenter().y > currentTargetPosition.y));
 
         if(!reachedX){
-            actor.setCenter(new Vector2(actor.getCenter().x + speedX, actor.getCenter().y));
+            actor.setCenter(new Vector2(
+                    actor.getCenter().x + speedX,
+                    actor.getCenter().y));
         } else{
-            actor.setCenter(new Vector2(currentTargetPosition.x, actor.getCenter().y));
+            actor.setCenter(new Vector2(
+                    currentTargetPosition.x,
+                    actor.getCenter().y));
         }
         if(!reachedY){
-            actor.setCenter(new Vector2(actor.getCenter().x, actor.getCenter().y + speedY));
+            actor.setCenter(new Vector2(
+                    actor.getCenter().x,
+                    actor.getCenter().y + speedY));
         } else{
-            actor.setCenter(new Vector2(actor.getCenter().x, currentTargetPosition.y));
+            actor.setCenter(new Vector2(
+                    actor.getCenter().x,
+                    currentTargetPosition.y));
         }
 
         return !reachedX || !reachedY;

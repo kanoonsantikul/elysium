@@ -9,7 +9,8 @@ public class Assets{
     public static Texture player1;
     public static Texture player2;
     public static Texture endTurnButton;
-    public static Texture cardBar;
+    public static Texture cardBarBlue;
+    public static Texture cardBarRed;
 
     public static Texture loadTexture (String file) {
 		return new Texture(Gdx.files.internal(file));
@@ -21,6 +22,7 @@ public class Assets{
         player1 = loadTexture("player1.png");
         player2 = loadTexture("player2.png");
         endTurnButton = loadTexture("end-turn-button.png");
-        cardBar = loadTexture("card-bar.png");
+        cardBarBlue = loadTexture("card-bar-blue.png");
+        cardBarRed = loadTexture("card-bar-red.png");
     }
 }

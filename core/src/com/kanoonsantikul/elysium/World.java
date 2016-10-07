@@ -24,6 +24,8 @@ public class World implements InputHandler.InputListener{
     private Character activeCharacter;
     private Queue<Action> actionQueue;
 
+    public boolean isPlayer1Turn;
+
     private Array<GameObject> gameObjects;
 
     public World(){
@@ -32,8 +34,9 @@ public class World implements InputHandler.InputListener{
 
         character = new Character(tiles[0].getCenter());
 
-        endTurnButton = new EndTurnButton(true);
-        cardBar = new CardBar(true);
+        isPlayer1Turn = true;
+        endTurnButton = new EndTurnButton();
+        cardBar = new CardBar();
 
         gameObjects = new Array<GameObject>();
         gameObjects.add(character);
@@ -48,7 +51,7 @@ public class World implements InputHandler.InputListener{
     public void onClicked(float x, float y){
         GameObject object = getObjectAt(x, y);
         if(object instanceof EndTurnButton){
-
+            isPlayer1Turn = !isPlayer1Turn;
         }
     }
 
@@ -78,8 +81,12 @@ public class World implements InputHandler.InputListener{
     public void onDragged(float x, float y){
         GameObject object = getObjectAt(x, y);
         if(object != null){
-            if(activeCharacter != null && object instanceof Tile){
-                updatePath((Tile)object);
+            if(activeCharacter != null){
+                if(object instanceof Tile){
+                    updatePath((Tile)object);
+                } else if(object instanceof Character){
+                    pathTracker.clear();
+                }
             }
         }
     }
@@ -88,6 +95,17 @@ public class World implements InputHandler.InputListener{
         for(int i=0; i<gameObjects.size; i++){
             if(gameObjects.get(i).isInBound(x, y)){
                 return gameObjects.get(i);
+            }
+        }
+
+        return null;
+    }
+
+    public Tile getTileOf(GameObject object){
+        for(int i=0; i<tiles.length ; i++){
+            if(tiles[i].getCenter().x == object.getCenter().x &&
+                    tiles[i].getCenter().y == object.getCenter().y){
+                return tiles[i];
             }
         }
 
@@ -114,6 +132,9 @@ public class World implements InputHandler.InputListener{
     }
 
     private void updatePath(Tile tile){
+        if(tile == null){
+            return;
+        }
         if(!pathTracker.contains(tile)){
             if(pathTracker.size() == 0 ||
                     pathTracker.getLast().getNeighbors(this, false).contains(tile))
@@ -123,11 +144,6 @@ public class World implements InputHandler.InputListener{
             List subPath = pathTracker.subList(0, listPosition + 1);
             pathTracker = new LinkedList(subPath);
         }
-
-        // String log ="";
-        // for(int i=0;i<pathTracker.size();i++)
-        //     log += pathTracker.get(i).hashCode() + " ";
-        // Gdx.app.log("",log);
     }
 
     private void createBoard(){

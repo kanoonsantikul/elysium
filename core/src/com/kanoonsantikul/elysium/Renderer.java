@@ -33,7 +33,14 @@ public class Renderer{
     }
 
     private void renderUI(){
-        batcher.draw(Assets.cardBar,
+        Texture cardBar;
+        if(world.isPlayer1Turn){
+            cardBar = Assets.cardBarBlue;
+        } else{
+            cardBar = Assets.cardBarRed;
+        }
+
+        batcher.draw(cardBar,
                 world.cardBar.getPosition().x,
                 world.cardBar.getPosition().y,
                 CardBar.WIDTH,
@@ -49,7 +56,7 @@ public class Renderer{
     private void renderTiles(){
         Tile[] tiles = world.tiles;
         Tile tile;
-        for(int i=0; i<(World.BOARD_SIZE * World.BOARD_SIZE); i++){
+        for(int i=0; i<tiles.length; i++){
             tile = tiles[i];
             batcher.draw(Assets.tile,
                     tile.getPosition().x,
