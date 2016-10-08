@@ -92,11 +92,13 @@ public class Renderer{
     private void renderCard(){
         Card[] cards = world.cards;
         for(int i=0; i<cards.length; i++){
+            batcher.setColor(1, 1, 1, cards[i].getAlpha());
             batcher.draw(Assets.card,
                     cards[i].getPosition().x,
                     cards[i].getPosition().y,
                     Card.WIDTH,
                     Card.HEIGHT);
+            batcher.setColor(1,1,1,1);
         }
     }
 }

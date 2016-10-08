@@ -10,13 +10,11 @@ public class Card extends GameObject{
     private static float INIT_Y = 13f;
 
     private int number;
+    private float alpha = 1;
 
     public Card(int number){
-        float y = INIT_Y;
-        float x = INIT_X + (WIDTH + 5)* number;
-
-        setPosition(new Vector2(x, y));
         this.number = number;
+        positioning();
     }
 
     public float getWidth(){
@@ -31,4 +29,17 @@ public class Card extends GameObject{
         return number;
     }
 
+    public void positioning(){
+        float y = INIT_Y;
+        float x = INIT_X + (WIDTH + 5)* number;
+        setPosition(new Vector2(x, y));
+    }
+
+    public void setAlpha(float alpha){
+        this.alpha = alpha;
+    }
+
+    public float getAlpha(){
+        return alpha;
+    }
 }

@@ -24,9 +24,9 @@ public class World implements InputHandler.InputListener{
 
     private Array<GameObject> gameObjects;
 
-    public LinkedList<Tile> pathTracker;
-    private Character activeCharacter;
+    private GameObject mouseFocus;
     private Queue<Action> actionQueue;
+    public LinkedList<Tile> pathTracker;
 
     public World(){
         tiles = new Tile[BOARD_SIZE * BOARD_SIZE];
@@ -42,6 +42,7 @@ public class World implements InputHandler.InputListener{
         cardBar = new CardBar();
 
         gameObjects = new Array<GameObject>();
+        gameObjects.addAll(cards);
         gameObjects.add(player1);
         gameObjects.addAll(tiles);
         gameObjects.add(endTurnButton);
@@ -65,32 +66,38 @@ public class World implements InputHandler.InputListener{
         GameObject object = getObjectAt(x, y);
         if(object != null){
             if(object instanceof Character){
-                activeCharacter = (Character)object;
+                mouseFocus = object;
+            } else if(object instanceof Card){
+                mouseFocus = object;
+                ((Card)mouseFocus).setAlpha(0.75f);
             }
         }
     }
 
     @Override
     public void onDragEnd(float x, float y){
-        if(activeCharacter != null){
-            actionQueue.addLast(
-                    new MoveAction(activeCharacter, pathTracker));
+        if(mouseFocus instanceof Character){
+            actionQueue.addLast(new MoveAction(mouseFocus, pathTracker));
+        } else if(mouseFocus instanceof Card){
+            ((Card)mouseFocus).positioning();
+            ((Card)mouseFocus).setAlpha(1f);
         }
 
-        activeCharacter = null;
+        mouseFocus = null;
     }
 
     @Override
     public void onDragged(float x, float y){
-        GameObject object = getObjectAt(x, y);
-        if(object != null){
-            if(activeCharacter != null){
-                if(object instanceof Tile){
-                    updatePath((Tile)object);
-                } else if(object instanceof Character){
-                    pathTracker.clear();
-                }
+        if(mouseFocus instanceof Character){
+            GameObject object = getObjectAt(x, y);
+
+            if(object instanceof Tile){
+                updatePath((Tile)object);
+            } else if(object instanceof Character){
+                pathTracker.clear();
             }
+        } else if(mouseFocus instanceof Card){
+            mouseFocus.setCenter(new Vector2(x, y));
         }
     }
 
