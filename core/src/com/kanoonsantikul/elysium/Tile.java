@@ -8,14 +8,16 @@ public class Tile extends GameObject{
     public static final float WIDTH = Assets.tile.getWidth() * Elysium.DEVICE_RATIO;
     public static final float HEIGHT = Assets.tile.getHeight() * Elysium.DEVICE_RATIO;
 
+    private static float INIT_X = 9f;
+    private static float INIT_Y = 150f;
+
     private int number;
 
-    public Tile(float x, float y, int number){
-        this(new Vector2(x, y), number);
-    }
+    public Tile(int number){
+        float y = INIT_Y + HEIGHT * (number / World.BOARD_SIZE);
+        float x = INIT_X + WIDTH * (number % World.BOARD_SIZE);
 
-    public Tile(Vector2 position, int number){
-        setPosition(position);
+        setPosition(new Vector2(x, y));
         this.number = number;
     }
 

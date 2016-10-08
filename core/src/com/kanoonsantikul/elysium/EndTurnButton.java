@@ -6,7 +6,7 @@ public class EndTurnButton extends GameObject{
     public static final float WIDTH = Assets.endTurnButton.getWidth() * Elysium.DEVICE_RATIO;
     public static final float HEIGHT = Assets.endTurnButton.getHeight() * Elysium.DEVICE_RATIO;
 
-    private static final float X = Elysium.WIDTH - WIDTH / 2 - World.BOARD_X_INIT;
+    private static final float X = Elysium.WIDTH - WIDTH / 2 - 9f;
     private static final float Y = HEIGHT / 2 + 12;
 
     public EndTurnButton(){

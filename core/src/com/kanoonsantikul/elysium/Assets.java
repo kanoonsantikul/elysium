@@ -11,6 +11,7 @@ public class Assets{
     public static Texture endTurnButton;
     public static Texture cardBarBlue;
     public static Texture cardBarRed;
+    public static Texture card;
 
     public static Texture loadTexture (String file) {
 		return new Texture(Gdx.files.internal(file));
@@ -24,5 +25,6 @@ public class Assets{
         endTurnButton = loadTexture("end-turn-button.png");
         cardBarBlue = loadTexture("card-bar-blue.png");
         cardBarRed = loadTexture("card-bar-red.png");
+        card = loadTexture("card.png");
     }
 }
