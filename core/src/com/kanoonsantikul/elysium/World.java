@@ -11,35 +11,38 @@ import com.badlogic.gdx.Gdx;
 
 public class World implements InputHandler.InputListener{
     public static final int BOARD_SIZE = 7;
-    public static final int BOARD_X_INIT = 9;
-    public static final int BOARD_Y_INIT = 150;
-    public Tile[] tiles;
+    public static final int FULL_HAND = 4;
 
-    public Character character;
+    public Tile[] tiles;
+    public Card[] cards;
+    public Character player1;
 
     public EndTurnButton endTurnButton;
     public CardBar cardBar;
-
-    public LinkedList<Tile> pathTracker;
-    private Character activeCharacter;
-    private Queue<Action> actionQueue;
 
     public boolean isPlayer1Turn;
 
     private Array<GameObject> gameObjects;
 
+    public LinkedList<Tile> pathTracker;
+    private Character activeCharacter;
+    private Queue<Action> actionQueue;
+
     public World(){
         tiles = new Tile[BOARD_SIZE * BOARD_SIZE];
-        createBoard();
+        initBoard();
 
-        character = new Character(tiles[0].getCenter());
+        cards = new Card[FULL_HAND];
+        initCard();
+
+        player1 = new Character(tiles[0].getCenter());
 
         isPlayer1Turn = true;
         endTurnButton = new EndTurnButton();
         cardBar = new CardBar();
 
         gameObjects = new Array<GameObject>();
-        gameObjects.add(character);
+        gameObjects.add(player1);
         gameObjects.addAll(tiles);
         gameObjects.add(endTurnButton);
 
@@ -146,18 +149,15 @@ public class World implements InputHandler.InputListener{
         }
     }
 
-    private void createBoard(){
-        Texture tile = Assets.tile;
-        float x = 0;
-        float y = 0;
+    private void initBoard(){
+        for(int i=0; i<tiles.length; i++){
+            tiles[i] = new Tile(i);
+        }
+    }
 
-        for(int i=0; i<(BOARD_SIZE * BOARD_SIZE); i++){
-            if(i % BOARD_SIZE == 0){
-                x = BOARD_X_INIT;
-                y = BOARD_Y_INIT + Tile.HEIGHT * (i / BOARD_SIZE);
-            }
-            x = BOARD_X_INIT + Tile.WIDTH * (i % BOARD_SIZE);
-            tiles[i] = new Tile(x, y, i);
+    private void initCard(){
+        for(int i=0; i<cards.length; i++){
+            cards[i] = new Card(i);
         }
     }
 }

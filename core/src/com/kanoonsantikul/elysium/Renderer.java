@@ -23,6 +23,7 @@ public class Renderer{
         batcher.begin();
         renderBoard();
         renderUI();
+        renderCard();
         batcher.end();
     }
 
@@ -80,11 +81,22 @@ public class Renderer{
     }
 
     private void renderCharacter(){
-        Character character = world.character;
+        Character player1 = world.player1;
         batcher.draw(Assets.player1,
-                character.getPosition().x,
-                character.getPosition().y,
+                player1.getPosition().x,
+                player1.getPosition().y,
                 Character.WIDTH,
                 Character.HEIGHT);
+    }
+
+    private void renderCard(){
+        Card[] cards = world.cards;
+        for(int i=0; i<cards.length; i++){
+            batcher.draw(Assets.card,
+                    cards[i].getPosition().x,
+                    cards[i].getPosition().y,
+                    Card.WIDTH,
+                    Card.HEIGHT);
+        }
     }
 }
