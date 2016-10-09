@@ -19,6 +19,7 @@ public class World implements InputHandler.InputListener{
 
     public EndTurnButton endTurnButton;
     public CardBar cardBar;
+    public FullCard fullCard;
 
     public boolean isPlayer1Turn;
 
@@ -56,17 +57,34 @@ public class World implements InputHandler.InputListener{
         GameObject object = getObjectAt(x, y);
         if(object instanceof EndTurnButton){
             isPlayer1Turn = !isPlayer1Turn;
+        } else if(object instanceof Card){
+            if(fullCard != null){
+                fullCard = null;
+            }
+        }
+    }
+
+    @Override
+    public void onPressed(float x, float y){
+        if(mouseFocus == null){
+
+            GameObject object = getObjectAt(x, y);
+            if(object instanceof Card){
+                fullCard = new FullCard();
+            }
         }
     }
 
     @Override
     public void onDragStart(float x, float y){
-        pathTracker.clear();
+        fullCard = null;
 
         GameObject object = getObjectAt(x, y);
         if(object != null){
-            if(object instanceof Character){
+            if(object instanceof Character && !object.isOnAction()){
+                pathTracker.clear();
                 mouseFocus = object;
+
             } else if(object instanceof Card){
                 mouseFocus = object;
                 ((Card)mouseFocus).setAlpha(0.75f);

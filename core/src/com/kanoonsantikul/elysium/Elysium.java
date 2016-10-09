@@ -21,9 +21,6 @@ public class Elysium extends Game {
 		batcher = new SpriteBatch();
 
 		Assets.load();
-		//Settings.load();
-		//Assets.load();
-		//setScreen(new MainMenuScreen(this));
 		setScreen(new GameScreen(this));
 	}
 

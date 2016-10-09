@@ -22,6 +22,8 @@ public class MoveAction extends Action{
     @Override
     public void act(){
         if(paths.size() > 0){
+            actor.setOnAction(true);
+
             if(currentTargetPosition == null){
                 changeDirection();
             } else if(!move()){
@@ -29,6 +31,7 @@ public class MoveAction extends Action{
                 paths.poll();
             }
         } else{
+            actor.setOnAction(false);
             setActed(true);
         }
     }

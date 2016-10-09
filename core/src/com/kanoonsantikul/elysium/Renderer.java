@@ -52,6 +52,21 @@ public class Renderer{
                 world.endTurnButton.getPosition().y,
                 EndTurnButton.WIDTH,
                 EndTurnButton.HEIGHT);
+
+        renderFont();
+    }
+
+    private void renderFont(){
+        String turn;
+        if(world.isPlayer1Turn){
+            turn = "Player 1";
+        } else{
+            turn = "Player 2";
+        }
+        Assets.font.draw(batcher,
+                turn,
+                world.endTurnButton.getPosition().x - 70,
+                world.endTurnButton.getPosition().y + world.endTurnButton.HEIGHT + 20);
     }
 
     private void renderTiles(){
@@ -99,6 +114,14 @@ public class Renderer{
                     Card.WIDTH,
                     Card.HEIGHT);
             batcher.setColor(1,1,1,1);
+        }
+
+        if(world.fullCard != null){
+            batcher.draw(Assets.card,
+                    FullCard.X,
+                    FullCard.Y,
+                    FullCard.WIDTH,
+                    FullCard.HEIGHT);
         }
     }
 }
