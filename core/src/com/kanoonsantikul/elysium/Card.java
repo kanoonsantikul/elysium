@@ -3,8 +3,8 @@ package com.kanoonsantikul.elysium;
 import com.badlogic.gdx.math.Vector2;
 
 public class Card extends GameObject{
-    public static final float WIDTH = Assets.card.getWidth() * Elysium.DEVICE_RATIO;
-    public static final float HEIGHT = Assets.card.getHeight() * Elysium.DEVICE_RATIO;
+    public static final float WIDTH = Assets.card.getWidth() * Elysium.DEVICE_RATIO / 2.5f;
+    public static final float HEIGHT = Assets.card.getHeight() * Elysium.DEVICE_RATIO / 2.5f;
 
     private static float INIT_X = 9f;
     private static float INIT_Y = 13f;

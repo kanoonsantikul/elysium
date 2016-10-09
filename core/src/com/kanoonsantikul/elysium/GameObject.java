@@ -6,7 +6,9 @@ public abstract class GameObject{
     public abstract float getWidth();
     public abstract float getHeight();
 
-    Vector2 position;
+    private boolean onAction = false;
+
+    private Vector2 position;
 
     public void setPosition(Vector2 position){
         this.position = position;
@@ -20,6 +22,14 @@ public abstract class GameObject{
         float x = this.position.x + getWidth()/2;
         float y = this.position.y + getHeight()/2;
         return new Vector2(x, y);
+    }
+
+    public boolean isOnAction(){
+        return onAction;
+    }
+
+    public void setOnAction(boolean onAction){
+        this.onAction = onAction;
     }
 
     public void setCenter(Vector2 position){

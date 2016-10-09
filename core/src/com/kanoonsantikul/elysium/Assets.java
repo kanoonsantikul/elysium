@@ -2,6 +2,7 @@ package com.kanoonsantikul.elysium;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 
 public class Assets{
     public static Texture tile;
@@ -12,6 +13,8 @@ public class Assets{
     public static Texture cardBarBlue;
     public static Texture cardBarRed;
     public static Texture card;
+
+    public static BitmapFont font;
 
     public static Texture loadTexture (String file) {
 		return new Texture(Gdx.files.internal(file));
@@ -26,5 +29,10 @@ public class Assets{
         cardBarBlue = loadTexture("card-bar-blue.png");
         cardBarRed = loadTexture("card-bar-red.png");
         card = loadTexture("card.png");
+
+        font = new BitmapFont(
+                Gdx.files.internal("font/font.fnt"),
+                Gdx.files.internal("font/font.png"),
+                false);
     }
 }
