@@ -96,10 +96,19 @@ public class Renderer{
     }
 
     private void renderCharacter(){
-        Character player1 = world.player1;
+        Character player;
+        player = world.player1;
         batcher.draw(Assets.player1,
-                player1.getPosition().x,
-                player1.getPosition().y,
+                player.getPosition().x,
+                player.getPosition().y,
+                Character.WIDTH,
+                Character.HEIGHT);
+
+
+        player = world.player2;
+        batcher.draw(Assets.player2,
+                player.getPosition().x,
+                player.getPosition().y,
                 Character.WIDTH,
                 Character.HEIGHT);
     }

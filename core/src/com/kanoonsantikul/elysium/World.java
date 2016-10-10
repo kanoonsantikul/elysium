@@ -16,6 +16,7 @@ public class World implements InputHandler.InputListener{
     public Tile[] tiles;
     public Card[] cards;
     public Character player1;
+    public Character player2;
 
     public EndTurnButton endTurnButton;
     public CardBar cardBar;
@@ -36,7 +37,8 @@ public class World implements InputHandler.InputListener{
         cards = new Card[FULL_HAND];
         initCard();
 
-        player1 = new Character(tiles[0].getCenter());
+        player1 = new Character(tiles[0]);
+        player2 = new Character(tiles[tiles.length - 1]);
 
         isPlayer1Turn = true;
         endTurnButton = new EndTurnButton();
@@ -45,6 +47,7 @@ public class World implements InputHandler.InputListener{
         gameObjects = new Array<GameObject>();
         gameObjects.addAll(cards);
         gameObjects.add(player1);
+        gameObjects.add(player2);
         gameObjects.addAll(tiles);
         gameObjects.add(endTurnButton);
 
@@ -66,12 +69,8 @@ public class World implements InputHandler.InputListener{
 
     @Override
     public void onPressed(float x, float y){
-        if(mouseFocus == null){
-
-            GameObject object = getObjectAt(x, y);
-            if(object instanceof Card){
-                fullCard = new FullCard();
-            }
+        if(getObjectAt(x, y) instanceof Card){
+            fullCard = new FullCard();
         }
     }
 
@@ -80,15 +79,15 @@ public class World implements InputHandler.InputListener{
         fullCard = null;
 
         GameObject object = getObjectAt(x, y);
-        if(object != null){
-            if(object instanceof Character && !object.isOnAction()){
-                pathTracker.clear();
+        if(object instanceof Character && !object.isOnAction()){
+            if((object == player1 && isPlayer1Turn) ||
+                    (object == player2 && !isPlayer1Turn)){
                 mouseFocus = object;
-
-            } else if(object instanceof Card){
-                mouseFocus = object;
-                ((Card)mouseFocus).setAlpha(0.75f);
             }
+
+        } else if(object instanceof Card){
+            mouseFocus = object;
+            ((Card)mouseFocus).setAlpha(0.75f);
         }
     }
 
@@ -96,6 +95,7 @@ public class World implements InputHandler.InputListener{
     public void onDragEnd(float x, float y){
         if(mouseFocus instanceof Character){
             actionQueue.addLast(new MoveAction(mouseFocus, pathTracker));
+
         } else if(mouseFocus instanceof Card){
             ((Card)mouseFocus).positioning();
             ((Card)mouseFocus).setAlpha(1f);
@@ -114,6 +114,7 @@ public class World implements InputHandler.InputListener{
             } else if(object instanceof Character){
                 pathTracker.clear();
             }
+            
         } else if(mouseFocus instanceof Card){
             mouseFocus.setCenter(new Vector2(x, y));
         }

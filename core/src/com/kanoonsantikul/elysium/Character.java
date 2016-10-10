@@ -6,6 +6,10 @@ public class Character extends GameObject{
     public static final float WIDTH = Assets.player1.getWidth() * Elysium.DEVICE_RATIO;
     public static final float HEIGHT = Assets.player1.getHeight() * Elysium.DEVICE_RATIO;
 
+    public Character(Tile tile){
+        this(tile.getCenter());
+    }
+
     public Character(float x, float y){
         this(new Vector2(x, y));
     }
