@@ -12,7 +12,7 @@ public class Assets{
     public static Texture endTurnButton;
     public static Texture cardBarBlue;
     public static Texture cardBarRed;
-    public static Texture card;
+    public static Texture[] cards;
 
     public static BitmapFont font;
 
@@ -28,7 +28,11 @@ public class Assets{
         endTurnButton = loadTexture("end-turn-button.png");
         cardBarBlue = loadTexture("card-bar-blue.png");
         cardBarRed = loadTexture("card-bar-red.png");
-        card = loadTexture("card.png");
+        cards = new Texture[]{
+            loadTexture("card.png"),
+            loadTexture("bear-trap-card.png"),
+            loadTexture("booby-trap-card.png")
+        };
 
         font = new BitmapFont(
                 Gdx.files.internal("font/font.fnt"),

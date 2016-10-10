@@ -2,6 +2,7 @@ package com.kanoonsantikul.elysium;
 
 import java.util.List;
 import java.util.LinkedList;
+import java.util.Random;
 
 import com.badlogic.gdx.utils.Queue;
 import com.badlogic.gdx.utils.Array;
@@ -14,7 +15,8 @@ public class World implements InputHandler.InputListener{
     public static final int FULL_HAND = 4;
 
     public Tile[] tiles;
-    public Card[] cards;
+    public Card[] player1Cards;
+    public Card[] player2Cards;
     public Character player1;
     public Character player2;
 
@@ -34,7 +36,8 @@ public class World implements InputHandler.InputListener{
         tiles = new Tile[BOARD_SIZE * BOARD_SIZE];
         initBoard();
 
-        cards = new Card[FULL_HAND];
+        player1Cards = new Card[FULL_HAND];
+        player2Cards = new Card[FULL_HAND];
         initCard();
 
         player1 = new Character(tiles[0]);
@@ -45,7 +48,8 @@ public class World implements InputHandler.InputListener{
         cardBar = new CardBar();
 
         gameObjects = new Array<GameObject>();
-        gameObjects.addAll(cards);
+        gameObjects.addAll(player1Cards);
+        gameObjects.addAll(player2Cards);
         gameObjects.add(player1);
         gameObjects.add(player2);
         gameObjects.addAll(tiles);
@@ -59,7 +63,7 @@ public class World implements InputHandler.InputListener{
     public void onClicked(float x, float y){
         GameObject object = getObjectAt(x, y);
         if(object instanceof EndTurnButton){
-            isPlayer1Turn = !isPlayer1Turn;
+            endTurn();
         } else if(object instanceof Card){
             if(fullCard != null){
                 fullCard = null;
@@ -71,7 +75,7 @@ public class World implements InputHandler.InputListener{
     public void onPressed(float x, float y){
         if(mouseFocus == null &&
                 getObjectAt(x, y) instanceof Card){
-            fullCard = new FullCard();
+            fullCard = new FullCard((Card)getObjectAt(x, y));
         }
     }
 
@@ -81,8 +85,7 @@ public class World implements InputHandler.InputListener{
 
         GameObject object = getObjectAt(x, y);
         if(object instanceof Character && !object.isOnAction()){
-            if((object == player1 && isPlayer1Turn) ||
-                    (object == player2 && !isPlayer1Turn)){
+            if(!(object == player1 ^ isPlayer1Turn)){
                 mouseFocus = object;
             }
 
@@ -125,8 +128,9 @@ public class World implements InputHandler.InputListener{
 
     public GameObject getObjectAt(float x, float y){
         for(int i=0; i<gameObjects.size; i++){
-            if(gameObjects.get(i).isInBound(x, y)){
-                return gameObjects.get(i);
+            GameObject object = gameObjects.get(i);
+            if(object.isInBound(x, y) && object.isVisible()){
+                return object;
             }
         }
 
@@ -144,12 +148,12 @@ public class World implements InputHandler.InputListener{
         return null;
     }
 
-    public void update(){
-        updateActionQueue();
-    }
-
     public Tile getTile(int row, int collum){
         return tiles[row * BOARD_SIZE + collum];
+    }
+
+    public void update(){
+        updateActionQueue();
     }
 
     private void updateActionQueue(){
@@ -184,6 +188,23 @@ public class World implements InputHandler.InputListener{
 
     }
 
+    private void endTurn(){
+        isPlayer1Turn = !isPlayer1Turn;
+
+        Card[] thisTurnCards = player1Cards;
+        Card[] previousTurnCards = player2Cards;
+        if(!isPlayer1Turn){
+            thisTurnCards = player2Cards;
+            previousTurnCards = player1Cards;
+        }
+        for(int i=0; i<thisTurnCards.length; i++){
+            thisTurnCards[i].setVisible(true);
+        }
+        for(int i=0; i<previousTurnCards.length; i++){
+            previousTurnCards[i].setVisible(false);
+        }
+    }
+
     private void initBoard(){
         for(int i=0; i<tiles.length; i++){
             tiles[i] = new Tile(i);
@@ -191,8 +212,14 @@ public class World implements InputHandler.InputListener{
     }
 
     private void initCard(){
-        for(int i=0; i<cards.length; i++){
-            cards[i] = new Card(i);
+        Random random = new Random();
+        for(int i=0; i<FULL_HAND; i++){
+            player1Cards[i] = new Card(i, random.nextInt(3));
+            player2Cards[i] = new Card(i, random.nextInt(3));
         }
+    }
+
+    private void drawCard(Card[] playerCards){
+        //if()
     }
 }
