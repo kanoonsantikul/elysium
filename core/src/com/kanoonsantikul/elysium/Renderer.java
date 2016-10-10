@@ -114,10 +114,16 @@ public class Renderer{
     }
 
     private void renderCard(){
-        Card[] cards = world.cards;
+        Card[] cards;
+        if(world.isPlayer1Turn){
+            cards = world.player1Cards;
+        } else{
+            cards = world.player2Cards;
+        }
+
         for(int i=0; i<cards.length; i++){
             batcher.setColor(1, 1, 1, cards[i].getAlpha());
-            batcher.draw(Assets.card,
+            batcher.draw(Assets.cards[cards[i].getId()],
                     cards[i].getPosition().x,
                     cards[i].getPosition().y,
                     Card.WIDTH,
@@ -126,7 +132,8 @@ public class Renderer{
         }
 
         if(world.fullCard != null){
-            batcher.draw(Assets.card,
+            Card card = world.fullCard.getCard();
+            batcher.draw(Assets.cards[card.getId()],
                     FullCard.X,
                     FullCard.Y,
                     FullCard.WIDTH,

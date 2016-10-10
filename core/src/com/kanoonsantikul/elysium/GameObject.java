@@ -6,9 +6,9 @@ public abstract class GameObject{
     public abstract float getWidth();
     public abstract float getHeight();
 
-    private boolean onAction = false;
-
     private Vector2 position;
+    private boolean onAction = false;
+    private boolean visible = true;
 
     public void setPosition(Vector2 position){
         this.position = position;
@@ -24,14 +24,6 @@ public abstract class GameObject{
         return new Vector2(x, y);
     }
 
-    public boolean isOnAction(){
-        return onAction;
-    }
-
-    public void setOnAction(boolean onAction){
-        this.onAction = onAction;
-    }
-
     public void setCenter(Vector2 position){
         float x = position.x - getWidth()/2;
         float y = position.y - getHeight()/2;
@@ -44,5 +36,21 @@ public abstract class GameObject{
             return true;
         }
         return false;
+    }
+
+    public boolean isOnAction(){
+        return onAction;
+    }
+
+    public void setOnAction(boolean onAction){
+        this.onAction = onAction;
+    }
+
+    public boolean isVisible(){
+        return visible;
+    }
+
+    public void setVisible(boolean visible){
+        this.visible = visible;
     }
 }
