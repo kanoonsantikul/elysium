@@ -69,7 +69,8 @@ public class World implements InputHandler.InputListener{
 
     @Override
     public void onPressed(float x, float y){
-        if(getObjectAt(x, y) instanceof Card){
+        if(mouseFocus == null &&
+                getObjectAt(x, y) instanceof Card){
             fullCard = new FullCard();
         }
     }
@@ -112,9 +113,11 @@ public class World implements InputHandler.InputListener{
             if(object instanceof Tile){
                 updatePath((Tile)object);
             } else if(object instanceof Character){
-                pathTracker.clear();
+                if(!(object == player1 ^ isPlayer1Turn)){
+                    pathTracker.clear();
+                }
             }
-            
+
         } else if(mouseFocus instanceof Card){
             mouseFocus.setCenter(new Vector2(x, y));
         }
@@ -164,15 +167,21 @@ public class World implements InputHandler.InputListener{
         if(tile == null){
             return;
         }
-        if(!pathTracker.contains(tile)){
-            if(pathTracker.size() == 0 ||
-                    pathTracker.getLast().getNeighbors(this, false).contains(tile))
-            pathTracker.add(tile);
+
+        if(pathTracker.size() == 0){
+            if(getTileOf(mouseFocus).getNeighbors(this, false).contains(tile)){
+                pathTracker.add(tile);
+            }
+        } else if(!pathTracker.contains(tile)){
+            if(pathTracker.getLast().getNeighbors(this, false).contains(tile)){
+                pathTracker.add(tile);
+            }
         } else{
             int listPosition = pathTracker.indexOf(tile);
             List subPath = pathTracker.subList(0, listPosition + 1);
             pathTracker = new LinkedList(subPath);
         }
+
     }
 
     private void initBoard(){
