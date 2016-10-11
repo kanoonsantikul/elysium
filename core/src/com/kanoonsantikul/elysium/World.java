@@ -17,6 +17,8 @@ public class World implements InputHandler.InputListener{
     public LinkedList<Tile> tiles;
     public LinkedList<Card> player1Cards;
     public LinkedList<Card> player2Cards;
+    public LinkedList<Trap> player1Traps;
+    public LinkedList<Trap> player2Traps;
     public Character player1;
     public Character player2;
 
@@ -40,6 +42,9 @@ public class World implements InputHandler.InputListener{
         player1Cards = new LinkedList<Card>();
         player2Cards = new LinkedList<Card>();
         initCard();
+
+        player1Traps = new LinkedList<Trap>();
+        player2Traps = new LinkedList<Trap>();
 
         player1 = new Character(tiles.getFirst());
         player2 = new Character(tiles.getLast());
@@ -104,9 +109,20 @@ public class World implements InputHandler.InputListener{
                     new LinkedList<Tile>(pathTracker)));
                     pathTracker.clear();
         } else if(mouseFocus instanceof Card){
-            mouseFocus.setVisible(true);
+            GameObject object = getObjectAt(x, y, false);
+            if(object instanceof Tile){
+                if(isPlayer1Turn){
+                    player1Traps.add(new Trap(trapInstance.getId(), (Tile)object));
+                    player1Cards.remove(mouseFocus);
+                } else{
+                    player2Traps.add(new Trap(trapInstance.getId(), (Tile)object));
+                    player2Cards.remove(mouseFocus);
+                }
+            } else{
+                mouseFocus.setVisible(true);
+                ((Card)mouseFocus).positioning();
+            }
             trapInstance.setId(0);
-            ((Card)mouseFocus).positioning();
         }
 
         mouseFocus = null;
