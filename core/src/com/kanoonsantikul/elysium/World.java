@@ -41,7 +41,6 @@ public class World implements InputHandler.InputListener{
 
         player1Cards = new LinkedList<Card>();
         player2Cards = new LinkedList<Card>();
-        initCard();
 
         player1Traps = new LinkedList<Trap>();
         player2Traps = new LinkedList<Trap>();
@@ -54,12 +53,11 @@ public class World implements InputHandler.InputListener{
         cardBar = new CardBar();
 
         gameObjects = new LinkedList<GameObject>();
-        gameObjects.addAll(player1Cards);
-        gameObjects.addAll(player2Cards);
         gameObjects.add(player1);
         gameObjects.add(player2);
         gameObjects.addAll(tiles);
         gameObjects.add(endTurnButton);
+        initCard();
 
         trapInstance = new Trap(0, null);
         actionQueue = new Queue<Action>();
@@ -68,6 +66,8 @@ public class World implements InputHandler.InputListener{
 
     @Override
     public void onClicked(float x, float y){
+        fullCard = null;
+        
         GameObject object = getObjectAt(x, y, true);
         if(object instanceof EndTurnButton){
             endTurn();
@@ -114,9 +114,11 @@ public class World implements InputHandler.InputListener{
                 if(isPlayer1Turn){
                     player1Traps.add(new Trap(trapInstance.getId(), (Tile)object));
                     player1Cards.remove(mouseFocus);
+                    gameObjects.remove(mouseFocus);
                 } else{
                     player2Traps.add(new Trap(trapInstance.getId(), (Tile)object));
                     player2Cards.remove(mouseFocus);
+                    gameObjects.remove(mouseFocus);
                 }
             } else{
                 mouseFocus.setVisible(true);
@@ -182,6 +184,7 @@ public class World implements InputHandler.InputListener{
 
     public void update(){
         updateActionQueue();
+        updatePlayerCards();
     }
 
     private void updateActionQueue(){
@@ -216,15 +219,32 @@ public class World implements InputHandler.InputListener{
 
     }
 
+    private void updatePlayerCards(){
+        Card card;
+        for(int i=0; i<player1Cards.size(); i++){
+            card = player1Cards.get(i);
+            card.setNumber(i);
+        }
+        for(int i=0; i<player2Cards.size(); i++){
+            card = player2Cards.get(i);
+            card.setNumber(i);
+        }
+    }
+
     private void endTurn(){
         isPlayer1Turn = !isPlayer1Turn;
 
         LinkedList<Card> thisTurnCards = player1Cards;
         LinkedList<Card> previousTurnCards = player2Cards;
+
         if(!isPlayer1Turn){
             thisTurnCards = player2Cards;
             previousTurnCards = player1Cards;
+            drawCard(player2Cards);
+        } else{
+            drawCard(player1Cards);
         }
+
         for(int i=0; i<thisTurnCards.size(); i++){
             thisTurnCards.get(i).setVisible(true);
         }
@@ -246,8 +266,11 @@ public class World implements InputHandler.InputListener{
 
     private boolean drawCard(LinkedList<Card> playerCards){
         Random random = new Random();
+        Card card;
         if(playerCards.size() < FULL_HAND){
-            playerCards.add(new Card(random.nextInt(3), playerCards.size()));
+            card = new Card(random.nextInt(3));
+            playerCards.add(card);
+            gameObjects.add(card);
             return true;
         }
         return false;
