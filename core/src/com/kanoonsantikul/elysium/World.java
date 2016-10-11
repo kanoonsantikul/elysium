@@ -55,9 +55,10 @@ public class World implements InputHandler.InputListener{
         gameObjects = new LinkedList<GameObject>();
         gameObjects.add(player1);
         gameObjects.add(player2);
+        initCard();
         gameObjects.addAll(tiles);
         gameObjects.add(endTurnButton);
-        initCard();
+
 
         trapInstance = new Trap(0, null);
         actionQueue = new Queue<Action>();
@@ -67,8 +68,8 @@ public class World implements InputHandler.InputListener{
     @Override
     public void onClicked(float x, float y){
         fullCard = null;
-        
-        GameObject object = getObjectAt(x, y, true);
+
+        GameObject object = getObjectAt(x, y, null);
         if(object instanceof EndTurnButton){
             endTurn();
         } else if(object instanceof Card){
@@ -80,7 +81,7 @@ public class World implements InputHandler.InputListener{
 
     @Override
     public void onPressed(float x, float y){
-        GameObject object = getObjectAt(x, y ,true);
+        GameObject object = getObjectAt(x, y ,null);
         if(mouseFocus == null && object instanceof Card){
             fullCard = new FullCard((Card)object);
         }
@@ -90,7 +91,7 @@ public class World implements InputHandler.InputListener{
     public void onDragStart(float x, float y){
         fullCard = null;
 
-        GameObject object = getObjectAt(x, y, true);
+        GameObject object = getObjectAt(x, y, null);
         if(object instanceof Character && !object.isOnAction()){
             if(!(object == player1 ^ isPlayer1Turn)){
                 mouseFocus = object;
@@ -103,14 +104,16 @@ public class World implements InputHandler.InputListener{
 
     @Override
     public void onDragEnd(float x, float y){
+        fullCard = null;
+
         if(mouseFocus instanceof Character){
             actionQueue.addLast(new MoveAction(
                     mouseFocus,
                     new LinkedList<Tile>(pathTracker)));
                     pathTracker.clear();
         } else if(mouseFocus instanceof Card){
-            GameObject object = getObjectAt(x, y, false);
-            if(object instanceof Tile){
+            GameObject object = getObjectAt(x, y, Tile.class);
+            if(object != null){
                 if(isPlayer1Turn){
                     player1Traps.add(new Trap(trapInstance.getId(), (Tile)object));
                     player1Cards.remove(mouseFocus);
@@ -120,6 +123,7 @@ public class World implements InputHandler.InputListener{
                     player2Cards.remove(mouseFocus);
                     gameObjects.remove(mouseFocus);
                 }
+                updatePlayerCards();
             } else{
                 mouseFocus.setVisible(true);
                 ((Card)mouseFocus).positioning();
@@ -133,10 +137,9 @@ public class World implements InputHandler.InputListener{
     @Override
     public void onDragged(float x, float y){
         if(mouseFocus instanceof Character){
-            GameObject object = getObjectAt(x, y, true);
-
-            if(object instanceof Tile
-                    && pathTracker.size() < ((Character)mouseFocus).moveRange){
+            GameObject object = getObjectAt(x, y, null);
+            if(object instanceof Tile &&
+                    pathTracker.size() < ((Character)mouseFocus).moveRange){
                 updatePath((Tile)object);
             } else if(object instanceof Character){
                 if(!(object == player1 ^ isPlayer1Turn)){
@@ -145,10 +148,11 @@ public class World implements InputHandler.InputListener{
             }
 
         } else if(mouseFocus instanceof Card){
-            if(getObjectAt(x, y, false) instanceof Tile){
+            GameObject object = getObjectAt(x, y, Tile.class);
+            if(object != null){
                 mouseFocus.setVisible(false);
                 trapInstance.setId(((Card)mouseFocus).getId());
-                trapInstance.setCenter(getObjectAt(x, y, false).getCenter());
+                trapInstance.setCenter(object.getCenter());
             } else{
                 mouseFocus.setVisible(true);
                 trapInstance.setId(0);
@@ -157,24 +161,16 @@ public class World implements InputHandler.InputListener{
         }
     }
 
-    public GameObject getObjectAt(float x, float y, boolean isDescending){
+    public GameObject getObjectAt(float x, float y, Class type){
         GameObject object;
-        if(isDescending){
-            for(int i=0; i<gameObjects.size(); i++){
-                object = gameObjects.get(i);
-                if(object.isInBound(x, y) && object.isVisible()){
-                    return object;
-                }
-            }
-        } else{
-            for(int i=gameObjects.size()-1; i>-1; i--){
-                object = gameObjects.get(i);
-                if(object.isInBound(x, y) && object.isVisible()){
+        for(int i=0; i<gameObjects.size(); i++){
+            object = gameObjects.get(i);
+            if(object.isInBound(x, y) && object.isVisible()){
+                if(type == null || object.getClass() == type){
                     return object;
                 }
             }
         }
-
         return null;
     }
 
@@ -184,7 +180,6 @@ public class World implements InputHandler.InputListener{
 
     public void update(){
         updateActionQueue();
-        updatePlayerCards();
     }
 
     private void updateActionQueue(){
@@ -236,20 +231,32 @@ public class World implements InputHandler.InputListener{
 
         LinkedList<Card> thisTurnCards = player1Cards;
         LinkedList<Card> previousTurnCards = player2Cards;
+        LinkedList<Trap> thisTurnTraps = player1Traps;
+        LinkedList<Trap> previousTurnTraps = player2Traps;
 
         if(!isPlayer1Turn){
             thisTurnCards = player2Cards;
             previousTurnCards = player1Cards;
+            thisTurnTraps =  player2Traps;
+            previousTurnTraps = player1Traps;
+
             drawCard(player2Cards);
         } else{
             drawCard(player1Cards);
         }
+        updatePlayerCards();
 
         for(int i=0; i<thisTurnCards.size(); i++){
             thisTurnCards.get(i).setVisible(true);
         }
         for(int i=0; i<previousTurnCards.size(); i++){
             previousTurnCards.get(i).setVisible(false);
+        }
+        for(int i=0; i<thisTurnTraps.size(); i++){
+            thisTurnTraps.get(i).setVisible(true);
+        }
+        for(int i=0; i<previousTurnTraps.size(); i++){
+            previousTurnTraps.get(i).setVisible(false);
         }
     }
 
@@ -262,6 +269,7 @@ public class World implements InputHandler.InputListener{
     private void initCard(){
         while(drawCard(player1Cards));
         while(drawCard(player2Cards));
+        updatePlayerCards();
     }
 
     private boolean drawCard(LinkedList<Card> playerCards){
