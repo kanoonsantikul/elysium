@@ -99,8 +99,10 @@ public class World implements InputHandler.InputListener{
     @Override
     public void onDragEnd(float x, float y){
         if(mouseFocus instanceof Character){
-            actionQueue.addLast(new MoveAction(mouseFocus, pathTracker));
-
+            actionQueue.addLast(new MoveAction(
+                    mouseFocus,
+                    new LinkedList<Tile>(pathTracker)));
+                    pathTracker.clear();
         } else if(mouseFocus instanceof Card){
             mouseFocus.setVisible(true);
             trapInstance.setId(0);
@@ -115,7 +117,8 @@ public class World implements InputHandler.InputListener{
         if(mouseFocus instanceof Character){
             GameObject object = getObjectAt(x, y, true);
 
-            if(object instanceof Tile){
+            if(object instanceof Tile
+                    && pathTracker.size() < ((Character)mouseFocus).moveRange){
                 updatePath((Tile)object);
             } else if(object instanceof Character){
                 if(!(object == player1 ^ isPlayer1Turn)){

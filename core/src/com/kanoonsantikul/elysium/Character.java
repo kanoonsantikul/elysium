@@ -6,7 +6,11 @@ public class Character extends GameObject{
     public static final float WIDTH = Assets.player1.getWidth() * Elysium.DEVICE_RATIO;
     public static final float HEIGHT = Assets.player1.getHeight() * Elysium.DEVICE_RATIO;
 
+    public static final int moveRange = 3;
+    public static final int trapRange = 4;
+
     private Tile tile;
+    private boolean isMoved;
 
     public Character(Tile tile){
         this(tile.getCenter(), tile);
