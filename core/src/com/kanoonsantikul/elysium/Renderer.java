@@ -70,10 +70,10 @@ public class Renderer{
     }
 
     private void renderTiles(){
-        Tile[] tiles = world.tiles;
+        LinkedList<Tile> tiles = world.tiles;
         Tile tile;
-        for(int i=0; i<tiles.length; i++){
-            tile = tiles[i];
+        for(int i=0; i<tiles.size(); i++){
+            tile = tiles.get(i);
             batcher.draw(Assets.tile,
                     tile.getPosition().x,
                     tile.getPosition().y,
@@ -114,25 +114,36 @@ public class Renderer{
     }
 
     private void renderCard(){
-        Card[] cards;
+        LinkedList<Card> cards;
         if(world.isPlayer1Turn){
             cards = world.player1Cards;
         } else{
             cards = world.player2Cards;
         }
 
-        for(int i=0; i<cards.length; i++){
-            batcher.setColor(1, 1, 1, cards[i].getAlpha());
-            batcher.draw(Assets.cards[cards[i].getId()],
-                    cards[i].getPosition().x,
-                    cards[i].getPosition().y,
+        Card card;
+        for(int i=0; i<cards.size(); i++){
+            card = cards.get(i);
+            if(!card.isVisible()){
+                Trap trap = world.trapInstance;
+                batcher.setColor(1, 1, 1, World.ALPHA);
+                batcher.draw(Assets.traps[trap.getId()],
+                        trap.getPosition().x,
+                        trap.getPosition().y,
+                        Trap.WIDTH,
+                        Trap.HEIGHT );
+                batcher.setColor(1,1,1,1);
+                continue;
+            }
+            batcher.draw(Assets.cards[card.getId()],
+                    card.getPosition().x,
+                    card.getPosition().y,
                     Card.WIDTH,
                     Card.HEIGHT);
-            batcher.setColor(1,1,1,1);
         }
 
         if(world.fullCard != null){
-            Card card = world.fullCard.getCard();
+            card = world.fullCard.getCard();
             batcher.draw(Assets.cards[card.getId()],
                     FullCard.X,
                     FullCard.Y,

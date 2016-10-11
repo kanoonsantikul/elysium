@@ -14,9 +14,9 @@ public class Card extends GameObject{
     private int number;
     private float alpha = 1;
 
-    public Card(int number, int id){
-        this.number = number;
+    public Card(int id, int number){
         this.id = id;
+        this.number = number;
         positioning();
     }
 
@@ -30,6 +30,10 @@ public class Card extends GameObject{
 
     public int getId(){
         return id;
+    }
+
+    public void setId(int id){
+        this.id = id;
     }
 
     public int getNumber(){

@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.Random;
 
 import com.badlogic.gdx.utils.Queue;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.Gdx;
@@ -13,10 +12,11 @@ import com.badlogic.gdx.Gdx;
 public class World implements InputHandler.InputListener{
     public static final int BOARD_SIZE = 7;
     public static final int FULL_HAND = 4;
+    public static final float ALPHA = 0.55f;
 
-    public Tile[] tiles;
-    public Card[] player1Cards;
-    public Card[] player2Cards;
+    public LinkedList<Tile> tiles;
+    public LinkedList<Card> player1Cards;
+    public LinkedList<Card> player2Cards;
     public Character player1;
     public Character player2;
 
@@ -26,28 +26,29 @@ public class World implements InputHandler.InputListener{
 
     public boolean isPlayer1Turn;
 
-    private Array<GameObject> gameObjects;
+    private LinkedList<GameObject> gameObjects;
 
+    public Trap trapInstance;
     private GameObject mouseFocus;
     private Queue<Action> actionQueue;
     public LinkedList<Tile> pathTracker;
 
     public World(){
-        tiles = new Tile[BOARD_SIZE * BOARD_SIZE];
+        tiles = new LinkedList<Tile>();
         initBoard();
 
-        player1Cards = new Card[FULL_HAND];
-        player2Cards = new Card[FULL_HAND];
+        player1Cards = new LinkedList<Card>();
+        player2Cards = new LinkedList<Card>();
         initCard();
 
-        player1 = new Character(tiles[0]);
-        player2 = new Character(tiles[tiles.length - 1]);
+        player1 = new Character(tiles.getFirst());
+        player2 = new Character(tiles.getLast());
 
         isPlayer1Turn = true;
         endTurnButton = new EndTurnButton();
         cardBar = new CardBar();
 
-        gameObjects = new Array<GameObject>();
+        gameObjects = new LinkedList<GameObject>();
         gameObjects.addAll(player1Cards);
         gameObjects.addAll(player2Cards);
         gameObjects.add(player1);
@@ -55,13 +56,14 @@ public class World implements InputHandler.InputListener{
         gameObjects.addAll(tiles);
         gameObjects.add(endTurnButton);
 
+        trapInstance = new Trap(0, null);
         actionQueue = new Queue<Action>();
         pathTracker = new LinkedList<Tile>();
     }
 
     @Override
     public void onClicked(float x, float y){
-        GameObject object = getObjectAt(x, y);
+        GameObject object = getObjectAt(x, y, true);
         if(object instanceof EndTurnButton){
             endTurn();
         } else if(object instanceof Card){
@@ -73,9 +75,9 @@ public class World implements InputHandler.InputListener{
 
     @Override
     public void onPressed(float x, float y){
-        if(mouseFocus == null &&
-                getObjectAt(x, y) instanceof Card){
-            fullCard = new FullCard((Card)getObjectAt(x, y));
+        GameObject object = getObjectAt(x, y ,true);
+        if(mouseFocus == null && object instanceof Card){
+            fullCard = new FullCard((Card)object);
         }
     }
 
@@ -83,7 +85,7 @@ public class World implements InputHandler.InputListener{
     public void onDragStart(float x, float y){
         fullCard = null;
 
-        GameObject object = getObjectAt(x, y);
+        GameObject object = getObjectAt(x, y, true);
         if(object instanceof Character && !object.isOnAction()){
             if(!(object == player1 ^ isPlayer1Turn)){
                 mouseFocus = object;
@@ -91,7 +93,6 @@ public class World implements InputHandler.InputListener{
 
         } else if(object instanceof Card){
             mouseFocus = object;
-            ((Card)mouseFocus).setAlpha(0.75f);
         }
     }
 
@@ -101,8 +102,9 @@ public class World implements InputHandler.InputListener{
             actionQueue.addLast(new MoveAction(mouseFocus, pathTracker));
 
         } else if(mouseFocus instanceof Card){
+            mouseFocus.setVisible(true);
+            trapInstance.setId(0);
             ((Card)mouseFocus).positioning();
-            ((Card)mouseFocus).setAlpha(1f);
         }
 
         mouseFocus = null;
@@ -111,7 +113,7 @@ public class World implements InputHandler.InputListener{
     @Override
     public void onDragged(float x, float y){
         if(mouseFocus instanceof Character){
-            GameObject object = getObjectAt(x, y);
+            GameObject object = getObjectAt(x, y, true);
 
             if(object instanceof Tile){
                 updatePath((Tile)object);
@@ -122,26 +124,33 @@ public class World implements InputHandler.InputListener{
             }
 
         } else if(mouseFocus instanceof Card){
+            if(getObjectAt(x, y, false) instanceof Tile){
+                mouseFocus.setVisible(false);
+                trapInstance.setId(((Card)mouseFocus).getId());
+                trapInstance.setCenter(getObjectAt(x, y, false).getCenter());
+            } else{
+                mouseFocus.setVisible(true);
+                trapInstance.setId(0);
+            }
             mouseFocus.setCenter(new Vector2(x, y));
         }
     }
 
-    public GameObject getObjectAt(float x, float y){
-        for(int i=0; i<gameObjects.size; i++){
-            GameObject object = gameObjects.get(i);
-            if(object.isInBound(x, y) && object.isVisible()){
-                return object;
+    public GameObject getObjectAt(float x, float y, boolean isDescending){
+        GameObject object;
+        if(isDescending){
+            for(int i=0; i<gameObjects.size(); i++){
+                object = gameObjects.get(i);
+                if(object.isInBound(x, y) && object.isVisible()){
+                    return object;
+                }
             }
-        }
-
-        return null;
-    }
-
-    public Tile getTileOf(GameObject object){
-        for(int i=0; i<tiles.length ; i++){
-            if(tiles[i].getCenter().x == object.getCenter().x &&
-                    tiles[i].getCenter().y == object.getCenter().y){
-                return tiles[i];
+        } else{
+            for(int i=gameObjects.size()-1; i>-1; i--){
+                object = gameObjects.get(i);
+                if(object.isInBound(x, y) && object.isVisible()){
+                    return object;
+                }
             }
         }
 
@@ -149,7 +158,7 @@ public class World implements InputHandler.InputListener{
     }
 
     public Tile getTile(int row, int collum){
-        return tiles[row * BOARD_SIZE + collum];
+        return tiles.get(row * BOARD_SIZE + collum);
     }
 
     public void update(){
@@ -173,7 +182,7 @@ public class World implements InputHandler.InputListener{
         }
 
         if(pathTracker.size() == 0){
-            if(getTileOf(mouseFocus).getNeighbors(this, false).contains(tile)){
+            if(((Character)mouseFocus).getTile().getNeighbors(this, false).contains(tile)){
                 pathTracker.add(tile);
             }
         } else if(!pathTracker.contains(tile)){
@@ -191,35 +200,37 @@ public class World implements InputHandler.InputListener{
     private void endTurn(){
         isPlayer1Turn = !isPlayer1Turn;
 
-        Card[] thisTurnCards = player1Cards;
-        Card[] previousTurnCards = player2Cards;
+        LinkedList<Card> thisTurnCards = player1Cards;
+        LinkedList<Card> previousTurnCards = player2Cards;
         if(!isPlayer1Turn){
             thisTurnCards = player2Cards;
             previousTurnCards = player1Cards;
         }
-        for(int i=0; i<thisTurnCards.length; i++){
-            thisTurnCards[i].setVisible(true);
+        for(int i=0; i<thisTurnCards.size(); i++){
+            thisTurnCards.get(i).setVisible(true);
         }
-        for(int i=0; i<previousTurnCards.length; i++){
-            previousTurnCards[i].setVisible(false);
+        for(int i=0; i<previousTurnCards.size(); i++){
+            previousTurnCards.get(i).setVisible(false);
         }
     }
 
     private void initBoard(){
-        for(int i=0; i<tiles.length; i++){
-            tiles[i] = new Tile(i);
+        for(int i=0; i<BOARD_SIZE * BOARD_SIZE; i++){
+            tiles.add(new Tile(i));
         }
     }
 
     private void initCard(){
-        Random random = new Random();
-        for(int i=0; i<FULL_HAND; i++){
-            player1Cards[i] = new Card(i, random.nextInt(3));
-            player2Cards[i] = new Card(i, random.nextInt(3));
-        }
+        while(drawCard(player1Cards));
+        while(drawCard(player2Cards));
     }
 
-    private void drawCard(Card[] playerCards){
-        //if()
+    private boolean drawCard(LinkedList<Card> playerCards){
+        Random random = new Random();
+        if(playerCards.size() < FULL_HAND){
+            playerCards.add(new Card(random.nextInt(3), playerCards.size()));
+            return true;
+        }
+        return false;
     }
 }
