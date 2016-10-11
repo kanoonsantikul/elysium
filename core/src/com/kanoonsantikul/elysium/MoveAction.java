@@ -13,6 +13,8 @@ public class MoveAction extends Action{
     private float speedX;
     private float speedY;
 
+    private Tile lastTile;
+
     public MoveAction(GameObject actor, LinkedList<Tile> paths){
         super(actor);
 
@@ -28,10 +30,11 @@ public class MoveAction extends Action{
                 changeDirection();
             } else if(!move()){
                 currentTargetPosition = null;
-                paths.poll();
+                lastTile = paths.poll();
             }
         } else{
             actor.setOnAction(false);
+            ((Character)actor).setTile(lastTile);
             setActed(true);
         }
     }

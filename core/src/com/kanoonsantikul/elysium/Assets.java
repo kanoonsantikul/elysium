@@ -13,6 +13,7 @@ public class Assets{
     public static Texture cardBarBlue;
     public static Texture cardBarRed;
     public static Texture[] cards;
+    public static Texture[] traps;
 
     public static BitmapFont font;
 
@@ -32,6 +33,12 @@ public class Assets{
             loadTexture("card.png"),
             loadTexture("bear-trap-card.png"),
             loadTexture("booby-trap-card.png")
+        };
+
+        traps = new Texture[]{
+            loadTexture("trap.png"),
+            loadTexture("bear-trap.png"),
+            loadTexture("booby-trap.png")
         };
 
         font = new BitmapFont(
