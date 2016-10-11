@@ -30,6 +30,7 @@ public class Renderer{
     private void renderBoard(){
         renderTiles();
         renderPathTracker();
+        renderTrap();
         renderCharacter();
     }
 
@@ -92,6 +93,25 @@ public class Renderer{
                     alphaTile.getPosition().y,
                     Tile.WIDTH,
                     Tile.HEIGHT);
+        }
+    }
+
+    private void renderTrap(){
+        LinkedList<Trap> traps;
+        if(world.isPlayer1Turn){
+            traps = world.player1Traps;
+        } else{
+            traps = world.player2Traps;
+        }
+
+        Trap trap;
+        for(int i=0; i<traps.size() ;i++){
+            trap = traps.get(i);
+            batcher.draw(Assets.traps[trap.getId()],
+                    trap.getPosition().x,
+                    trap.getPosition().y,
+                    Trap.WIDTH,
+                    Trap.HEIGHT);
         }
     }
 
