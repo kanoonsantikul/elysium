@@ -2,7 +2,7 @@ package com.kanoonsantikul.elysium;
 
 import com.badlogic.gdx.math.Vector2;
 
-public class Trap extends GameObject{
+public class Trap extends BoardObject{
     public static final float WIDTH = Assets.traps[0].getWidth() * Elysium.DEVICE_RATIO;
     public static final float HEIGHT = Assets.traps[0].getHeight() * Elysium.DEVICE_RATIO;
 
@@ -11,8 +11,8 @@ public class Trap extends GameObject{
 
     public Trap (int id, Tile tile){
         setId(id);
-        setTile(tile);
         if(tile != null){
+            setTile(tile);
             setCenter(tile.getCenter());
         }
     }
@@ -31,13 +31,5 @@ public class Trap extends GameObject{
 
     public float getHeight(){
         return HEIGHT;
-    }
-
-    public Tile getTile(){
-        return tile;
-    }
-
-    public void setTile(Tile tile){
-        this.tile = tile;
     }
 }

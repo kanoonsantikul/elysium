@@ -2,7 +2,7 @@ package com.kanoonsantikul.elysium;
 
 import com.badlogic.gdx.math.Vector2;
 
-public class Character extends GameObject{
+public class Character extends BoardObject{
     public static final float WIDTH = Assets.player1.getWidth() * Elysium.DEVICE_RATIO;
     public static final float HEIGHT = Assets.player1.getHeight() * Elysium.DEVICE_RATIO;
 
@@ -17,6 +17,7 @@ public class Character extends GameObject{
     }
 
     public Character(Vector2 position, Tile tile){
+        setIsMoved(false);
         setTile(tile);
         setCenter(position);
     }
@@ -29,11 +30,11 @@ public class Character extends GameObject{
         return HEIGHT;
     }
 
-    public Tile getTile(){
-        return tile;
+    public boolean getIsMoved(){
+        return isMoved;
     }
 
-    public void setTile(Tile tile){
-        this.tile = tile;
+    public void setIsMoved(boolean isMoved){
+        this.isMoved = isMoved;
     }
 }

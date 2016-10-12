@@ -1,5 +1,7 @@
 package com.kanoonsantikul.elysium;
 
+import com.kanoonsantikul.elysium.InputHandler.GestureHandler;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
