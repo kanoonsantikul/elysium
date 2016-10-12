@@ -15,17 +15,17 @@ public class MoveAction extends Action{
 
     private Tile lastTile;
 
-    public MoveAction(GameObject actor, LinkedList<Tile> paths){
+    public MoveAction(BoardObject actor, LinkedList<Tile> paths){
         super(actor);
 
         this.paths = paths;
+        actor.setOnAction(true);
+        actor.setTile(null);
     }
 
     @Override
     public void act(){
         if(paths.size() > 0){
-            actor.setOnAction(true);
-
             if(currentTargetPosition == null){
                 changeDirection();
             } else if(!move()){
@@ -34,7 +34,10 @@ public class MoveAction extends Action{
             }
         } else{
             actor.setOnAction(false);
-            ((Character)actor).setTile(lastTile);
+            ((BoardObject)actor).setTile(lastTile);
+            if(actor instanceof Character){
+                ((Character)actor).setIsMoved(true);
+            }
             setActed(true);
         }
     }

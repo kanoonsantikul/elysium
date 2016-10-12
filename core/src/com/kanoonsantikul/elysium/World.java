@@ -67,8 +67,6 @@ public class World implements InputHandler.InputListener{
 
     @Override
     public void onClicked(float x, float y){
-        fullCard = null;
-
         GameObject object = getObjectAt(x, y, null);
         if(object instanceof EndTurnButton){
             endTurn();
@@ -92,7 +90,9 @@ public class World implements InputHandler.InputListener{
         fullCard = null;
 
         GameObject object = getObjectAt(x, y, null);
-        if(object instanceof Character && !object.isOnAction()){
+        if(object instanceof Character
+                && !object.isOnAction()
+                && !((Character)object).getIsMoved()){
             if(!(object == player1 ^ isPlayer1Turn)){
                 mouseFocus = object;
             }
@@ -108,22 +108,41 @@ public class World implements InputHandler.InputListener{
 
         if(mouseFocus instanceof Character){
             actionQueue.addLast(new MoveAction(
-                    mouseFocus,
+                    (BoardObject)mouseFocus,
                     new LinkedList<Tile>(pathTracker)));
                     pathTracker.clear();
         } else if(mouseFocus instanceof Card){
             GameObject object = getObjectAt(x, y, Tile.class);
             if(object != null){
+                boolean tileIsEmpty = true;
+                LinkedList<Trap> traps;
                 if(isPlayer1Turn){
-                    player1Traps.add(new Trap(trapInstance.getId(), (Tile)object));
-                    player1Cards.remove(mouseFocus);
-                    gameObjects.remove(mouseFocus);
+                    traps = player1Traps;
                 } else{
-                    player2Traps.add(new Trap(trapInstance.getId(), (Tile)object));
-                    player2Cards.remove(mouseFocus);
-                    gameObjects.remove(mouseFocus);
+                    traps = player2Traps;
                 }
-                updatePlayerCards();
+
+                for(int i=0; i<traps.size(); i++){
+                    if(traps.get(i).getTile() == object){
+                        tileIsEmpty = false;
+                    }
+                }
+
+                if(tileIsEmpty){
+                    if(isPlayer1Turn){
+                        player1Traps.add(new Trap(trapInstance.getId(), (Tile)object));
+                        player1Cards.remove(mouseFocus);
+                        gameObjects.remove(mouseFocus);
+                    } else{
+                        player2Traps.add(new Trap(trapInstance.getId(), (Tile)object));
+                        player2Cards.remove(mouseFocus);
+                        gameObjects.remove(mouseFocus);
+                    }
+                    updatePlayerCards();
+                } else{
+                    mouseFocus.setVisible(true);
+                    ((Card)mouseFocus).positioning();
+                }
             } else{
                 mouseFocus.setVisible(true);
                 ((Card)mouseFocus).positioning();
@@ -138,8 +157,7 @@ public class World implements InputHandler.InputListener{
     public void onDragged(float x, float y){
         if(mouseFocus instanceof Character){
             GameObject object = getObjectAt(x, y, null);
-            if(object instanceof Tile &&
-                    pathTracker.size() < ((Character)mouseFocus).moveRange){
+            if(object instanceof Tile){
                 updatePath((Tile)object);
             } else if(object instanceof Character){
                 if(!(object == player1 ^ isPlayer1Turn)){
@@ -150,9 +168,25 @@ public class World implements InputHandler.InputListener{
         } else if(mouseFocus instanceof Card){
             GameObject object = getObjectAt(x, y, Tile.class);
             if(object != null){
-                mouseFocus.setVisible(false);
-                trapInstance.setId(((Card)mouseFocus).getId());
-                trapInstance.setCenter(object.getCenter());
+                boolean tileIsEmpty = true;
+                LinkedList<Trap> traps;
+                if(isPlayer1Turn){
+                    traps = player1Traps;
+                } else{
+                    traps = player2Traps;
+                }
+
+                for(int i=0; i<traps.size(); i++){
+                    if(traps.get(i).getTile() == object){
+                        tileIsEmpty = false;
+                    }
+                }
+
+                if(tileIsEmpty){
+                    mouseFocus.setVisible(false);
+                    trapInstance.setId(((Card)mouseFocus).getId());
+                    trapInstance.setCenter(object.getCenter());
+                }
             } else{
                 mouseFocus.setVisible(true);
                 trapInstance.setId(0);
@@ -198,12 +232,14 @@ public class World implements InputHandler.InputListener{
             return;
         }
 
+        Character character = (Character)mouseFocus;
         if(pathTracker.size() == 0){
-            if(((Character)mouseFocus).getTile().getNeighbors(this, false).contains(tile)){
+            if(character.getTile().getNeighbors(this, false).contains(tile)){
                 pathTracker.add(tile);
             }
         } else if(!pathTracker.contains(tile)){
-            if(pathTracker.getLast().getNeighbors(this, false).contains(tile)){
+            if(pathTracker.getLast().getNeighbors(this, false).contains(tile)
+                    && pathTracker.size() < character.moveRange){
                 pathTracker.add(tile);
             }
         } else{
@@ -240,8 +276,10 @@ public class World implements InputHandler.InputListener{
             thisTurnTraps =  player2Traps;
             previousTurnTraps = player1Traps;
 
+            player2.setIsMoved(false);
             drawCard(player2Cards);
         } else{
+            player1.setIsMoved(false);
             drawCard(player1Cards);
         }
         updatePlayerCards();

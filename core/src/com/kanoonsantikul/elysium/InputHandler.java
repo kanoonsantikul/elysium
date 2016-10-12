@@ -9,6 +9,7 @@ public class InputHandler extends GestureDetector{
     public static final float LONG_PRESS_SECONDS = 0.25f;
 
     private boolean isDragged = false;
+    private boolean isJustClick = true;
     private InputListener listener;
 
     public interface InputListener{
@@ -20,13 +21,9 @@ public class InputHandler extends GestureDetector{
     }
 
     public class GestureHandler extends GestureAdapter{
-        public GestureHandler(){
-
-        }
-
         @Override
         public boolean longPress(float x, float y){
-            if(listener != null){
+            if(listener != null && !isJustClick){
                 listener.onPressed(x, flipAxis(y));
             }
             return true;
@@ -38,7 +35,15 @@ public class InputHandler extends GestureDetector{
     }
 
     @Override
+    public boolean touchDown(float x, float y, int pointer, int button){
+        isJustClick = false;
+        return false;
+    }
+
+    @Override
     public boolean touchUp(float x, float y, int pointer, int button){
+        isJustClick = true;
+
         if(pointer == 0 && button == Buttons.LEFT){
             if(!isDragged){
                 listener.onClicked(x, flipAxis(y));
@@ -67,7 +72,7 @@ public class InputHandler extends GestureDetector{
         this.listener = listener;
     }
 
-    private float flipAxis(float y){
+    private static float flipAxis(float y){
         return Elysium.HEIGHT - 1 - y;
     }
 }
