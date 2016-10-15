@@ -36,7 +36,7 @@ public class Renderer{
 
     private void renderUI(){
         Texture cardBar;
-        if(world.isPlayer1Turn){
+        if(world.player == world.player1){
             cardBar = Assets.cardBarBlue;
         } else{
             cardBar = Assets.cardBarRed;
@@ -59,7 +59,7 @@ public class Renderer{
 
     private void renderFont(){
         String turn;
-        if(world.isPlayer1Turn){
+        if(world.player == world.player1){
             turn = "Player 1";
         } else{
             turn = "Player 2";
@@ -84,9 +84,13 @@ public class Renderer{
     }
 
     private void renderPathTracker(){
+        if(world.pathTracker == null){
+            return;
+        }
+        
         LinkedList<Tile> pathTracker = world.pathTracker;
         Tile alphaTile;
-        for(int i=0 ;i<pathTracker.size(); i++){
+        for(int i=0; i<pathTracker.size(); i++){
             alphaTile = pathTracker.get(i);
             batcher.draw(Assets.alphaTile,
                     alphaTile.getPosition().x,
@@ -97,13 +101,7 @@ public class Renderer{
     }
 
     private void renderTrap(){
-        LinkedList<Trap> traps;
-        if(world.isPlayer1Turn){
-            traps = world.player1Traps;
-        } else{
-            traps = world.player2Traps;
-        }
-
+        LinkedList<Trap> traps = world.player.getTraps();
         Trap trap;
         for(int i=0; i<traps.size() ;i++){
             trap = traps.get(i);
@@ -116,31 +114,25 @@ public class Renderer{
     }
 
     private void renderCharacter(){
-        Character player;
+        Player player;
         player = world.player1;
         batcher.draw(Assets.player1,
-                player.getPosition().x,
-                player.getPosition().y,
-                Character.WIDTH,
-                Character.HEIGHT);
+                world.player1.getPosition().x,
+                world.player1.getPosition().y,
+                Player.WIDTH,
+                Player.HEIGHT);
 
 
         player = world.player2;
         batcher.draw(Assets.player2,
-                player.getPosition().x,
-                player.getPosition().y,
-                Character.WIDTH,
-                Character.HEIGHT);
+                world.player2.getPosition().x,
+                world.player2.getPosition().y,
+                Player.WIDTH,
+                Player.HEIGHT);
     }
 
     private void renderCard(){
-        LinkedList<Card> cards;
-        if(world.isPlayer1Turn){
-            cards = world.player1Cards;
-        } else{
-            cards = world.player2Cards;
-        }
-
+        LinkedList<Card> cards = world.player.getCards();
         Card card;
         for(int i=0; i<cards.size(); i++){
             card = cards.get(i);

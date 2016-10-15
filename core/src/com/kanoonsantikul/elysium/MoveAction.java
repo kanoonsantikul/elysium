@@ -19,6 +19,8 @@ public class MoveAction extends Action{
         super(actor);
 
         this.paths = paths;
+        lastTile = actor.getTile();
+
         actor.setOnAction(true);
         actor.setTile(null);
     }
@@ -35,8 +37,8 @@ public class MoveAction extends Action{
         } else{
             actor.setOnAction(false);
             ((BoardObject)actor).setTile(lastTile);
-            if(actor instanceof Character){
-                ((Character)actor).setIsMoved(true);
+            if(actor instanceof Player){
+                ((Player)actor).setIsMoved(true);
             }
             setActed(true);
         }
