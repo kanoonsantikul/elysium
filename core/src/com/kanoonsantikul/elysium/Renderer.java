@@ -6,8 +6,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 
 public class Renderer{
+    private static final float NAME_X = EndTurnButton.X - 20;
+    private static final float NAME_Y = EndTurnButton.Y + EndTurnButton.HEIGHT + 20;
+
+    private static final float PLAYER_FONT_Y = -10f;
+
     World world;
     SpriteBatch batcher;
 
@@ -43,14 +49,14 @@ public class Renderer{
         }
 
         batcher.draw(cardBar,
-                world.cardBar.getPosition().x,
-                world.cardBar.getPosition().y,
+                CardBar.X,
+                CardBar.Y,
                 CardBar.WIDTH,
                 CardBar.HEIGHT);
 
         batcher.draw(Assets.endTurnButton,
-                world.endTurnButton.getPosition().x,
-                world.endTurnButton.getPosition().y,
+                EndTurnButton.X,
+                EndTurnButton.Y,
                 EndTurnButton.WIDTH,
                 EndTurnButton.HEIGHT);
 
@@ -66,8 +72,8 @@ public class Renderer{
         }
         Assets.font.draw(batcher,
                 turn,
-                world.endTurnButton.getPosition().x - 70,
-                world.endTurnButton.getPosition().y + world.endTurnButton.HEIGHT + 20);
+                NAME_X,
+                NAME_Y);
     }
 
     private void renderTiles(){
@@ -87,7 +93,6 @@ public class Renderer{
         if(world.pathTracker == null){
             return;
         }
-        
         LinkedList<Tile> pathTracker = world.pathTracker;
         Tile alphaTile;
         for(int i=0; i<pathTracker.size(); i++){
@@ -115,12 +120,22 @@ public class Renderer{
 
     private void renderCharacter(){
         Player player;
+        GlyphLayout glyph;
+        String text;
+
         player = world.player1;
+        text = "HP: " + player.getHealth();
         batcher.draw(Assets.player1,
                 world.player1.getPosition().x,
                 world.player1.getPosition().y,
                 Player.WIDTH,
                 Player.HEIGHT);
+        glyph = Assets.fontSmall.draw(batcher, text, -400, -400);
+        Assets.fontSmall.draw(
+                batcher,
+                text,
+                player.getCenter().x - glyph.width / 2f,
+                player.getPosition().y - PLAYER_FONT_Y);
 
 
         player = world.player2;
@@ -129,6 +144,12 @@ public class Renderer{
                 world.player2.getPosition().y,
                 Player.WIDTH,
                 Player.HEIGHT);
+        glyph = Assets.fontSmall.draw(batcher, text, -400, -400);
+        Assets.fontSmall.draw(
+                batcher,
+                text,
+                player.getCenter().x - glyph.width / 2f,
+                player.getPosition().y - PLAYER_FONT_Y);
     }
 
     private void renderCard(){

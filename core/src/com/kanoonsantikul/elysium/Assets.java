@@ -3,6 +3,7 @@ package com.kanoonsantikul.elysium;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Assets{
     public static Texture tile;
@@ -16,6 +17,7 @@ public class Assets{
     public static Texture[] traps;
 
     public static BitmapFont font;
+    public static BitmapFont fontSmall;
 
     public static Texture loadTexture (String file) {
 		return new Texture(Gdx.files.internal(file));
@@ -42,8 +44,12 @@ public class Assets{
         };
 
         font = new BitmapFont(
-                Gdx.files.internal("font/font.fnt"),
-                Gdx.files.internal("font/font.png"),
+                Gdx.files.internal("font/ubuntu-font.fnt"),
+                new TextureRegion(loadTexture("font/ubuntu-font.png")),
+                false);
+        fontSmall = new BitmapFont(
+                Gdx.files.internal("font/ubuntu-font-small.fnt"),
+                new TextureRegion(loadTexture("font/ubuntu-font-small.png")),
                 false);
     }
 }

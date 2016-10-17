@@ -1,6 +1,7 @@
 package com.kanoonsantikul.elysium;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.Gdx;
 
 public abstract class GameObject{
     public abstract float getWidth();
