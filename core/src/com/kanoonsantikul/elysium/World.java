@@ -3,7 +3,6 @@ package com.kanoonsantikul.elysium;
 import java.util.LinkedList;
 import java.util.Random;
 
-import com.badlogic.gdx.utils.Queue;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.Gdx;
@@ -30,7 +29,7 @@ public class World implements InputHandler.InputListener{
     public WorldState dragCardState;
     public WorldState dragPlayerState;
 
-    public Queue<Action> actionQueue;
+    public LinkedList<Action> actionQueue;
     public LinkedList<Tile> pathTracker;
 
     public World(){
@@ -55,7 +54,7 @@ public class World implements InputHandler.InputListener{
         dragPlayerState = new DragPlayerState();
 
         trapInstance = new Trap(0, null);
-        actionQueue = new Queue<Action>();
+        actionQueue = new LinkedList<Action>();
     }
 
     @Override
@@ -139,8 +138,8 @@ public class World implements InputHandler.InputListener{
     }
 
     private void updateActionQueue(){
-        if(actionQueue.size > 0){
-            Action action = actionQueue.first();
+        if(actionQueue.size() > 0){
+            Action action = actionQueue.getFirst();
             if(action.isActed()){
                 actionQueue.removeFirst();
             } else{
