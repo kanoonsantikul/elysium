@@ -8,14 +8,12 @@ public class Player extends BoardObject{
     public static final float WIDTH = Assets.player1.getWidth() * Elysium.DEVICE_RATIO;
     public static final float HEIGHT = Assets.player1.getHeight() * Elysium.DEVICE_RATIO;
 
-    public int moveRange = 3;
-    public int trapRange = 4;
-
+    private int moveRange = 3;
+    private int trapRange = 4;
     private int health = 2000;
+    private int turnCount = 0;
     private LinkedList<Card> cards;
     private LinkedList<Trap> traps;
-
-    private Tile tile;
     private boolean isMoved;
 
     public Player(Tile tile){
@@ -39,12 +37,36 @@ public class Player extends BoardObject{
         return HEIGHT;
     }
 
-    public boolean getIsMoved(){
-        return isMoved;
+    public int getMoveRange(){
+        return moveRange;
     }
 
-    public void setIsMoved(boolean isMoved){
-        this.isMoved = isMoved;
+    public void setMoveRange(int moveRange){
+        this.moveRange = moveRange;
+    }
+
+    public int getTrapRange(){
+        return moveRange;
+    }
+
+    public void setTrapRange(int trapRange){
+        this.trapRange = trapRange;
+    }
+
+    public int getHealth(){
+        return health;
+    }
+
+    public void setHealth(int health){
+        this.health = health;
+    }
+
+    public int getTurnCount(){
+        return health;
+    }
+
+    public void setTurnCount(int turnCount){
+        this.turnCount = turnCount;
     }
 
     public LinkedList<Card> getCards(){
@@ -55,14 +77,14 @@ public class Player extends BoardObject{
         return traps;
     }
 
-    public void setHealth(int health){
-        this.health = health;
+    public boolean getIsMoved(){
+        return isMoved;
     }
 
-    public int getHealth(){
-        return health;
+    public void setIsMoved(boolean isMoved){
+        this.isMoved = isMoved;
     }
-
+    
     public void updateCards(){
         Card card;
         for(int i=0; i<cards.size(); i++){
