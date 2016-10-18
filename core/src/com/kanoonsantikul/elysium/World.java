@@ -23,7 +23,7 @@ public class World implements InputHandler.InputListener{
     public Trap trapInstance;
     public GameObject mouseFocus;
 
-    protected LinkedList<GameObject> gameObjects;
+    protected static LinkedList<GameObject> gameObjects;
 
     public WorldState state;
     public WorldState dragCardState;
@@ -118,7 +118,7 @@ public class World implements InputHandler.InputListener{
         }
     }
 
-    public GameObject getObjectAt(float x, float y, Class type){
+    public static GameObject getObjectAt(float x, float y, Class type){
         GameObject object;
         for(int i=0; i<gameObjects.size(); i++){
             object = gameObjects.get(i);
@@ -131,11 +131,16 @@ public class World implements InputHandler.InputListener{
         return null;
     }
 
+    public static GameObject getObjectAt(Vector2 position, Class type){
+        return getObjectAt(position.x, position.y, type);
+    }
+
     public Tile getTile(int row, int collum){
         return tiles.get(row * BOARD_SIZE + collum);
     }
 
     public void update(){
+        turnManager.update();
         updateActionQueue();
     }
 
@@ -157,19 +162,16 @@ public class World implements InputHandler.InputListener{
     }
 
     private void initCard(){
-        while(drawCard(player1.getCards()));
-        while(drawCard(player2.getCards()));
-        player1.updateCards();
-        player2.updateCards();
+        while(drawCard(player1));
+        while(drawCard(player2));
     }
 
-    public boolean drawCard(LinkedList<Card> playerCards){
+    public boolean drawCard(Player player){
         Random random = new Random();
         Card card;
-        if(playerCards.size() < FULL_HAND){
+        if(player.getCards().size() < FULL_HAND){
             card = new Card(random.nextInt(3));
-            playerCards.add(card);
-            gameObjects.add(card);
+            player.addCard(card);
             return true;
         }
         return false;
