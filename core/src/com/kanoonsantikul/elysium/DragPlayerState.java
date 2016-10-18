@@ -18,7 +18,7 @@ public class DragPlayerState implements WorldState{
         pathTracker = new LinkedList<Tile>();
         world.pathTracker = pathTracker;
 
-        if(player.isOnAction() && player.getIsMoved()){
+        if(player.isOnAction() || player.getIsMoved()){
             world.state = null;
         }
     }
@@ -59,7 +59,7 @@ public class DragPlayerState implements WorldState{
             }
 
             if(lastTile.getNeighbors(world, false).contains(tile)
-                    && pathTracker.size() < player.moveRange){
+                    && pathTracker.size() < player.getMoveRange()){
                 pathTracker.add(tile);
             }
         } else{

@@ -31,6 +31,7 @@ public class World implements InputHandler.InputListener{
 
     public LinkedList<Action> actionQueue;
     public LinkedList<Tile> pathTracker;
+    public TurnManager turnManager;
 
     public World(){
         tiles = new LinkedList<Tile>();
@@ -55,6 +56,7 @@ public class World implements InputHandler.InputListener{
 
         trapInstance = new Trap(0, null);
         actionQueue = new LinkedList<Action>();
+        turnManager = new TurnManager(this);
     }
 
     @Override
@@ -63,7 +65,7 @@ public class World implements InputHandler.InputListener{
 
         GameObject object = getObjectAt(x, y, null);
         if(object instanceof EndTurnButton){
-            endTurn();
+            turnManager.switchTurn();
         }
     }
 
@@ -80,13 +82,13 @@ public class World implements InputHandler.InputListener{
         fullCard = null;
 
         GameObject object = getObjectAt(x, y, null);
-        if(object == player){
+        if(object == player && state == null){
             mouseFocus = object;
 
             state = dragPlayerState;
             state.enterState(this);
 
-        } else if(object instanceof Card){
+        } else if(object instanceof Card && state == null){
             mouseFocus = object;
 
             state = dragCardState;
@@ -96,10 +98,10 @@ public class World implements InputHandler.InputListener{
 
     @Override
     public void onDragEnd(float x, float y){
-        if(mouseFocus instanceof Player){
+        if(mouseFocus instanceof Player && state != null){
             state.exitState();
             state = null;
-        } else if(mouseFocus instanceof Card){
+        } else if(mouseFocus instanceof Card && state != null){
             state.exitState();
             state = null;
         }
@@ -109,9 +111,9 @@ public class World implements InputHandler.InputListener{
 
     @Override
     public void onDragged(float x, float y){
-        if(mouseFocus instanceof Player){
+        if(mouseFocus instanceof Player && state != null){
             state.handleInput(x, y);
-        } else if(mouseFocus instanceof Card){
+        } else if(mouseFocus instanceof Card && state != null){
             state.handleInput(x, y);
         }
     }
@@ -148,31 +150,6 @@ public class World implements InputHandler.InputListener{
         }
     }
 
-    private void endTurn(){
-        for(int i=0; i<player.getCards().size(); i++){
-            player.getCards().get(i).setVisible(false);
-        }
-        for(int i=0; i<player.getTraps().size(); i++){
-            player.getTraps().get(i).setVisible(false);
-        }
-
-        if(player == player1){
-            player = player2;
-        } else{
-            player = player1;
-        }
-        player.setIsMoved(false);
-        drawCard(player.getCards());
-        player.updateCards();
-
-        for(int i=0; i<player.getCards().size(); i++){
-            player.getCards().get(i).setVisible(true);
-        }
-        for(int i=0; i<player.getTraps().size(); i++){
-            player.getTraps().get(i).setVisible(true);
-        }
-    }
-
     private void initBoard(){
         for(int i=0; i<BOARD_SIZE * BOARD_SIZE; i++){
             tiles.add(new Tile(i));
@@ -186,7 +163,7 @@ public class World implements InputHandler.InputListener{
         player2.updateCards();
     }
 
-    private boolean drawCard(LinkedList<Card> playerCards){
+    public boolean drawCard(LinkedList<Card> playerCards){
         Random random = new Random();
         Card card;
         if(playerCards.size() < FULL_HAND){
