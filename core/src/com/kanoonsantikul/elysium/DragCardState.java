@@ -21,15 +21,7 @@ public class DragCardState implements WorldState{
     public void handleInput(float x, float y){
         GameObject mouseOver = world.getObjectAt(x, y ,Tile.class);
         if(mouseOver instanceof Tile){
-            LinkedList<Trap> traps = world.player.getTraps();
-            boolean tileIsEmpty = true;
-            for(int i=0; i<traps.size(); i++){
-                if(traps.get(i).getTile() == mouseOver){
-                    tileIsEmpty = false;
-                }
-            }
-
-            if(tileIsEmpty){
+            if(world.getObjectAt(mouseOver.getCenter(), Trap.class) == null){
                 lastFocusTile = (Tile)mouseOver;
                 card.setVisible(false);
                 trapInstance.setId(card.getId());
@@ -53,11 +45,8 @@ public class DragCardState implements WorldState{
     @Override
     public void exitState(){
         if(lastFocusTile != null){
-            world.player.getTraps().add(
-                    new Trap(trapInstance.getId(), lastFocusTile));
-            world.player.getCards().remove(card);
-            world.gameObjects.remove(card);
-            world.player.updateCards();
+            world.player.addTrap(new Trap(trapInstance.getId(), lastFocusTile));
+            world.player.removeCard(card);
 
         } else{
             card.setVisible(true);

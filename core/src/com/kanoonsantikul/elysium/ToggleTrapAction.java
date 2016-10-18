@@ -10,6 +10,12 @@ public class ToggleTrapAction extends Action{
         this.setActed(true);
     }
 
+    public ToggleTrapAction(Tile tile, LinkedList<Action> actionQueue){
+        super(null);
+
+        World.getObjectAt(tile.getCenter(), Trap.class);
+    }
+
     private void addAction(Action[] trapActions, LinkedList<Action> actionQueue){
         for(int i=0; i<trapActions.length; i++){
             actionQueue.add(trapActions[i]);

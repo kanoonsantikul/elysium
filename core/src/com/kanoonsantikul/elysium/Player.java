@@ -11,7 +11,6 @@ public class Player extends BoardObject{
     private int moveRange = 3;
     private int trapRange = 4;
     private int health = 2000;
-    private int turnCount = 0;
     private LinkedList<Card> cards;
     private LinkedList<Trap> traps;
     private boolean isMoved;
@@ -61,20 +60,34 @@ public class Player extends BoardObject{
         this.health = health;
     }
 
-    public int getTurnCount(){
-        return health;
-    }
-
-    public void setTurnCount(int turnCount){
-        this.turnCount = turnCount;
-    }
-
     public LinkedList<Card> getCards(){
         return cards;
     }
 
+    public void addCard(Card card){
+        cards.add(card);
+        World.gameObjects.add(card);
+        updateCards();
+    }
+
+    public void removeCard(Card card){
+        cards.remove(card);
+        World.gameObjects.remove(card);
+        updateCards();
+    }
+
     public LinkedList<Trap> getTraps(){
         return traps;
+    }
+
+    public void addTrap(Trap trap){
+        traps.add(trap);
+        World.gameObjects.add(trap);
+    }
+
+    public void removeTrap(Trap trap){
+        traps.remove(trap);
+        World.gameObjects.remove(trap);
     }
 
     public boolean getIsMoved(){
@@ -84,7 +97,7 @@ public class Player extends BoardObject{
     public void setIsMoved(boolean isMoved){
         this.isMoved = isMoved;
     }
-    
+
     public void updateCards(){
         Card card;
         for(int i=0; i<cards.size(); i++){
