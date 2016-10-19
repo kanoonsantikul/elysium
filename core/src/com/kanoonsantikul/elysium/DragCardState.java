@@ -21,7 +21,7 @@ public class DragCardState implements WorldState{
     public void handleInput(float x, float y){
         GameObject mouseOver = world.getObjectAt(x, y ,Tile.class);
         if(mouseOver instanceof Tile){
-            if(world.getObjectAt(mouseOver.getCenter(), Trap.class) == null){
+            if(world.getObjectAt(mouseOver.getCenter(), Trap.class, false) == null){
                 lastFocusTile = (Tile)mouseOver;
                 card.setVisible(false);
                 trapInstance.setId(card.getId());

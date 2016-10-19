@@ -35,14 +35,15 @@ public class DragPlayerState implements WorldState{
 
     @Override
     public void update(){
-
+        
     }
 
     @Override
     public void exitState(){
         world.actionQueue.addLast(new MoveAction(
                 player,
-                pathTracker));
+                pathTracker,
+                world.actionQueue));
     }
 
     private void updatePath(Tile tile){
@@ -58,7 +59,7 @@ public class DragPlayerState implements WorldState{
                 lastTile = pathTracker.getLast();
             }
 
-            if(lastTile.getNeighbors(world, false).contains(tile)
+            if(lastTile.getNeighbors(false).contains(tile)
                     && pathTracker.size() < player.getMoveRange()){
                 pathTracker.add(tile);
             }

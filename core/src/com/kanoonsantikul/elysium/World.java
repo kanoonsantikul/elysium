@@ -12,28 +12,32 @@ public class World implements InputHandler.InputListener{
     public static final int FULL_HAND = 4;
     public static final float ALPHA = 0.55f;
 
-    public LinkedList<Tile> tiles;
-    public static Player player1;
-    public static Player player2;
-    public Player player;
-
-    public EndTurnButton endTurnButton;
-    public CardBar cardBar;
-    public Trap trapInstance;
-    public GameObject mouseFocus;
-
+    private static World world;
     protected static LinkedList<GameObject> gameObjects;
-    protected static LinkedList<Action> actionQueue;
-    protected static TurnManager turnManager;
-    protected static FullCard fullCard;
 
-    public WorldState state;
-    public WorldState dragCardState;
-    public WorldState dragPlayerState;
+    protected LinkedList<Tile> tiles;
+    protected Player player1;
+    protected Player player2;
+    protected Player player;
 
-    public LinkedList<Tile> pathTracker;
+    protected EndTurnButton endTurnButton;
+    protected CardBar cardBar;
+    protected Trap trapInstance;
+    protected GameObject mouseFocus;
+
+    protected LinkedList<Action> actionQueue;
+    protected TurnManager turnManager;
+    protected FullCard fullCard;
+
+    protected WorldState state;
+    protected WorldState dragCardState;
+    protected WorldState dragPlayerState;
+
+    protected LinkedList<Tile> pathTracker;
 
     public World(){
+        world = this;
+
         tiles = new LinkedList<Tile>();
         initBoard();
 
@@ -58,6 +62,13 @@ public class World implements InputHandler.InputListener{
         dragPlayerState = new DragPlayerState();
 
         trapInstance = new Trap(0, null);
+    }
+
+    public static World instance(){
+        if(world != null){
+            return world;
+        }
+        return null;
     }
 
     @Override
@@ -120,20 +131,35 @@ public class World implements InputHandler.InputListener{
     }
 
     public static GameObject getObjectAt(float x, float y, Class type){
+        return getObjectAt(x, y, type, false);
+    }
+
+    public static GameObject getObjectAt(
+            float x,
+            float y,
+            Class type,
+            boolean ignoreVisible){
         GameObject object;
         for(int i=0; i<gameObjects.size(); i++){
             object = gameObjects.get(i);
             if(object.isInBound(x, y)){
-                if((type == null && object.isVisible()) || object.getClass() == type){
-                    return object;
+                if(type == null || object.getClass() == type){
+                    if(!ignoreVisible && object.isVisible()){
+                        return object;
+                    } else if(ignoreVisible){
+                        return object;
+                    }
                 }
             }
         }
         return null;
     }
 
-    public static GameObject getObjectAt(Vector2 position, Class type){
-        return getObjectAt(position.x, position.y, type);
+    public static GameObject getObjectAt(
+            Vector2 position,
+            Class type,
+            boolean ignoreVisible){
+        return getObjectAt(position.x, position.y, type, ignoreVisible);
     }
 
     public Tile getTile(int row, int collum){
