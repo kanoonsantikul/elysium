@@ -37,7 +37,8 @@ public class Renderer{
         renderTiles();
         renderPathTracker();
         renderTrap();
-        renderCharacter();
+        renderCharacter(world.player1);
+        renderCharacter(world.player2);
     }
 
     private void renderUI(){
@@ -118,33 +119,22 @@ public class Renderer{
         }
     }
 
-    private void renderCharacter(){
-        Player player;
-        GlyphLayout glyph;
-        String text;
+    private void renderCharacter(Player player){
+        String text = "HP: " + player.getHealth();
+        Texture texture;
+        if(player == world.player1){
+            texture = Assets.player1;
+        } else{
+            texture = Assets.player2;
+        }
 
-        player = world.player1;
-        text = "HP: " + player.getHealth();
-        batcher.draw(Assets.player1,
-                world.player1.getPosition().x,
-                world.player1.getPosition().y,
+        batcher.draw(texture,
+                player.getPosition().x,
+                player.getPosition().y,
                 Player.WIDTH,
                 Player.HEIGHT);
-        glyph = Assets.fontSmall.draw(batcher, text, -400, -400);
-        Assets.fontSmall.draw(
-                batcher,
-                text,
-                player.getCenter().x - glyph.width / 2f,
-                player.getPosition().y - PLAYER_FONT_Y);
 
-
-        player = world.player2;
-        batcher.draw(Assets.player2,
-                world.player2.getPosition().x,
-                world.player2.getPosition().y,
-                Player.WIDTH,
-                Player.HEIGHT);
-        glyph = Assets.fontSmall.draw(batcher, text, -400, -400);
+        GlyphLayout glyph = Assets.fontSmall.draw(batcher, text, -400, -400);
         Assets.fontSmall.draw(
                 batcher,
                 text,

@@ -33,7 +33,8 @@ public class Tile extends GameObject{
         return number;
     }
 
-    public LinkedList<Tile> getNeighbors(World world, boolean neighbor8){
+    public LinkedList<Tile> getNeighbors(boolean neighbor8){
+        World world = World.instance();
         LinkedList<Tile> neighbors = new LinkedList<Tile>();
 
         int row = number / World.BOARD_SIZE;

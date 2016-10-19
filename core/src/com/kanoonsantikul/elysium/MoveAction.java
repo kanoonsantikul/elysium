@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 
 public class MoveAction extends Action{
     private LinkedList<Tile> paths;
+    private LinkedList<Action> actionQueue;
     private Vector2 currentTargetPosition;
 
     private final float SPEED = 3;
@@ -15,10 +16,13 @@ public class MoveAction extends Action{
 
     private Tile lastTile;
 
-    public MoveAction(BoardObject actor, LinkedList<Tile> paths){
+    public MoveAction(BoardObject actor,
+            LinkedList<Tile> paths,
+            LinkedList<Action> actionQueue){
         super(actor);
 
         this.paths = paths;
+        this.actionQueue = actionQueue;
         lastTile = actor.getTile();
 
         actor.setOnAction(true);
@@ -39,8 +43,10 @@ public class MoveAction extends Action{
             ((BoardObject)actor).setTile(lastTile);
             if(actor instanceof Player){
                 ((Player)actor).setIsMoved(true);
-                World.actionQueue.add(
-                        new ToggleTrapAction((Player)actor,lastTile));
+                if(actionQueue != null){
+                    actionQueue.add(
+                            new ToggleTrapAction((Player)actor,lastTile));
+                }
             }
             setActed(true);
         }

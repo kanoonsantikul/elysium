@@ -3,25 +3,40 @@ package com.kanoonsantikul.elysium;
 import com.badlogic.gdx.Gdx;
 
 public class ToggleTrapAction extends Action{
+    private World world = World.instance();
+
+    private Tile tile;
+
     public ToggleTrapAction(Player player, Tile tile){
         super(player);
 
-        Trap trap = (Trap)World.getObjectAt(tile.getCenter(), Trap.class);
-        if(trap != null){
-            World.player1.removeTrap(trap);
-            World.player2.removeTrap(trap);
-            addActions(getAction(trap.getId()));
+        this.tile = tile;
+    }
+
+    @Override
+    public void act(){
+        for(int i=0; i<2; i++){
+            Trap trap = (Trap)world.getObjectAt(tile.getCenter(), Trap.class, true);
+            if(trap != null){
+                world.actionQueue.add(
+                    new ShowFullCardAction(new Card(trap.getId())));
+                world.player1.removeTrap(trap);
+                world.player2.removeTrap(trap);
+                addActions(getAction(trap.getId()));
+            }
         }
         setActed(true);
     }
 
     private Action[] getAction(int trapId){
         Action[] actions = null;
-        switch(trapId){
-            case 1:
-                actions = new Action[]{new LockMoveAction(2, (Player)actor)};
-                break;
+
+        if(trapId == 1){
+            actions = new Action[]{new LockMoveAction(2, (Player)actor)};
+        } else if(trapId == 2){
+            actions = new Action[]{new BombAction(tile, 200)};
         }
+
         return actions;
     }
 
@@ -30,9 +45,9 @@ public class ToggleTrapAction extends Action{
         for(int i=0; i<actions.length; i++){
             action = actions[i];
             if(action instanceof TurnTrackAction){
-                World.turnManager.turnTrackActionPool.add(action);
+                world.turnManager.turnTrackActionPool.add(action);
             } else{
-                World.actionQueue.add(action);
+                world.actionQueue.add(action);
             }
         }
     }
