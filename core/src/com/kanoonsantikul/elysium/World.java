@@ -13,25 +13,25 @@ public class World implements InputHandler.InputListener{
     public static final float ALPHA = 0.55f;
 
     public LinkedList<Tile> tiles;
-    public Player player1;
-    public Player player2;
+    public static Player player1;
+    public static Player player2;
     public Player player;
 
     public EndTurnButton endTurnButton;
     public CardBar cardBar;
-    public FullCard fullCard;
     public Trap trapInstance;
     public GameObject mouseFocus;
 
     protected static LinkedList<GameObject> gameObjects;
+    protected static LinkedList<Action> actionQueue;
+    protected static TurnManager turnManager;
+    protected static FullCard fullCard;
 
     public WorldState state;
     public WorldState dragCardState;
     public WorldState dragPlayerState;
 
-    public LinkedList<Action> actionQueue;
     public LinkedList<Tile> pathTracker;
-    public TurnManager turnManager;
 
     public World(){
         tiles = new LinkedList<Tile>();
@@ -51,12 +51,13 @@ public class World implements InputHandler.InputListener{
         gameObjects.addAll(tiles);
         gameObjects.add(endTurnButton);
 
+        actionQueue = new LinkedList<Action>();
+        turnManager = new TurnManager(this);
+
         dragCardState = new DragCardState();
         dragPlayerState = new DragPlayerState();
 
         trapInstance = new Trap(0, null);
-        actionQueue = new LinkedList<Action>();
-        turnManager = new TurnManager(this);
     }
 
     @Override
@@ -122,8 +123,8 @@ public class World implements InputHandler.InputListener{
         GameObject object;
         for(int i=0; i<gameObjects.size(); i++){
             object = gameObjects.get(i);
-            if(object.isInBound(x, y) && object.isVisible()){
-                if(type == null || object.getClass() == type){
+            if(object.isInBound(x, y)){
+                if((type == null && object.isVisible()) || object.getClass() == type){
                     return object;
                 }
             }
@@ -140,7 +141,6 @@ public class World implements InputHandler.InputListener{
     }
 
     public void update(){
-        turnManager.update();
         updateActionQueue();
     }
 

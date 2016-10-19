@@ -1,13 +1,15 @@
 package com.kanoonsantikul.elysium;
 
+import com.badlogic.gdx.Gdx;
+
 public abstract class TurnTrackAction extends Action{
     public abstract void update();
 
     private int turnLimit;
     private int turnCount;
 
-    public TurnTrackAction(int turnLimit){
-        super(null);
+    public TurnTrackAction(int turnLimit, GameObject object){
+        super(object);
 
         this.turnLimit = turnLimit;
         turnCount = 0;
@@ -22,7 +24,7 @@ public abstract class TurnTrackAction extends Action{
     private void checkTurnLimit(){
         turnCount++;
         if(turnCount == turnLimit){
-            this.setActed(true);
+            setActed(true);
         }
     }
 }

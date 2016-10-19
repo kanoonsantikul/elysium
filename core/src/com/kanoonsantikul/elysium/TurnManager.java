@@ -2,16 +2,17 @@ package com.kanoonsantikul.elysium;
 
 import java.util.LinkedList;
 
+import com.badlogic.gdx.Gdx;
+
 public class TurnManager{
     private World world;
-    private Player player;
 
-    public LinkedList<TurnTrackAction> turnTrackActionPool;
+    public static LinkedList<Action> turnTrackActionPool;
 
     public TurnManager(World world){
         this.world = world;
 
-        turnTrackActionPool = new LinkedList<TurnTrackAction>();
+        turnTrackActionPool = new LinkedList<Action>();
     }
 
     public void switchTurn(){
@@ -24,6 +25,7 @@ public class TurnManager{
         }
 
         startTurn(world.player);
+        update();
     }
 
     public void endTurn(Player player){
@@ -49,8 +51,17 @@ public class TurnManager{
     }
 
     public void update(){
+        Action action;
         for(int i=0; i<turnTrackActionPool.size(); i++){
-            turnTrackActionPool.get(i).act();
+            action = turnTrackActionPool.get(i);
+            if(action.isActed()){
+                turnTrackActionPool.remove(i);
+                continue;
+            }
+            if(action.actor == world.player){
+                action.act();
+            }
         }
     }
+
 }
