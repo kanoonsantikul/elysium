@@ -1,15 +1,12 @@
 package com.kanoonsantikul.elysium;
 
-public abstract class LockMoveAction extends TurnTrackAction{
-    private Player player;
-
+public class LockMoveAction extends TurnTrackAction{
     public LockMoveAction(int turnLimit, Player player){
-        super(turnLimit);
-        this.player = player;
+        super(turnLimit, player);
     }
 
     @Override
     public void update(){
-        player.setIsMoved(true);
+        ((Player)actor).setIsMoved(true);
     }
 }
