@@ -44,6 +44,7 @@ public class DragPlayerState implements WorldState{
                 player,
                 pathTracker,
                 world.actionQueue));
+        world.pathTracker = null;
     }
 
     private void updatePath(Tile tile){

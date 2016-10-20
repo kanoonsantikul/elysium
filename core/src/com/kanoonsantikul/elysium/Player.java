@@ -9,7 +9,7 @@ public class Player extends BoardObject{
     public static final float HEIGHT = Assets.player1.getHeight() * Elysium.DEVICE_RATIO;
 
     private int moveRange = 3;
-    private int trapRange = 4;
+    private int trapRange = 2;
     private int health = 2000;
     private LinkedList<Card> cards;
     private LinkedList<Trap> traps;
