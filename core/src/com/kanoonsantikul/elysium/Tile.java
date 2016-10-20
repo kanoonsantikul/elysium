@@ -3,6 +3,7 @@ package com.kanoonsantikul.elysium;
 import java.util.LinkedList;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.Gdx;
 
 public class Tile extends GameObject{
     public static final float WIDTH = Assets.tile.getWidth() * Elysium.DEVICE_RATIO;
@@ -14,11 +15,23 @@ public class Tile extends GameObject{
     private int number;
 
     public Tile(int number){
-        float y = INIT_Y + HEIGHT * (number / World.BOARD_SIZE);
-        float x = INIT_X + WIDTH * (number % World.BOARD_SIZE);
+        float y = INIT_Y + HEIGHT * getRowOf(number);
+        float x = INIT_X + WIDTH * getCollumOf(number);
 
         setPosition(new Vector2(x, y));
         this.number = number;
+    }
+
+    public static int getNumberOf(int row, int collum){
+        return row * World.BOARD_SIZE + collum;
+    }
+
+    public static int getRowOf(int number){
+        return number / World.BOARD_SIZE;
+    }
+
+    public static int getCollumOf(int number){
+        return number % World.BOARD_SIZE;
     }
 
     public float getWidth(){
@@ -33,38 +46,32 @@ public class Tile extends GameObject{
         return number;
     }
 
-    public LinkedList<Tile> getNeighbors(boolean neighbor8){
-        World world = World.instance();
+
+    public LinkedList<Tile> getNeighbors(int range, boolean neighbor8){
+        LinkedList<Tile> tiles = World.instance().tiles;
         LinkedList<Tile> neighbors = new LinkedList<Tile>();
+        Tile tile;
+        int row, collum;
 
-        int row = number / World.BOARD_SIZE;
-        int collum = number % World.BOARD_SIZE;
+        for(int i=-range; i<range + 1; i++){
+            for(int j=-range; j<range + 1; j++){
+                row = i + getRowOf(number);
+                collum = j + getCollumOf(number);
 
-        if(row - 1 >= 0){
-            neighbors.add(world.getTile(row - 1, collum));
-        }
-        if(row + 1 < World.BOARD_SIZE){
-            neighbors.add(world.getTile(row + 1, collum));
-        }
-        if(collum - 1 >= 0){
-            neighbors.add(world.getTile(row, collum - 1));
-        }
-        if(collum + 1 < World.BOARD_SIZE){
-            neighbors.add(world.getTile(row, collum + 1));
-        }
-
-        if(neighbor8){
-            if(row - 1 >= 0 && collum - 1 >= 0){
-                neighbors.add(world.getTile(row - 1, collum - 1));
-            }
-            if(row - 1 >= 0 && collum + 1 < World.BOARD_SIZE){
-                neighbors.add(world.getTile(row - 1, collum + 1));
-            }
-            if(row + 1 < World.BOARD_SIZE && collum -1 >= 0){
-                neighbors.add(world.getTile(row + 1, collum - 1));
-            }
-            if(row + 1 < World.BOARD_SIZE && collum + 1 < World.BOARD_SIZE){
-                neighbors.add(world.getTile(row + 1, collum + 1));
+                if((row >= 0 && row < World.BOARD_SIZE)
+                        && (collum >=0 && collum < World.BOARD_SIZE)
+                        && getNumberOf(row, collum) != number){
+                    if(!neighbor8){
+                        if(i ==0 ^ j == 0){
+                            tile = tiles.get(getNumberOf(row, collum));
+                            neighbors.add(tile);
+                        }
+                    } else{
+                        tile = tiles.get(getNumberOf(row, collum));
+                        neighbors.add(tile);
+                    }
+                }
+                tile = null;
             }
         }
 
