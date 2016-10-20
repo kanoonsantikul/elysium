@@ -162,10 +162,6 @@ public class World implements InputHandler.InputListener{
         return getObjectAt(position.x, position.y, type, ignoreVisible);
     }
 
-    public Tile getTile(int row, int collum){
-        return tiles.get(row * BOARD_SIZE + collum);
-    }
-
     public void update(){
         updateActionQueue();
     }
