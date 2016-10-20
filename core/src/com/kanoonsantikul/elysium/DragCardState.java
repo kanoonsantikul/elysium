@@ -15,12 +15,16 @@ public class DragCardState implements WorldState{
         this.world = world;
         this.card = (Card)world.mouseFocus;
         this.trapInstance = world.trapInstance;
+
+        Vector2 position = world.player.getCenter();
+        Tile tile = (Tile)world.getObjectAt(position, Tile.class, false);
+        world.pathTracker = tile.getNeighbors(world.player.getTrapRange(), true);
     }
 
     @Override
     public void handleInput(float x, float y){
         GameObject mouseOver = world.getObjectAt(x, y ,Tile.class);
-        if(mouseOver instanceof Tile){
+        if(mouseOver instanceof Tile && world.pathTracker.contains((Tile)mouseOver)){
             if(world.getObjectAt(mouseOver.getCenter(), Trap.class, false) == null){
                 lastFocusTile = (Tile)mouseOver;
                 card.setVisible(false);
@@ -54,5 +58,6 @@ public class DragCardState implements WorldState{
         }
 
         trapInstance.setId(0);
+        world.pathTracker = null;
     }
 }
