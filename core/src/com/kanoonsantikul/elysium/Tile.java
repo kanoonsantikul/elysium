@@ -9,8 +9,8 @@ public class Tile extends GameObject{
     public static final float WIDTH = Assets.tile.getWidth() * Elysium.DEVICE_RATIO;
     public static final float HEIGHT = Assets.tile.getHeight() * Elysium.DEVICE_RATIO;
 
-    private static float INIT_X = 9f;
-    private static float INIT_Y = 150f;
+    private static float INIT_X = 7f;
+    private static float INIT_Y = 140f;
 
     private int number;
 
@@ -23,15 +23,15 @@ public class Tile extends GameObject{
     }
 
     public static int getNumberOf(int row, int collum){
-        return row * World.BOARD_SIZE + collum;
+        return row * World.BOARD_WIDTH + collum;
     }
 
     public static int getRowOf(int number){
-        return number / World.BOARD_SIZE;
+        return number / World.BOARD_WIDTH;
     }
 
     public static int getCollumOf(int number){
-        return number % World.BOARD_SIZE;
+        return number % World.BOARD_WIDTH;
     }
 
     public float getWidth(){
@@ -58,8 +58,8 @@ public class Tile extends GameObject{
                 row = i + getRowOf(number);
                 collum = j + getCollumOf(number);
 
-                if((row >= 0 && row < World.BOARD_SIZE)
-                        && (collum >=0 && collum < World.BOARD_SIZE)
+                if((row >= 0 && row < World.BOARD_HEIGHT)
+                        && (collum >=0 && collum < World.BOARD_WIDTH)
                         && getNumberOf(row, collum) != number){
                     if(!neighbor8){
                         if(i ==0 ^ j == 0){

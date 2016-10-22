@@ -40,10 +40,13 @@ public class DragPlayerState implements WorldState{
 
     @Override
     public void exitState(){
-        world.actionQueue.addLast(new MoveAction(
-                player,
-                pathTracker,
-                world.actionQueue));
+        if(pathTracker.size() > 0){
+            world.actionQueue.addLast(new MoveAction(
+                    player,
+                    pathTracker,
+                    world.actionQueue));
+        }
+
         world.pathTracker = null;
     }
 

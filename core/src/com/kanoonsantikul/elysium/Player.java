@@ -45,7 +45,7 @@ public class Player extends BoardObject{
     }
 
     public int getTrapRange(){
-        return moveRange;
+        return trapRange;
     }
 
     public void setTrapRange(int trapRange){

@@ -7,12 +7,13 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.Color;
 
 public class Renderer{
-    private static final float NAME_X = EndTurnButton.X - 20;
+    private static final float NAME_X = EndTurnButton.X - 5;
     private static final float NAME_Y = EndTurnButton.Y + EndTurnButton.HEIGHT + 20;
 
-    private static final float PLAYER_FONT_Y = -10f;
+    private static final float PLAYER_FONT_Y = -12f;
 
     World world;
     SpriteBatch batcher;
@@ -24,6 +25,7 @@ public class Renderer{
 
     public void render(){
         GL20 gl = Gdx.gl;
+        gl.glClearColor(91/255f, 222/255f, 162/255f, 1);
 		gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batcher.begin();
@@ -35,8 +37,9 @@ public class Renderer{
 
     private void renderBoard(){
         renderTiles();
-        renderPathTracker();
         renderTrap();
+        renderPathTracker();
+        renderTargetTiles();
         renderCharacter(world.player1);
         renderCharacter(world.player2);
     }
@@ -71,10 +74,12 @@ public class Renderer{
         } else{
             turn = "Player 2";
         }
+        Assets.font.setColor(Color.BLACK);
         Assets.font.draw(batcher,
                 turn,
                 NAME_X,
                 NAME_Y);
+        Assets.font.setColor(Color.WHITE);
     }
 
     private void renderTiles(){
@@ -82,6 +87,7 @@ public class Renderer{
         Tile tile;
         for(int i=0; i<tiles.size(); i++){
             tile = tiles.get(i);
+
             batcher.draw(Assets.tile,
                     tile.getPosition().x,
                     tile.getPosition().y,
@@ -91,16 +97,36 @@ public class Renderer{
     }
 
     private void renderPathTracker(){
-        if(world.pathTracker == null){
+        LinkedList<Tile> pathTracker = world.pathTracker;
+
+        if(pathTracker == null){
             return;
         }
-        LinkedList<Tile> pathTracker = world.pathTracker;
-        Tile alphaTile;
+
+        Tile moveTile;
         for(int i=0; i<pathTracker.size(); i++){
-            alphaTile = pathTracker.get(i);
-            batcher.draw(Assets.alphaTile,
-                    alphaTile.getPosition().x,
-                    alphaTile.getPosition().y,
+            moveTile = pathTracker.get(i);
+            batcher.draw(Assets.moveTile,
+                    moveTile.getPosition().x,
+                    moveTile.getPosition().y,
+                    Tile.WIDTH,
+                    Tile.HEIGHT);
+        }
+    }
+
+    private void renderTargetTiles(){
+        LinkedList<Tile> targetTiles = world.targetTiles;
+
+        if(targetTiles == null){
+            return;
+        }
+
+        Tile targetTile;
+        for(int i=0; i<targetTiles.size(); i++){
+            targetTile = targetTiles.get(i);
+            batcher.draw(Assets.targetTile,
+                    targetTile.getPosition().x,
+                    targetTile.getPosition().y,
                     Tile.WIDTH,
                     Tile.HEIGHT);
         }
@@ -120,7 +146,7 @@ public class Renderer{
     }
 
     private void renderCharacter(Player player){
-        String text = "HP: " + player.getHealth();
+        String text = "" + player.getHealth();
         Texture texture;
         if(player == world.player1){
             texture = Assets.player1;
@@ -167,7 +193,7 @@ public class Renderer{
 
         if(world.fullCard != null){
             card = world.fullCard.getCard();
-            batcher.draw(Assets.cards[card.getId()],
+            batcher.draw(Assets.fullCards[card.getId()],
                     FullCard.X,
                     FullCard.Y,
                     FullCard.WIDTH,
