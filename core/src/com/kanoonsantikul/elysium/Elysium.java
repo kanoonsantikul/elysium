@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.Application.ApplicationType;
 
 public class Elysium extends Game {
-	public static float DEVICE_RATIO;
+	public static float DEVICE_RATIO = 1f;
 	public static int WIDTH;
 	public static int HEIGHT;
 
@@ -14,7 +14,7 @@ public class Elysium extends Game {
 
 	@Override
 	public void create () {
-		DEVICE_RATIO = getDeviceRatio();
+		//DEVICE_RATIO = getDeviceRatio();
 		WIDTH = Gdx.graphics.getWidth();
 		HEIGHT = Gdx.graphics.getHeight();
 
@@ -34,14 +34,14 @@ public class Elysium extends Game {
 		batcher.dispose();
 	}
 
-	public float getDeviceRatio(){
-		ApplicationType type = Gdx.app.getType();
-		if(type == ApplicationType.Android){
-			return 1f;
-		} else if(type == ApplicationType.Desktop){
-			return 0.35f;
-		}
-		return 0f;
-	}
+	// public float getDeviceRatio(){
+	// 	ApplicationType type = Gdx.app.getType();
+	// 	if(type == ApplicationType.Android){
+	// 		return 1f;
+	// 	} else if(type == ApplicationType.Desktop){
+	// 		return 0.35f;
+	// 	}
+	// 	return 0f;
+	// }
 
 }

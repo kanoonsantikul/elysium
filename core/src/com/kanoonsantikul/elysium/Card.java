@@ -4,8 +4,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 
 public class Card extends GameObject{
-    public static final float WIDTH = Assets.cards[0].getWidth() * Elysium.DEVICE_RATIO / 2.5f;
-    public static final float HEIGHT = Assets.cards[0].getHeight() * Elysium.DEVICE_RATIO / 2.5f;
+    public static final float WIDTH = Assets.cards[0].getWidth() * Elysium.DEVICE_RATIO;
+    public static final float HEIGHT = Assets.cards[0].getHeight() * Elysium.DEVICE_RATIO;
 
     private static float INIT_X = 9f;
     private static float INIT_Y = 13f;

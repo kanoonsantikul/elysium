@@ -8,7 +8,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.Gdx;
 
 public class World implements InputHandler.InputListener{
-    public static final int BOARD_SIZE = 7;
+    public static final int BOARD_WIDTH = 6;
+    public static final int BOARD_HEIGHT = 9;
     public static final int FULL_HAND = 4;
     public static final float ALPHA = 0.55f;
 
@@ -23,17 +24,17 @@ public class World implements InputHandler.InputListener{
     protected EndTurnButton endTurnButton;
     protected CardBar cardBar;
     protected Trap trapInstance;
+    protected FullCard fullCard;
     protected GameObject mouseFocus;
+    protected LinkedList<Tile> pathTracker;
+    protected LinkedList<Tile> targetTiles;
 
     protected LinkedList<Action> actionQueue;
     protected TurnManager turnManager;
-    protected FullCard fullCard;
 
     protected WorldState state;
     protected WorldState dragCardState;
     protected WorldState dragPlayerState;
-
-    protected LinkedList<Tile> pathTracker;
 
     public World(){
         world = this;
@@ -47,6 +48,7 @@ public class World implements InputHandler.InputListener{
 
         endTurnButton = new EndTurnButton();
         cardBar = new CardBar();
+        trapInstance = new Trap(0, null);
 
         gameObjects = new LinkedList<GameObject>();
         gameObjects.add(player1);
@@ -54,14 +56,12 @@ public class World implements InputHandler.InputListener{
         initCard();
         gameObjects.addAll(tiles);
         gameObjects.add(endTurnButton);
-
+        
         actionQueue = new LinkedList<Action>();
         turnManager = new TurnManager(this);
 
         dragCardState = new DragCardState();
         dragPlayerState = new DragPlayerState();
-
-        trapInstance = new Trap(0, null);
     }
 
     public static World instance(){
@@ -86,6 +86,9 @@ public class World implements InputHandler.InputListener{
         GameObject object = getObjectAt(x, y ,null);
         if(object instanceof Card && mouseFocus == null){
             fullCard = new FullCard((Card)object);
+        }
+        if(state == dragCardState){
+            state.handleInput(x, y);
         }
     }
 
@@ -178,7 +181,7 @@ public class World implements InputHandler.InputListener{
     }
 
     private void initBoard(){
-        for(int i=0; i<BOARD_SIZE * BOARD_SIZE; i++){
+        for(int i=0; i<BOARD_WIDTH * BOARD_HEIGHT; i++){
             tiles.add(new Tile(i));
         }
     }
