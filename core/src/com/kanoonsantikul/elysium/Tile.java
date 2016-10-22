@@ -11,13 +11,7 @@ public class Tile extends GameObject{
 
     private static float INIT_X = 7f;
     private static float INIT_Y = 140f;
-
-    private static final int[][] directions = new int[][]{
-        {-1, -1}, {-1, 0}, {-1, 1},
-        {0 ,-1}, {0, 0}, {0, 1},
-        {1, -1}, {1, 0}, {1, 1}
-    };
-
+        
     private int number;
 
     public Tile(int number){
