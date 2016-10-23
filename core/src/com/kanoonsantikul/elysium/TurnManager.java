@@ -7,12 +7,25 @@ import com.badlogic.gdx.Gdx;
 public class TurnManager{
     private World world;
 
-    public static LinkedList<Action> turnTrackActionPool;
+    public LinkedList<TurnStateChangeListener> listeners;
+
+    public interface TurnStateChangeListener{
+        public void onTurnStart(Player player);
+        public void onTurnEnd(Player player);
+    }
 
     public TurnManager(World world){
         this.world = world;
 
-        turnTrackActionPool = new LinkedList<Action>();
+        listeners = new LinkedList<TurnStateChangeListener>();
+    }
+
+    public void addListener(TurnStateChangeListener listener){
+        listeners.add(listener);
+    }
+
+    public void removeListener(TurnStateChangeListener listener){
+        listeners.remove(listener);
     }
 
     public void switchTurn(){
@@ -25,15 +38,15 @@ public class TurnManager{
         }
 
         startTurn(world.player);
-        update();
     }
 
     public void endTurn(Player player){
         for(int i=0; i<player.getCards().size(); i++){
             player.getCards().get(i).setVisible(false);
         }
-        for(int i=0; i<player.getTraps().size(); i++){
-            player.getTraps().get(i).setVisible(false);
+
+        for(int i=0; i<listeners.size(); i++){
+            listeners.get(i).onTurnEnd(player);
         }
     }
 
@@ -45,23 +58,9 @@ public class TurnManager{
         for(int i=0; i<player.getCards().size(); i++){
             player.getCards().get(i).setVisible(true);
         }
-        for(int i=0; i<player.getTraps().size(); i++){
-            player.getTraps().get(i).setVisible(true);
+
+        for(int i=0; i<listeners.size(); i++){
+            listeners.get(i).onTurnStart(player);
         }
     }
-
-    public void update(){
-        Action action;
-        for(int i=0; i<turnTrackActionPool.size(); i++){
-            action = turnTrackActionPool.get(i);
-            if(action.isActed()){
-                turnTrackActionPool.remove(i);
-                continue;
-            }
-            if(action.actor == world.player){
-                action.act();
-            }
-        }
-    }
-
 }

@@ -48,7 +48,7 @@ public class World implements InputHandler.InputListener{
 
         endTurnButton = new EndTurnButton();
         cardBar = new CardBar();
-        trapInstance = new Trap(0, null);
+        trapInstance = new Trap(0, null, null);
 
         gameObjects = new LinkedList<GameObject>();
         gameObjects.add(player1);
@@ -56,7 +56,7 @@ public class World implements InputHandler.InputListener{
         initCard();
         gameObjects.addAll(tiles);
         gameObjects.add(endTurnButton);
-        
+
         actionQueue = new LinkedList<Action>();
         turnManager = new TurnManager(this);
 
@@ -194,8 +194,13 @@ public class World implements InputHandler.InputListener{
     public boolean drawCard(Player player){
         Random random = new Random();
         Card card;
+        int cardId;
         if(player.getCards().size() < FULL_HAND){
-            card = new Card(random.nextInt(3));
+            do{
+                cardId = random.nextInt(Assets.traps.length);
+            }while(cardId == 0);
+
+            card = new Card(cardId);
             player.addCard(card);
             return true;
         }

@@ -137,6 +137,9 @@ public class Renderer{
         Trap trap;
         for(int i=0; i<traps.size() ;i++){
             trap = traps.get(i);
+            if(!trap.isVisible()){
+                continue;
+            }
             batcher.draw(Assets.traps[trap.getId()],
                     trap.getPosition().x,
                     trap.getPosition().y,

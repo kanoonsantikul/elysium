@@ -1,7 +1,7 @@
 package com.kanoonsantikul.elysium;
 
 public class ShowFullCardAction extends DelayAction{
-    private static final long DELAY_MILLI = 1000;
+    private static final long DELAY_MILLI = 1200;
 
     private World world = World.instance();
 

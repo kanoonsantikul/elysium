@@ -38,19 +38,22 @@ public class Assets{
         cards = new Texture[]{
             loadTexture("card.png"),
             loadTexture("bear-trap-card.png"),
-            loadTexture("booby-trap-card.png")
+            loadTexture("booby-trap-card.png"),
+            loadTexture("card.png"),
         };
 
         fullCards = new Texture[]{
             loadTexture("full-card.png"),
             loadTexture("bear-trap-full-card.png"),
-            loadTexture("booby-trap-full-card.png")
+            loadTexture("booby-trap-full-card.png"),
+            loadTexture("full-card.png")
         };
 
         traps = new Texture[]{
             loadTexture("trap.png"),
             loadTexture("bear-trap.png"),
-            loadTexture("booby-trap.png")
+            loadTexture("booby-trap.png"),
+            loadTexture("trap.png"),
         };
 
         font = new BitmapFont(
@@ -61,5 +64,25 @@ public class Assets{
                 Gdx.files.internal("font/font-small.fnt"),
                 new TextureRegion(loadTexture("font/font-small.png")),
                 false);
+    }
+
+    public static void dispose(){
+        tile.dispose();
+        moveTile.dispose();
+        targetTile.dispose();
+        player1.dispose();
+        player2.dispose();
+        endTurnButton.dispose();
+        cardBarBlue.dispose();
+        cardBarRed.dispose();
+
+        for(int i=0; i<cards.length; i++){
+            cards[i].dispose();
+            fullCards[i].dispose();
+            traps[i].dispose();
+        }
+
+        font.dispose();
+        fontSmall.dispose();
     }
 }
