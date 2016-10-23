@@ -12,16 +12,19 @@ public class Elysium extends Game {
 
 	public SpriteBatch batcher;
 
+	private GameScreen gameScreen;
+
 	@Override
 	public void create () {
 		//DEVICE_RATIO = getDeviceRatio();
 		WIDTH = Gdx.graphics.getWidth();
 		HEIGHT = Gdx.graphics.getHeight();
 
-		batcher = new SpriteBatch();
-
 		Assets.load();
-		setScreen(new GameScreen(this));
+		batcher = new SpriteBatch();
+		gameScreen = new GameScreen(this);
+
+		setScreen(gameScreen);
 	}
 
 	@Override
@@ -32,6 +35,8 @@ public class Elysium extends Game {
 	@Override
 	public void dispose () {
 		batcher.dispose();
+		gameScreen.dispose();
+		Assets.dispose();
 	}
 
 	// public float getDeviceRatio(){

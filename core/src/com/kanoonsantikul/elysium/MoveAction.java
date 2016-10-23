@@ -45,7 +45,7 @@ public class MoveAction extends Action{
                 ((Player)actor).setIsMoved(true);
                 if(actionQueue != null){
                     actionQueue.add(
-                            new ToggleTrapAction((Player)actor,lastTile));
+                            new ToggleTrapAction((Player)actor, lastTile));
                 }
             }
             setActed(true);

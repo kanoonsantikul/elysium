@@ -48,7 +48,8 @@ public class DragCardState implements WorldState{
     @Override
     public void exitState(){
         if(lastFocusTile != null){
-            world.player.addTrap(new Trap(trapInstance.getId(), lastFocusTile));
+            Trap trap = TrapBuilder.build(card.getId(), lastFocusTile, world.player);
+            world.player.addTrap(trap);
             world.player.removeCard(card);
 
         } else{

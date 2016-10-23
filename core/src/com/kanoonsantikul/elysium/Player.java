@@ -82,12 +82,16 @@ public class Player extends BoardObject{
 
     public void addTrap(Trap trap){
         traps.add(trap);
-        World.gameObjects.add(trap);
+        World world = World.instance();
+        world.gameObjects.add(trap);
+        world.turnManager.addListener(trap);
     }
 
     public void removeTrap(Trap trap){
         traps.remove(trap);
-        World.gameObjects.remove(trap);
+        World world = World.instance();
+        world.gameObjects.remove(trap);
+        world.turnManager.removeListener(trap);
     }
 
     public boolean getIsMoved(){
