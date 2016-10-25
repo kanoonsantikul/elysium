@@ -2,6 +2,7 @@ package com.kanoonsantikul.elysium;
 
 import java.util.LinkedList;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 
 public class DragCardState implements WorldState{
@@ -24,8 +25,7 @@ public class DragCardState implements WorldState{
         GameObject mouseOver = world.getObjectAt(x, y ,Tile.class);
         if(mouseOver instanceof Tile){
             if(world.targetTiles != null
-                    && world.targetTiles.contains(mouseOver)
-                    && world.getObjectAt(mouseOver.getCenter(), Trap.class, false) == null){
+                    && world.targetTiles.contains(mouseOver)){
                 lastFocusTile = (Tile)mouseOver;
                 card.setVisible(false);
                 trapInstance.setId(card.getId());
@@ -63,14 +63,16 @@ public class DragCardState implements WorldState{
 
     private void getTargetTile(){
         if(world.targetTiles == null && !world.player.isOnAction()){
+            world.targetTiles = new LinkedList<Tile>();
             Vector2 position = world.player.getCenter();
             Tile tile = (Tile)world.getObjectAt(position, Tile.class, false);
-            world.targetTiles = tile.getNeighbors(world.player.getTrapRange(), true);
+            LinkedList<Tile> neighborTiles =
+                    tile.getNeighbors(world.player.getTrapRange(), true);
 
-            for(int i=0; i<world.targetTiles.size(); i++){
-                tile = world.targetTiles.get(i);
-                if(world.getObjectAt(tile.getCenter(), Trap.class, false) != null){
-                    world.targetTiles.remove(i);
+            for(int i=0; i<neighborTiles.size(); i++){
+                tile = neighborTiles.get(i);
+                if(world.getObjectAt(tile.getCenter(), Trap.class, false) == null){
+                    world.targetTiles.add(tile);
                 }
             }
         }

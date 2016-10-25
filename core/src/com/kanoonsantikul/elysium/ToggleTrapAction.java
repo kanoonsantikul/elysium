@@ -6,7 +6,6 @@ public class ToggleTrapAction extends Action{
     private World world = World.instance();
 
     private Tile tile;
-    private Trap trap;
 
     public ToggleTrapAction(Player actor, Tile tile){
         super(actor);
@@ -22,15 +21,15 @@ public class ToggleTrapAction extends Action{
     }
 
     private void getTrap(Player player){
-        trap = null;
+        Trap trap = null;
         for(int i=0; i<player.getTraps().size(); i++){
             trap = player.getTraps().get(i);
-            if(!trap.getCenter().equals(tile.getCenter())){
-                trap = null;
+            if(trap.getCenter().equals(tile.getCenter())){
+                break;
             }
+            trap = null;
         }
         if(trap != null){
-            Gdx.app.log("","toggle");
             trap.toggle(actor);
         }
     }

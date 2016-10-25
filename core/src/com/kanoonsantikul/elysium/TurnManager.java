@@ -44,6 +44,9 @@ public class TurnManager{
         for(int i=0; i<player.getCards().size(); i++){
             player.getCards().get(i).setVisible(false);
         }
+        for(int i=0; i<player.getTraps().size(); i++){
+            player.getTraps().get(i).setVisible(false);
+        }
 
         for(int i=0; i<listeners.size(); i++){
             listeners.get(i).onTurnEnd(player);
@@ -57,6 +60,9 @@ public class TurnManager{
 
         for(int i=0; i<player.getCards().size(); i++){
             player.getCards().get(i).setVisible(true);
+        }
+        for(int i=0; i<player.getTraps().size(); i++){
+            player.getTraps().get(i).setVisible(true);
         }
 
         for(int i=0; i<listeners.size(); i++){

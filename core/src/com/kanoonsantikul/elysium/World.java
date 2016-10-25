@@ -3,6 +3,7 @@ package com.kanoonsantikul.elysium;
 import java.util.LinkedList;
 import java.util.Random;
 
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.Gdx;
@@ -28,6 +29,7 @@ public class World implements InputHandler.InputListener{
     protected GameObject mouseFocus;
     protected LinkedList<Tile> pathTracker;
     protected LinkedList<Tile> targetTiles;
+    protected LinkedList<ParticleEffect> effects;
 
     protected LinkedList<Action> actionQueue;
     protected TurnManager turnManager;
@@ -49,6 +51,7 @@ public class World implements InputHandler.InputListener{
         endTurnButton = new EndTurnButton();
         cardBar = new CardBar();
         trapInstance = new Trap(0, null, null);
+        effects = new LinkedList<ParticleEffect>();
 
         gameObjects = new LinkedList<GameObject>();
         gameObjects.add(player1);
@@ -146,7 +149,7 @@ public class World implements InputHandler.InputListener{
         for(int i=0; i<gameObjects.size(); i++){
             object = gameObjects.get(i);
             if(object.isInBound(x, y)){
-                if(type == null || object.getClass() == type){
+                if(type == null || type.isAssignableFrom(object.getClass())){
                     if(!ignoreVisible && object.isVisible()){
                         return object;
                     } else if(ignoreVisible){

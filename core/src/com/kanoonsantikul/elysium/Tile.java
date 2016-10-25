@@ -11,7 +11,7 @@ public class Tile extends GameObject{
 
     private static float INIT_X = 7f;
     private static float INIT_Y = 140f;
-        
+
     private int number;
 
     public Tile(int number){
@@ -62,7 +62,8 @@ public class Tile extends GameObject{
                         && (collum >=0 && collum < World.BOARD_WIDTH)
                         && getNumberOf(row, collum) != number){
                     if(!neighbor8){
-                        if(i ==0 ^ j == 0){
+                        if(i == 0 ^ j == 0){
+                            //Gdx.app.log(""+i,""+j);
                             tile = tiles.get(getNumberOf(row, collum));
                             neighbors.add(tile);
                         }
@@ -74,6 +75,7 @@ public class Tile extends GameObject{
                 tile = null;
             }
         }
+        //Gdx.app.log("","");
         return neighbors;
     }
 
