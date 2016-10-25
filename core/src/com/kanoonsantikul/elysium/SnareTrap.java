@@ -1,12 +1,16 @@
 package com.kanoonsantikul.elysium;
 
-public class BearTrap extends Trap{
-    private static final int LOCK_TURN = 2;
+import java.util.List;
+import java.util.LinkedList;
+
+public class SnareTrap extends Trap{
+    private static final int LOCK_TURN = 1;
+    private static final int MOVE_RANGE = 2;
 
     private Player actor;
     private int turnCount = 0;
 
-    public BearTrap(int id, Tile tile, Player user){
+    public SnareTrap(int id, Tile tile, Player user){
         super(id, tile, user);
     }
 
@@ -27,7 +31,14 @@ public class BearTrap extends Trap{
         super.toggle(actor);
         this.actor = (Player)actor;
 
+        LinkedList<Tile> path = getTile().getNeighbors(MOVE_RANGE, false);
+        List subPath = path.subList(0, MOVE_RANGE);
+        path = new LinkedList(subPath);
+
         World.instance().actionQueue.add(
                 new ShowFullCardAction(new Card(id)));
+        World.instance().actionQueue.add(
+                new MoveAction((Player)actor, path, World.instance().actionQueue));
+        setVisible(false);
     }
 }

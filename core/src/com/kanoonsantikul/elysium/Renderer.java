@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.Color;
 
 public class Renderer{
@@ -23,14 +24,14 @@ public class Renderer{
         this.batcher = batcher;
     }
 
-    public void render(){
+    public void render(float delta){
         GL20 gl = Gdx.gl;
         gl.glClearColor(91/255f, 222/255f, 162/255f, 1);
 		gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batcher.begin();
         renderBoard();
-        renderUI();
+        renderUI(delta);
         renderCard();
         batcher.end();
     }
@@ -44,7 +45,7 @@ public class Renderer{
         renderCharacter(world.player2);
     }
 
-    private void renderUI(){
+    private void renderUI(float delta){
         Texture cardBar;
         if(world.player == world.player1){
             cardBar = Assets.cardBarBlue;
@@ -65,6 +66,7 @@ public class Renderer{
                 EndTurnButton.HEIGHT);
 
         renderFont();
+        renderEffect(delta);
     }
 
     private void renderFont(){
@@ -137,7 +139,7 @@ public class Renderer{
         Trap trap;
         for(int i=0; i<traps.size() ;i++){
             trap = traps.get(i);
-            if(!trap.isVisible()){
+            if(trap.isToggled()){
                 continue;
             }
             batcher.draw(Assets.traps[trap.getId()],
@@ -169,6 +171,18 @@ public class Renderer{
                 text,
                 player.getCenter().x - glyph.width / 2f,
                 player.getPosition().y - PLAYER_FONT_Y);
+    }
+
+    private void renderEffect(float delta){
+        ParticleEffect effect;
+        for(int i=0; i<world.effects.size(); i++){
+            effect = world.effects.get(i);
+            effect.update(delta);
+            effect.draw(batcher);
+            if(effect.isComplete()){
+                world.effects.remove(effect);
+            }
+        }
     }
 
     private void renderCard(){

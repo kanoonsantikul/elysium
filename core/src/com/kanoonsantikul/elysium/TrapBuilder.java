@@ -14,6 +14,10 @@ public class TrapBuilder{
             return new BoobyTrap(id, tile, user);
         } else if(id == 3){
             return new TickingTimeBomb(id, tile, user);
+        } else if(id == 4){
+            return new ExplosiveTrap(id, tile, user);
+        } else if(id == 5){
+            return new SnareTrap(id, tile, user);
         }
         return null;
     }

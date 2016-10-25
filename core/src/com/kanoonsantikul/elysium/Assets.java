@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 
 public class Assets{
     public static Texture tile;
@@ -20,6 +21,8 @@ public class Assets{
 
     public static BitmapFont font;
     public static BitmapFont fontSmall;
+
+    public static ParticleEffect bombEffect;
 
     public static Texture loadTexture (String file) {
 		return new Texture(Gdx.files.internal(file));
@@ -40,12 +43,16 @@ public class Assets{
             loadTexture("bear-trap-card.png"),
             loadTexture("booby-trap-card.png"),
             loadTexture("card.png"),
+            loadTexture("card.png"),
+            loadTexture("card.png")
         };
 
         fullCards = new Texture[]{
             loadTexture("full-card.png"),
             loadTexture("bear-trap-full-card.png"),
             loadTexture("booby-trap-full-card.png"),
+            loadTexture("full-card.png"),
+            loadTexture("full-card.png"),
             loadTexture("full-card.png")
         };
 
@@ -54,6 +61,8 @@ public class Assets{
             loadTexture("bear-trap.png"),
             loadTexture("booby-trap.png"),
             loadTexture("trap.png"),
+            loadTexture("trap.png"),
+            loadTexture("trap.png")
         };
 
         font = new BitmapFont(
@@ -64,6 +73,11 @@ public class Assets{
                 Gdx.files.internal("font/font-small.fnt"),
                 new TextureRegion(loadTexture("font/font-small.png")),
                 false);
+
+        bombEffect = new ParticleEffect();
+        bombEffect.load(
+                Gdx.files.internal("effect/bomb"),
+                Gdx.files.internal(""));
     }
 
     public static void dispose(){
@@ -84,5 +98,7 @@ public class Assets{
 
         font.dispose();
         fontSmall.dispose();
+
+        bombEffect.dispose();
     }
 }
