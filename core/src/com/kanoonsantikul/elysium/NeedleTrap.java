@@ -1,18 +1,20 @@
 package com.kanoonsantikul.elysium;
 
-public class BearTrap extends Trap{
-    private static final int LOCK_TURN = 2;
+public class NeedleTrap extends Trap{
+    private static final int LOCK_TURN = 1;
+    private static final int DAMAGE = 400;
 
     private Player actor;
     private int turnCount = 0;
 
-    public BearTrap(int id, Tile tile, Player user){
+    public NeedleTrap(int id, Tile tile, Player user){
         super(id, tile, user);
     }
 
     @Override
     public void onTurnStart(Player player){
         if(isToggled && player == actor){
+            setVisible(false);
             if(turnCount < LOCK_TURN){
                 actor.setIsMoved(true);
                 turnCount++;
@@ -25,12 +27,15 @@ public class BearTrap extends Trap{
     @Override
     public void toggle(GameObject actor){
         if(isToggled){
-            return;    
+            return;
         }
         super.toggle(actor);
         this.actor = (Player)actor;
 
         World.instance().actionQueue.add(
                 new ShowFullCardAction(new Card(id)));
+        World.instance().actionQueue.add(
+                new DamageAction(getTile(), DAMAGE));
+        setVisible(false);
     }
 }

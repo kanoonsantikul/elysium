@@ -20,7 +20,7 @@ public class ExplosiveTrap extends Trap{
                 new ShowFullCardAction(new Card(id)));
         for(int i=0; i<tiles.size(); i++){
             World.instance().actionQueue.add(
-                    new BombAction(tiles.get(i), DAMAGE));
+                    new DamageAction(tiles.get(i), DAMAGE));
         }
         user.removeTrap(this);
     }

@@ -13,11 +13,11 @@ public class Action{
     public void act(){
     }
 
-    public void setActed(boolean acted){
-        this.acted = acted;
-    }
-
     public boolean isActed(){
         return acted;
+    }
+
+    public void setActed(boolean acted){
+        this.acted = acted;
     }
 }
