@@ -24,4 +24,8 @@ public class TickingTimeBomb extends Trap{
             }
         }
     }
+
+    @Override
+    public void toggle(GameObject actor){
+    }
 }
