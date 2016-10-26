@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.Gdx;
 
 public class World implements InputHandler.InputListener{
-    public static final int BOARD_WIDTH = 6;
+    public static final int BOARD_WIDTH = 5;
     public static final int BOARD_HEIGHT = 9;
     public static final int FULL_HAND = 4;
     public static final float ALPHA = 0.55f;
@@ -45,8 +45,8 @@ public class World implements InputHandler.InputListener{
         tiles = new LinkedList<Tile>();
         initBoard();
 
-        player1 = new Player(tiles.getFirst());
-        player2 = new Player(tiles.getLast());
+        player1 = new Player(tiles.get(Tile.getNumberOf(0, 2)));
+        player2 = new Player(tiles.get(Tile.getNumberOf(BOARD_HEIGHT - 1, 2)));
         player = player1;
 
         endTurnButton = new EndTurnButton();
@@ -202,7 +202,7 @@ public class World implements InputHandler.InputListener{
         if(player.getCards().size() < FULL_HAND){
             do{
                 cardId = random.nextInt(Assets.traps.length);
-            }while(cardId != 8);
+            }while(cardId == 0);
 
             card = new Card(cardId);
             player.addCard(card);
