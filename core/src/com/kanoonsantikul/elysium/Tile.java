@@ -63,7 +63,6 @@ public class Tile extends GameObject{
                         && getNumberOf(row, collum) != number){
                     if(!neighbor8){
                         if(i == 0 ^ j == 0){
-                            //Gdx.app.log(""+i,""+j);
                             tile = tiles.get(getNumberOf(row, collum));
                             neighbors.add(tile);
                         }
@@ -75,7 +74,6 @@ public class Tile extends GameObject{
                 tile = null;
             }
         }
-        //Gdx.app.log("","");
         return neighbors;
     }
 

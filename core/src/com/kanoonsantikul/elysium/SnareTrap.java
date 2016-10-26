@@ -17,6 +17,7 @@ public class SnareTrap extends Trap{
     @Override
     public void onTurnStart(Player player){
         if(isToggled && player == actor){
+            setVisible(false);
             if(turnCount < LOCK_TURN){
                 actor.setIsMoved(true);
                 turnCount++;
@@ -28,12 +29,21 @@ public class SnareTrap extends Trap{
 
     @Override
     public void toggle(GameObject actor){
+        if(isToggled){
+            return;
+        }
         super.toggle(actor);
         this.actor = (Player)actor;
 
-        LinkedList<Tile> path = getTile().getNeighbors(MOVE_RANGE, false);
-        List subPath = path.subList(0, MOVE_RANGE);
-        path = new LinkedList(subPath);
+        LinkedList<Tile> path = new LinkedList<Tile>();
+        int row = Tile.getRowOf(getTile().getNumber());
+        int collum = Tile.getCollumOf(getTile().getNumber());
+        for(int i=1; i<=MOVE_RANGE; i++){
+            if(row + i < World.BOARD_HEIGHT){
+                path.add(World.instance()
+                        .tiles.get(Tile.getNumberOf(row + i, collum)));
+            }
+        }
 
         World.instance().actionQueue.add(
                 new ShowFullCardAction(new Card(id)));

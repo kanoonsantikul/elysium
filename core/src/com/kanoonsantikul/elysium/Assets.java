@@ -44,6 +44,9 @@ public class Assets{
             loadTexture("booby-trap-card.png"),
             loadTexture("card.png"),
             loadTexture("card.png"),
+            loadTexture("card.png"),
+            loadTexture("card.png"),
+            loadTexture("card.png"),
             loadTexture("card.png")
         };
 
@@ -53,6 +56,9 @@ public class Assets{
             loadTexture("booby-trap-full-card.png"),
             loadTexture("full-card.png"),
             loadTexture("full-card.png"),
+            loadTexture("full-card.png"),
+            loadTexture("full-card.png"),
+            loadTexture("full-card.png"),
             loadTexture("full-card.png")
         };
 
@@ -60,6 +66,9 @@ public class Assets{
             loadTexture("trap.png"),
             loadTexture("bear-trap.png"),
             loadTexture("booby-trap.png"),
+            loadTexture("trap.png"),
+            loadTexture("trap.png"),
+            loadTexture("trap.png"),
             loadTexture("trap.png"),
             loadTexture("trap.png"),
             loadTexture("trap.png")

@@ -18,6 +18,12 @@ public class TrapBuilder{
             return new ExplosiveTrap(id, tile, user);
         } else if(id == 5){
             return new SnareTrap(id, tile, user);
+        } else if(id == 6){
+            return new FuzzyTrap(id, tile, user);
+        } else if(id == 7){
+            return new VenomTrap(id, tile, user);
+        } else if(id == 8){
+            return new NeedleTrap(id, tile, user);
         }
         return null;
     }

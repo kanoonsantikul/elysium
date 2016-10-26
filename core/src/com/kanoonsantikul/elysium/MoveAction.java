@@ -3,9 +3,9 @@ package com.kanoonsantikul.elysium;
 import java.util.LinkedList;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.Gdx;
 
 public class MoveAction extends Action{
+
     private LinkedList<Tile> paths;
     private LinkedList<Action> actionQueue;
     private Vector2 currentTargetPosition;
@@ -24,13 +24,14 @@ public class MoveAction extends Action{
         this.paths = paths;
         this.actionQueue = actionQueue;
         lastTile = actor.getTile();
-
-        actor.setOnAction(true);
-        actor.setTile(null);
     }
 
     @Override
     public void act(){
+        if(!actor.isOnAction()){
+            preAction();
+        }
+
         if(paths.size() > 0){
             if(currentTargetPosition == null){
                 changeDirection();
@@ -49,6 +50,15 @@ public class MoveAction extends Action{
                 }
             }
             setActed(true);
+        }
+    }
+
+    private void preAction(){
+        actor.setOnAction(true);
+        if(((BoardObject)actor).getTile() != lastTile){
+            paths.clear();
+            lastTile = ((BoardObject)actor).getTile();
+            actionQueue = null;
         }
     }
 

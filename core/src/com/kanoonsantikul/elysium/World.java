@@ -27,6 +27,7 @@ public class World implements InputHandler.InputListener{
     protected Trap trapInstance;
     protected FullCard fullCard;
     protected GameObject mouseFocus;
+    protected Random random;
     protected LinkedList<Tile> pathTracker;
     protected LinkedList<Tile> targetTiles;
     protected LinkedList<ParticleEffect> effects;
@@ -51,6 +52,7 @@ public class World implements InputHandler.InputListener{
         endTurnButton = new EndTurnButton();
         cardBar = new CardBar();
         trapInstance = new Trap(0, null, null);
+        random = new Random();
         effects = new LinkedList<ParticleEffect>();
 
         gameObjects = new LinkedList<GameObject>();
@@ -195,13 +197,12 @@ public class World implements InputHandler.InputListener{
     }
 
     public boolean drawCard(Player player){
-        Random random = new Random();
         Card card;
         int cardId;
         if(player.getCards().size() < FULL_HAND){
             do{
                 cardId = random.nextInt(Assets.traps.length);
-            }while(cardId == 0);
+            }while(cardId != 8);
 
             card = new Card(cardId);
             player.addCard(card);

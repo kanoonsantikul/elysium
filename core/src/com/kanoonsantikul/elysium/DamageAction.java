@@ -2,11 +2,11 @@ package com.kanoonsantikul.elysium;
 
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 
-public class BombAction extends Action{
+public class DamageAction extends Action{
     private Tile tile;
     private int damage;
 
-    public BombAction(Tile tile, int damage){
+    public DamageAction(Tile tile, int damage){
         super(tile);
 
         this.tile = tile;
