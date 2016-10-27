@@ -44,7 +44,7 @@ public class InputHandler extends GestureDetector{
     public boolean touchUp(float x, float y, int pointer, int button){
         isJustClick = true;
 
-        if(pointer == 0 && button == Buttons.LEFT){
+        if(pointer == 0 && button == Buttons.LEFT && listener != null){
             if(!isDragged){
                 listener.onClicked(x, flipAxis(y));
             } else{
@@ -57,7 +57,7 @@ public class InputHandler extends GestureDetector{
 
     @Override
     public boolean touchDragged(float x, float y, int pointer){
-        if(pointer == 0){
+        if(pointer == 0 && listener != null){
             if(!isDragged){
                 isDragged = true;
                 listener.onDragStart(x, flipAxis(y));

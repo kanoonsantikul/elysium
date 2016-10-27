@@ -1,45 +1,34 @@
 package com.kanoonsantikul.elysium;
 
-import com.kanoonsantikul.elysium.InputHandler.GestureHandler;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.input.GestureDetector;
 
-public class GameScreen extends ScreenAdapter {
-    Elysium game;
-    World world;
-    Renderer renderer;
-    InputMultiplexer inputs;
+public class GameScreen extends ScreenAdapter implements
+        World.GameStateChangeListener{
+    private static final String USERNAME = "THEHUNTER";
+
+    private Elysium game;
+    private World world;
+    private Renderer renderer;
 
     public GameScreen(Elysium game){
         this.game = game;
 
         world = new World();
+        world.setListener(this);
+        game.inputHandler.setListener(world);
         renderer = new Renderer(world, game.batcher);
-
-        setupInput();
+        ConnectionManager.instance().connect(USERNAME);
     }
 
     @Override
 	public void render (float delta) {
         world.update();
 		renderer.render(delta);
-	}
+    }
 
-    private void setupInput(){
-        inputs = new InputMultiplexer();
-        InputHandler inputHandler =
-                new InputHandler(new GestureDetector.GestureAdapter());
-        inputHandler.setListener(world);
-        GestureDetector gestureHandler =
-                new GestureDetector(inputHandler.new GestureHandler());
-        gestureHandler.setLongPressSeconds(InputHandler.LONG_PRESS_SECONDS);
-
-        inputs.addProcessor(inputHandler);
-        inputs.addProcessor(gestureHandler);
-        Gdx.input.setInputProcessor(inputs);
+    @Override
+    public void onGameOver(GameOverScreen.Winner winner){
+        game.setScreen(new GameOverScreen(game, winner));
     }
 }
