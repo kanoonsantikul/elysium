@@ -15,6 +15,7 @@ public class World implements InputHandler.InputListener{
     public static final float ALPHA = 0.55f;
 
     private static World world;
+    private static GameStateChangeListener listener;
     protected static LinkedList<GameObject> gameObjects;
 
     protected LinkedList<Tile> tiles;
@@ -38,6 +39,10 @@ public class World implements InputHandler.InputListener{
     protected WorldState state;
     protected WorldState dragCardState;
     protected WorldState dragPlayerState;
+
+    public interface GameStateChangeListener{
+        public void onGameOver(GameOverScreen.Winner winner);
+    }
 
     public World(){
         world = this;
@@ -74,6 +79,38 @@ public class World implements InputHandler.InputListener{
             return world;
         }
         return null;
+    }
+
+    public static GameObject getObjectAt(float x, float y, Class type){
+        return getObjectAt(x, y, type, false);
+    }
+
+    public static GameObject getObjectAt(
+            float x,
+            float y,
+            Class type,
+            boolean ignoreVisible){
+        GameObject object;
+        for(int i=0; i<gameObjects.size(); i++){
+            object = gameObjects.get(i);
+            if(object.isInBound(x, y)){
+                if(type == null || type.isAssignableFrom(object.getClass())){
+                    if(!ignoreVisible && object.isVisible()){
+                        return object;
+                    } else if(ignoreVisible){
+                        return object;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public static GameObject getObjectAt(
+            Vector2 position,
+            Class type,
+            boolean ignoreVisible){
+        return getObjectAt(position.x, position.y, type, ignoreVisible);
     }
 
     @Override
@@ -138,40 +175,26 @@ public class World implements InputHandler.InputListener{
         }
     }
 
-    public static GameObject getObjectAt(float x, float y, Class type){
-        return getObjectAt(x, y, type, false);
-    }
-
-    public static GameObject getObjectAt(
-            float x,
-            float y,
-            Class type,
-            boolean ignoreVisible){
-        GameObject object;
-        for(int i=0; i<gameObjects.size(); i++){
-            object = gameObjects.get(i);
-            if(object.isInBound(x, y)){
-                if(type == null || type.isAssignableFrom(object.getClass())){
-                    if(!ignoreVisible && object.isVisible()){
-                        return object;
-                    } else if(ignoreVisible){
-                        return object;
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
-    public static GameObject getObjectAt(
-            Vector2 position,
-            Class type,
-            boolean ignoreVisible){
-        return getObjectAt(position.x, position.y, type, ignoreVisible);
+    public void setListener(GameStateChangeListener listener){
+        this.listener = listener;
     }
 
     public void update(){
         updateActionQueue();
+        if(player1.getHealth() <= 0 || player2.getHealth() <= 0){
+            GameOverScreen.Winner winner;
+            if(player1.getHealth() <= 0 && player2.getHealth() <= 0){
+                winner = GameOverScreen.Winner.NONE;
+            } else if(player1.getHealth() <= 0){
+                winner = GameOverScreen.Winner.PLAYER2;
+            } else{
+                winner = GameOverScreen.Winner.PLAYER1;
+            }
+
+            if(listener != null){
+                listener.onGameOver(winner);
+            }
+        }
     }
 
     private void updateActionQueue(){
