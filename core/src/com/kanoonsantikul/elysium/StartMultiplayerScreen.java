@@ -1,0 +1,56 @@
+package com.kanoonsantikul.elysium;
+
+import java.util.Random;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;;
+import com.badlogic.gdx.ScreenAdapter;
+
+public class StartMultiplayerScreen extends ScreenAdapter implements
+        ConnectionManager.ConnectionStateListener{
+
+    private static String username;
+
+    private Elysium game;
+    private String text;
+
+    public StartMultiplayerScreen(Elysium game){
+        this.game = game;
+
+        Random random = new Random();
+        username = random.nextGaussian() + "";
+
+        ConnectionManager.instance().setListener(this);
+        ConnectionManager.instance().connect(username);
+        text = "Connecting to Server";
+    }
+
+    @Override
+    public void render (float delta){
+        GL20 gl = Gdx.gl;
+        gl.glClearColor(91/255f, 222/255f, 162/255f, 1);
+        gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        game.batcher.begin();
+        GlyphLayout glyph = Assets.font.draw(game.batcher, text, -400, -400);
+        Assets.font.setColor(Color.BLACK);
+        Assets.font.draw(game.batcher,
+                text,
+                Elysium.WIDTH/2 - glyph.width / 2,
+                Elysium.HEIGHT/2 + glyph.height / 2);
+        Assets.font.setColor(Color.WHITE);
+        game.batcher.end();
+    }
+
+    @Override
+    public void onGameStarted() {
+        game.setScreen(new GameScreen(game));
+    }
+
+    @Override
+    public void onWaitingStarted(){
+        text = "Waiting for other player";
+    }
+}
