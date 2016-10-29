@@ -62,7 +62,7 @@ public class DragCardState implements WorldState{
     }
 
     private void getTargetTile(){
-        if(world.targetTiles == null && !world.player.isOnAction()){
+        if(world.targetTiles == null && !world.player.isLock()){
             world.targetTiles = new LinkedList<Tile>();
             Vector2 position = world.player.getCenter();
             Tile tile = (Tile)world.getObjectAt(position, Tile.class, false);

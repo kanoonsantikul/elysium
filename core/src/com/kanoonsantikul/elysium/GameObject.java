@@ -8,7 +8,7 @@ public abstract class GameObject{
     public abstract float getHeight();
 
     private Vector2 position;
-    private boolean onAction = false;
+    private boolean lock = false;
     private boolean visible = true;
 
     public void setPosition(Vector2 position){
@@ -39,12 +39,12 @@ public abstract class GameObject{
         return false;
     }
 
-    public boolean isOnAction(){
-        return onAction;
+    public boolean isLock(){
+        return lock;
     }
 
-    public void setOnAction(boolean onAction){
-        this.onAction = onAction;
+    public void setLock(boolean lock){
+        this.lock = lock;
     }
 
     public boolean isVisible(){

@@ -161,7 +161,7 @@ public class World implements InputHandler.InputListener{
 
     @Override
     public void onDragEnd(float x, float y){
-        fullCard.setCardId(FullCard.NULL_CARD);
+        endTurnButton.setPressed(false);
         
         if(mouseFocus instanceof Player && state != null){
             state.exitState();
