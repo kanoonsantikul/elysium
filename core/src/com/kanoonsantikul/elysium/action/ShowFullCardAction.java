@@ -1,23 +1,23 @@
 package com.kanoonsantikul.elysium;
 
 public class ShowFullCardAction extends DelayAction{
-    private static final long DELAY_MILLI = 1200;
+    private static final long DELAY_MILLI = 1400;
 
     private World world = World.instance();
 
-    private Card card;
+    private int cardId;
 
-    public ShowFullCardAction(Card card){
+    public ShowFullCardAction(int cardId){
         super(DELAY_MILLI);
 
-        this.card = card;
+        this.cardId = cardId;
     }
 
     public void enter(){
-        world.fullCard = new FullCard(card);
+        world.fullCard.setCardId(cardId);
     }
 
     public void exit(){
-        world.fullCard = null;
+        world.fullCard.setCardId(FullCard.NULL_CARD);
     }
 }

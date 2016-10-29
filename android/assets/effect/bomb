@@ -1,6 +1,8 @@
 bomb
 - Delay -
-active: false
+active: true
+lowMin: 0.0
+lowMax: 0.0
 - Duration - 
 lowMin: 1000.0
 lowMax: 1000.0
@@ -50,14 +52,12 @@ lowMax: 0.0
 highMin: 0.0
 highMax: 0.0
 relative: false
-scalingCount: 3
+scalingCount: 2
 scaling0: 0.0
-scaling1: 0.56179774
-scaling2: 0.41573033
-timelineCount: 3
+scaling1: 0.8979592
+timelineCount: 2
 timeline0: 0.0
-timeline1: 0.12925969
-timeline2: 0.73913044
+timeline1: 0.6438356
 - X Offset - 
 active: true
 lowMin: 0.0
@@ -114,16 +114,16 @@ highMax: 400.0
 relative: false
 scalingCount: 6
 scaling0: 0.0
-scaling1: 0.41573033
-scaling2: 0.5730337
-scaling3: 0.25842696
+scaling1: 0.2857143
+scaling2: 0.2857143
+scaling3: 0.2857143
 scaling4: 0.084269665
 scaling5: 0.0
 timelineCount: 6
 timeline0: 0.0
-timeline1: 0.11280846
-timeline2: 0.32079905
-timeline3: 0.8695652
+timeline1: 0.09589041
+timeline2: 0.32876712
+timeline3: 0.8287671
 timeline4: 0.9670975
 timeline5: 1.0
 - Angle - 
@@ -221,4 +221,4 @@ additive: true
 behind: false
 premultipliedAlpha: false
 - Image Path -
-particle.png
+/home/kanoonsantikul/pre_particle.png

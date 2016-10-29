@@ -1,13 +1,13 @@
 package com.kanoonsantikul.elysium;
 
-public class VenomTrap extends Trap{
+public class VenomGas extends Trap{
     private static final int LOCK_TURN = 4;
     private static final int DAMAGE = 100;
 
     private Player actor;
     private int turnCount = 0;
 
-    public VenomTrap(int id, Tile tile, Player user){
+    public VenomGas(int id, Tile tile, Player user){
         super(id, tile, user);
     }
 
@@ -34,7 +34,7 @@ public class VenomTrap extends Trap{
         this.actor = (Player)actor;
 
         World.instance().actionQueue.add(
-                new ShowFullCardAction(new Card(id)));
+                new ShowFullCardAction(id));
         setVisible(false);
     }
 }

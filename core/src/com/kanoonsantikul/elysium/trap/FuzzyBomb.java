@@ -2,14 +2,14 @@ package com.kanoonsantikul.elysium;
 
 import java.util.LinkedList;
 
-public class FuzzyTrap extends Trap{
+public class FuzzyBomb extends Trap{
     private static final int LOCK_TURN = 3;
     private World world = World.instance();
 
     private Player actor;
     private int turnCount = 0;
 
-    public FuzzyTrap(int id, Tile tile, Player user){
+    public FuzzyBomb(int id, Tile tile, Player user){
         super(id, tile, user);
     }
 
@@ -38,8 +38,8 @@ public class FuzzyTrap extends Trap{
         super.toggle(actor);
         this.actor = (Player)actor;
 
-        world.actionQueue.add(
-                new ShowFullCardAction(new Card(id)));
+        World.instance().actionQueue.add(
+                new ShowFullCardAction(id));
         setVisible(false);
     }
 

@@ -9,10 +9,12 @@ public class FullCard extends GameObject{
     public static final float X = Elysium.WIDTH / 2 - WIDTH /2 ;
     public static final float Y = Elysium.HEIGHT / 2 - HEIGHT /2 + 20;
 
-    private Card card;
+    public static final int NULL_CARD = -1;
 
-    public FullCard(Card card){
-        this.card = card;
+    private int cardId;
+
+    public FullCard(){
+        setCardId(NULL_CARD);
     }
 
     public float getWidth(){
@@ -23,7 +25,11 @@ public class FullCard extends GameObject{
         return HEIGHT;
     }
 
-    public Card getCard(){
-        return card;
+    public int getCardId(){
+        return cardId;
+    }
+
+    public void setCardId(int cardId){
+        this.cardId = cardId;
     }
 }

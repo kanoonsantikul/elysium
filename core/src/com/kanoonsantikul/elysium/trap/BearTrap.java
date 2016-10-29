@@ -25,12 +25,12 @@ public class BearTrap extends Trap{
     @Override
     public void toggle(GameObject actor){
         if(isToggled){
-            return;    
+            return;
         }
         super.toggle(actor);
         this.actor = (Player)actor;
 
         World.instance().actionQueue.add(
-                new ShowFullCardAction(new Card(id)));
+                new ShowFullCardAction(id));
     }
 }

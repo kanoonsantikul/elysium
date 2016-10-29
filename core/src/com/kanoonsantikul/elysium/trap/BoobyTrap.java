@@ -12,7 +12,7 @@ public class BoobyTrap extends Trap{
         super.toggle(actor);
 
         World.instance().actionQueue.add(
-                new ShowFullCardAction(new Card(id)));
+                new ShowFullCardAction(id));
         World.instance().actionQueue.add(
                 new DamageAction(getTile(), DAMAGE));
         user.removeTrap(this);

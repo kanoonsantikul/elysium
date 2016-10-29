@@ -2,11 +2,11 @@ package com.kanoonsantikul.elysium;
 
 import java.util.LinkedList;
 
-public class ExplosiveTrap extends Trap{
-    private static final int DAMAGE = 250;
+public class ExplosiveBomb extends Trap{
+    private static final int DAMAGE = 100;
     private static final int RANGE = 1;
 
-    public ExplosiveTrap(int id, Tile tile, Player user){
+    public ExplosiveBomb(int id, Tile tile, Player user){
         super(id, tile, user);
     }
 
@@ -17,7 +17,7 @@ public class ExplosiveTrap extends Trap{
         LinkedList<Tile> tiles = getTile().getNeighbors(RANGE, true);
 
         World.instance().actionQueue.add(
-                new ShowFullCardAction(new Card(id)));
+                new ShowFullCardAction(id));
         for(int i=0; i<tiles.size(); i++){
             World.instance().actionQueue.add(
                     new DamageAction(tiles.get(i), DAMAGE));

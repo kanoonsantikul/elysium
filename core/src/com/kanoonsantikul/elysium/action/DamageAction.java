@@ -19,8 +19,7 @@ public class DamageAction extends Action{
         effect.getEmitters().first().setPosition(
                 tile.getCenter().x,
                 tile.getCenter().y);
-        effect.start();
-        World.instance().effects.add(effect);
+        World.instance().effects.add(new DamageEffect(effect, damage));
 
         Player player = (Player)World.getObjectAt(tile.getCenter(), Player.class, false);
         if(player != null){

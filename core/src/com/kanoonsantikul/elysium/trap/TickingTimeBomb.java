@@ -1,8 +1,10 @@
 package com.kanoonsantikul.elysium;
 
+import com.badlogic.gdx.Gdx;
+
 public class TickingTimeBomb extends Trap{
     private static final int LOCK_TURN = 2;
-    private static final int DAMAGE = 750;
+    private static final int DAMAGE = 200;
 
     private int turnCount = 0;
 
@@ -17,7 +19,7 @@ public class TickingTimeBomb extends Trap{
                 turnCount++;
             } else{
                 World.instance().actionQueue.add(
-                        new ShowFullCardAction(new Card(id)));
+                        new ShowFullCardAction(id));
                 World.instance().actionQueue.add(
                         new DamageAction(getTile(), DAMAGE));
                 user.removeTrap(this);
