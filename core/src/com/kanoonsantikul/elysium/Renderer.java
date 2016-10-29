@@ -45,45 +45,6 @@ public class Renderer{
         renderCharacter(world.player2);
     }
 
-    private void renderUI(float delta){
-        Texture cardBar;
-        if(world.player == world.player1){
-            cardBar = Assets.cardBarBlue;
-        } else{
-            cardBar = Assets.cardBarRed;
-        }
-
-        batcher.draw(cardBar,
-                CardBar.X,
-                CardBar.Y,
-                CardBar.WIDTH,
-                CardBar.HEIGHT);
-
-        batcher.draw(Assets.endTurnButton,
-                EndTurnButton.X,
-                EndTurnButton.Y,
-                EndTurnButton.WIDTH,
-                EndTurnButton.HEIGHT);
-
-        renderFont();
-        renderEffect(delta);
-    }
-
-    private void renderFont(){
-        String turn;
-        if(world.player == world.player1){
-            turn = "Player 1";
-        } else{
-            turn = "Player 2";
-        }
-        Assets.font.setColor(Color.BLACK);
-        Assets.font.draw(batcher,
-                turn,
-                NAME_X,
-                NAME_Y);
-        Assets.font.setColor(Color.WHITE);
-    }
-
     private void renderTiles(){
         LinkedList<Tile> tiles = world.tiles;
         Tile tile;
@@ -95,6 +56,30 @@ public class Renderer{
                     tile.getPosition().y,
                     Tile.WIDTH,
                     Tile.HEIGHT);
+        }
+
+        if(!world.player.isOnAction()){
+            batcher.draw(Assets.hilightTile,
+                    world.player.getTile().getPosition().x,
+                    world.player.getTile().getPosition().y,
+                    Tile.WIDTH,
+                    Tile.HEIGHT);
+        }
+    }
+
+    private void renderTrap(){
+        LinkedList<Trap> traps = world.player.getTraps();
+        Trap trap;
+        for(int i=0; i<traps.size() ;i++){
+            trap = traps.get(i);
+            if(trap.isToggled()){
+                continue;
+            }
+            batcher.draw(Assets.traps[trap.getId()],
+                    trap.getPosition().x,
+                    trap.getPosition().y,
+                    Trap.WIDTH,
+                    Trap.HEIGHT);
         }
     }
 
@@ -134,22 +119,6 @@ public class Renderer{
         }
     }
 
-    private void renderTrap(){
-        LinkedList<Trap> traps = world.player.getTraps();
-        Trap trap;
-        for(int i=0; i<traps.size() ;i++){
-            trap = traps.get(i);
-            if(trap.isToggled()){
-                continue;
-            }
-            batcher.draw(Assets.traps[trap.getId()],
-                    trap.getPosition().x,
-                    trap.getPosition().y,
-                    Trap.WIDTH,
-                    Trap.HEIGHT);
-        }
-    }
-
     private void renderCharacter(Player player){
         String text = "" + player.getHealth();
         Texture texture;
@@ -173,14 +142,70 @@ public class Renderer{
                 player.getPosition().y - PLAYER_FONT_Y);
     }
 
+
+    private void renderUI(float delta){
+        Texture cardBar;
+        if(world.player == world.player1){
+            cardBar = Assets.cardBarBlue;
+        } else{
+            cardBar = Assets.cardBarRed;
+        }
+
+        batcher.draw(cardBar,
+                CardBar.X,
+                CardBar.Y,
+                CardBar.WIDTH,
+                CardBar.HEIGHT);
+
+        Texture endTurnButton;
+        if(world.endTurnButton.isPressed()){
+            endTurnButton = Assets.endTurnButtonPressed;
+        } else{
+            endTurnButton = Assets.endTurnButton;
+        }
+        batcher.draw(endTurnButton,
+                EndTurnButton.X,
+                EndTurnButton.Y,
+                EndTurnButton.WIDTH,
+                EndTurnButton.HEIGHT);
+
+        renderFont();
+        renderEffect(delta);
+    }
+
+    private void renderFont(){
+        String turn;
+        if(world.player == world.player1){
+            turn = "Player 1";
+        } else{
+            turn = "Player 2";
+        }
+        Assets.font.setColor(Color.BLACK);
+        Assets.font.draw(batcher,
+                turn,
+                NAME_X,
+                NAME_Y);
+        Assets.font.setColor(Color.WHITE);
+    }
+
     private void renderEffect(float delta){
         ParticleEffect effect;
         for(int i=0; i<world.effects.size(); i++){
-            effect = world.effects.get(i);
-            effect.update(delta);
+            effect = world.effects.get(i).getEffect();
             effect.draw(batcher);
-            if(effect.isComplete()){
-                world.effects.remove(effect);
+            effect.update(delta);
+
+            if(effect.getEmitters().first().getPercentComplete() >= 0.5){
+                world.effects.remove(world.effects.get(i));
+            } else{
+                String damage = world.effects.get(i).getDamage() + "";
+                GlyphLayout glyph = Assets.font.draw(batcher, damage, -400, -400);
+                Assets.font.setColor(Color.BLACK);
+                Assets.font.draw(batcher,
+                        damage,
+                        effect.getEmitters().first().getX() - glyph.width / 2,
+                        effect.getEmitters().first().getY() + glyph.height / 2);
+                Assets.font.setColor(Color.WHITE);
             }
         }
     }
@@ -208,13 +233,14 @@ public class Renderer{
                     Card.HEIGHT);
         }
 
-        if(world.fullCard != null){
-            card = world.fullCard.getCard();
-            batcher.draw(Assets.fullCards[card.getId()],
+        int cardId = world.fullCard.getCardId();
+        if(cardId != -1){
+            batcher.draw(Assets.fullCards[cardId],
                     FullCard.X,
                     FullCard.Y,
                     FullCard.WIDTH,
                     FullCard.HEIGHT);
         }
     }
+
 }

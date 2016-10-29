@@ -46,7 +46,7 @@ public class SnareTrap extends Trap{
         }
 
         World.instance().actionQueue.add(
-                new ShowFullCardAction(new Card(id)));
+                new ShowFullCardAction(id));
         World.instance().actionQueue.add(
                 new MoveAction((Player)actor, path, World.instance().actionQueue));
         setVisible(false);

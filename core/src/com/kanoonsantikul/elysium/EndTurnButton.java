@@ -9,7 +9,7 @@ public class EndTurnButton extends GameObject{
     public static final float X = Elysium.WIDTH - WIDTH - 9f;
     public static final float Y = 12f;
 
-    private boolean isPress;
+    private boolean isPressed;
 
     public EndTurnButton(){
         setPosition(new Vector2(X, Y));
@@ -23,11 +23,11 @@ public class EndTurnButton extends GameObject{
         return HEIGHT;
     }
 
-    public boolean isPress(){
-        return isPress;
+    public boolean isPressed(){
+        return isPressed;
     }
 
-    private void setPress(boolean isPress){
-        this.isPress = isPress;
+    public void setPressed(boolean isPressed){
+        this.isPressed = isPressed;
     }
 }

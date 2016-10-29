@@ -1,13 +1,13 @@
 package com.kanoonsantikul.elysium;
 
-public class NeedleTrap extends Trap{
+public class SpikeTrap extends Trap{
     private static final int LOCK_TURN = 1;
-    private static final int DAMAGE = 400;
+    private static final int DAMAGE = 300;
 
     private Player actor;
     private int turnCount = 0;
 
-    public NeedleTrap(int id, Tile tile, Player user){
+    public SpikeTrap(int id, Tile tile, Player user){
         super(id, tile, user);
     }
 
@@ -33,7 +33,7 @@ public class NeedleTrap extends Trap{
         this.actor = (Player)actor;
 
         World.instance().actionQueue.add(
-                new ShowFullCardAction(new Card(id)));
+                new ShowFullCardAction(id));
         World.instance().actionQueue.add(
                 new DamageAction(getTile(), DAMAGE));
         setVisible(false);

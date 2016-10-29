@@ -31,7 +31,7 @@ public class World implements InputHandler.InputListener{
     protected Random random;
     protected LinkedList<Tile> pathTracker;
     protected LinkedList<Tile> targetTiles;
-    protected LinkedList<ParticleEffect> effects;
+    protected LinkedList<DamageEffect> effects;
 
     protected LinkedList<Action> actionQueue;
     protected TurnManager turnManager;
@@ -57,8 +57,9 @@ public class World implements InputHandler.InputListener{
         endTurnButton = new EndTurnButton();
         cardBar = new CardBar();
         trapInstance = new Trap(0, null, null);
+        fullCard = new FullCard();
         random = new Random();
-        effects = new LinkedList<ParticleEffect>();
+        effects = new LinkedList<DamageEffect>();
 
         gameObjects = new LinkedList<GameObject>();
         gameObjects.add(player1);
@@ -115,10 +116,11 @@ public class World implements InputHandler.InputListener{
 
     @Override
     public void onClicked(float x, float y){
-        fullCard = null;
+        fullCard.setCardId(FullCard.NULL_CARD);
 
         GameObject object = getObjectAt(x, y, null);
         if(object instanceof EndTurnButton){
+            endTurnButton.setPressed(false);
             turnManager.switchTurn();
         }
     }
@@ -127,8 +129,12 @@ public class World implements InputHandler.InputListener{
     public void onPressed(float x, float y){
         GameObject object = getObjectAt(x, y ,null);
         if(object instanceof Card && mouseFocus == null){
-            fullCard = new FullCard((Card)object);
+            fullCard.setCardId(((Card)object).getId());
+
+        } else if(object instanceof EndTurnButton){
+            endTurnButton.setPressed(true);
         }
+
         if(state == dragCardState){
             state.handleInput(x, y);
         }
@@ -136,7 +142,7 @@ public class World implements InputHandler.InputListener{
 
     @Override
     public void onDragStart(float x, float y){
-        fullCard = null;
+        fullCard.setCardId(FullCard.NULL_CARD);
 
         GameObject object = getObjectAt(x, y, null);
         if(object == player && state == null){
@@ -155,6 +161,8 @@ public class World implements InputHandler.InputListener{
 
     @Override
     public void onDragEnd(float x, float y){
+        fullCard.setCardId(FullCard.NULL_CARD);
+        
         if(mouseFocus instanceof Player && state != null){
             state.exitState();
             state = null;

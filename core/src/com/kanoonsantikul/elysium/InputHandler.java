@@ -6,7 +6,7 @@ import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Gdx;
 
 public class InputHandler extends GestureDetector{
-    public static final float LONG_PRESS_SECONDS = 0.25f;
+    public static final float LONG_PRESS_SECONDS = 0.09f;
 
     private boolean isDragged = false;
     private boolean isJustClick = true;
