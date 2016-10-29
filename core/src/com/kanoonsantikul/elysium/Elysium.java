@@ -27,7 +27,8 @@ public class Elysium extends Game {
 		batcher = new SpriteBatch();
 		setupInput();
 
-		setScreen(new GameScreen(this));
+		setScreen(new StartMultiplayerScreen(this));
+		//setScreen(new GameScreen(this));
 		//setScreen(new GameOverScreen(this, GameOverScreen.Winner.NONE));
 	}
 
