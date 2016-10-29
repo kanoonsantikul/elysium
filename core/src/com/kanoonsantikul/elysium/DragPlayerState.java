@@ -18,7 +18,7 @@ public class DragPlayerState implements WorldState{
         pathTracker = new LinkedList<Tile>();
         world.pathTracker = pathTracker;
 
-        if(player.isOnAction() || player.getIsMoved()){
+        if(player.isLock() || player.getIsMoved()){
             world.state = null;
         }
     }

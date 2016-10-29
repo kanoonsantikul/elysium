@@ -58,7 +58,7 @@ public class Renderer{
                     Tile.HEIGHT);
         }
 
-        if(!world.player.isOnAction()){
+        if(!world.player.isLock()){
             batcher.draw(Assets.hilightTile,
                     world.player.getTile().getPosition().x,
                     world.player.getTile().getPosition().y,

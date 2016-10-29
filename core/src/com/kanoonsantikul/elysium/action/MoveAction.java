@@ -28,7 +28,7 @@ public class MoveAction extends Action{
 
     @Override
     public void act(){
-        if(!actor.isOnAction()){
+        if(!actor.isLock()){
             preAction();
         }
 
@@ -40,7 +40,7 @@ public class MoveAction extends Action{
                 lastTile = paths.poll();
             }
         } else{
-            actor.setOnAction(false);
+            actor.setLock(false);
             ((BoardObject)actor).setTile(lastTile);
             if(actor instanceof Player){
                 ((Player)actor).setIsMoved(true);
@@ -54,7 +54,7 @@ public class MoveAction extends Action{
     }
 
     private void preAction(){
-        actor.setOnAction(true);
+        actor.setLock(true);
         if(((BoardObject)actor).getTile() != lastTile){
             paths.clear();
             lastTile = ((BoardObject)actor).getTile();
