@@ -28,47 +28,46 @@ public class TurnManager{
         listeners.remove(listener);
     }
 
-    public void switchTurn(){
-        endTurn(world.player);
+    public void endTurn(){
+        world.endTurnButton.setPressed(true);
+        world.isMyTurn = false;
 
-        if(world.player == world.player1){
-            world.player = world.player2;
-        } else{
-            world.player = world.player1;
+        for(int i=0; i<world.player.getTraps().size(); i++){
+            world.player.getTraps().get(i).setVisible(false);
         }
-
-        startTurn(world.player);
-    }
-
-    public void endTurn(Player player){
-        for(int i=0; i<player.getCards().size(); i++){
-            player.getCards().get(i).setVisible(false);
-        }
-        for(int i=0; i<player.getTraps().size(); i++){
-            player.getTraps().get(i).setVisible(false);
-        }
-
-        for(int i=0; i<listeners.size(); i++){
-            listeners.get(i).onTurnEnd(player);
-        }
-    }
-
-    public void startTurn(Player player){
-        player.setIsMoved(false);
-        world.drawCard(player);
-        player.updateCards();
-
-        for(int i=0; i<player.getCards().size(); i++){
-            player.getCards().get(i).setVisible(true);
-        }
-        for(int i=0; i<player.getTraps().size(); i++){
-            player.getTraps().get(i).setVisible(true);
+        for(int i=0; i<world.enemy.getTraps().size(); i++){
+            world.enemy.getTraps().get(i).setVisible(true);
         }
 
         LinkedList<TurnStateChangeListener> listeners
                 = new LinkedList<TurnStateChangeListener>(this.listeners);
         for(int i=0; i<listeners.size(); i++){
-            listeners.get(i).onTurnStart(player);
+            listeners.get(i).onTurnEnd(world.player);
+            listeners.get(i).onTurnStart(world.enemy);
+        }
+
+        MultiplayerUpdater.instance().sendTurnUpdate();
+    }
+
+    public void startTurn(){
+        world.endTurnButton.setPressed(false);
+        world.isMyTurn = true;
+
+        world.player.setIsMoved(false);
+        world.drawCard();
+
+        for(int i=0; i<world.player.getTraps().size(); i++){
+            world.player.getTraps().get(i).setVisible(true);
+        }
+        for(int i=0; i<world.enemy.getTraps().size(); i++){
+            world.enemy.getTraps().get(i).setVisible(false);
+        }
+
+        LinkedList<TurnStateChangeListener> listeners
+                = new LinkedList<TurnStateChangeListener>(this.listeners);
+        for(int i=0; i<listeners.size(); i++){
+            listeners.get(i).onTurnStart(world.player);
+            listeners.get(i).onTurnEnd(world.enemy);
         }
     }
 }

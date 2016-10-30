@@ -8,6 +8,10 @@ public class Player extends BoardObject{
     public static final float WIDTH = Assets.player1.getWidth() * Elysium.DEVICE_RATIO;
     public static final float HEIGHT = Assets.player1.getHeight() * Elysium.DEVICE_RATIO;
 
+    public static final int PLAYER1 = 1;
+    public static final int PLAYER2 = 2;
+    private int number;
+
     private int moveRange = 3;
     private int trapRange = 2;
     private int health = 2000;
@@ -15,17 +19,19 @@ public class Player extends BoardObject{
     private LinkedList<Trap> traps;
     private boolean isMoved;
 
-    public Player(Tile tile){
-        this(tile.getCenter(), tile);
-    }
+    public Player(int number, Tile tile){
+        this.number = number;
 
-    public Player(Vector2 position, Tile tile){
         cards = new LinkedList<Card>();
         traps = new LinkedList<Trap>();
 
         setIsMoved(false);
         setTile(tile);
-        setCenter(position);
+        setCenter(tile.getCenter());
+    }
+
+    public int getNumber(){
+        return this.number;
     }
 
     public float getWidth(){
@@ -64,6 +70,10 @@ public class Player extends BoardObject{
         return cards;
     }
 
+    public void setCards(LinkedList<Card> cards){
+        this.cards = cards;
+    }
+
     public void addCard(Card card){
         cards.add(card);
         World.gameObjects.add(card);
@@ -74,6 +84,16 @@ public class Player extends BoardObject{
         cards.remove(card);
         World.gameObjects.remove(card);
         updateCards();
+    }
+
+    public void updateCards(){
+        Card card;
+        for(int i=0; i<cards.size(); i++){
+            card = cards.get(i);
+            card.setNumber(i);
+        }
+
+        MultiplayerUpdater.instance().sendCardUpdate(cards);
     }
 
     public LinkedList<Trap> getTraps(){
@@ -100,13 +120,5 @@ public class Player extends BoardObject{
 
     public void setIsMoved(boolean isMoved){
         this.isMoved = isMoved;
-    }
-
-    public void updateCards(){
-        Card card;
-        for(int i=0; i<cards.size(); i++){
-            card = cards.get(i);
-            card.setNumber(i);
-        }
     }
 }

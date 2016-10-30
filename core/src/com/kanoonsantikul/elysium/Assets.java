@@ -15,8 +15,7 @@ public class Assets{
     public static Texture player2;
     public static Texture endTurnButton;
     public static Texture endTurnButtonPressed;
-    public static Texture cardBarBlue;
-    public static Texture cardBarRed;
+    public static Texture cardBar;
     public static Texture[] cards;
     public static Texture[] fullCards;
     public static Texture[] traps;
@@ -39,8 +38,7 @@ public class Assets{
         player2 = loadTexture("player2.png");
         endTurnButton = loadTexture("end-turn-button.png");
         endTurnButtonPressed = loadTexture("end-turn-button-pressed.png");
-        cardBarBlue = loadTexture("card-bar-1.png");
-        cardBarRed = loadTexture("card-bar-2.png");
+        cardBar = loadTexture("card-bar.png");
 
         cards = new Texture[]{
             loadTexture("card.png"),
@@ -101,8 +99,7 @@ public class Assets{
         player1.dispose();
         player2.dispose();
         endTurnButton.dispose();
-        cardBarBlue.dispose();
-        cardBarRed.dispose();
+        cardBar.dispose();
 
         for(int i=0; i<cards.length; i++){
             cards[i].dispose();

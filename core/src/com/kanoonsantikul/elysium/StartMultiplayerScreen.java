@@ -45,12 +45,16 @@ public class StartMultiplayerScreen extends ScreenAdapter implements
     }
 
     @Override
-    public void onGameStarted() {
-        game.setScreen(new GameScreen(game));
+    public void onGameStarted(int userNumber) {
+        game.setScreen(new GameScreen(game, userNumber));
     }
 
     @Override
     public void onWaitingStarted(){
         text = "Waiting for other player";
+    }
+
+    @Override
+    public void onGameUpdateReceived(String message){
     }
 }

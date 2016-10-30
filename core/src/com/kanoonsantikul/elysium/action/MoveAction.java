@@ -24,6 +24,8 @@ public class MoveAction extends Action{
         this.paths = paths;
         this.actionQueue = actionQueue;
         lastTile = actor.getTile();
+
+        MultiplayerUpdater.instance().sendLocationUpdate(actor, paths, actionQueue);
     }
 
     @Override

@@ -18,7 +18,7 @@ public class DragPlayerState implements WorldState{
         pathTracker = new LinkedList<Tile>();
         world.pathTracker = pathTracker;
 
-        if(player.isLock() || player.getIsMoved()){
+        if(!world.isMyTurn || player.isLock() || player.getIsMoved()){
             world.state = null;
         }
     }
@@ -31,11 +31,6 @@ public class DragPlayerState implements WorldState{
         } else if(object == player){
             pathTracker.clear();
         }
-    }
-
-    @Override
-    public void update(){
-
     }
 
     @Override
