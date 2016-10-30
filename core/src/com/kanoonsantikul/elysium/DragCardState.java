@@ -20,10 +20,12 @@ public class DragCardState implements WorldState{
 
     @Override
     public void handleInput(float x, float y){
-        getTargetTile();
+        if(world.isMyTurn){
+            getTargetTile();
+        }
 
         GameObject mouseOver = world.getObjectAt(x, y ,Tile.class);
-        if(mouseOver instanceof Tile){
+        if(world.isMyTurn && mouseOver instanceof Tile){
             if(world.targetTiles != null
                     && world.targetTiles.contains(mouseOver)){
                 lastFocusTile = (Tile)mouseOver;
@@ -41,16 +43,13 @@ public class DragCardState implements WorldState{
     }
 
     @Override
-    public void update(){
-
-    }
-
-    @Override
     public void exitState(){
         if(lastFocusTile != null){
             Trap trap = TrapBuilder.build(card.getId(), lastFocusTile, world.player);
             world.player.addTrap(trap);
             world.player.removeCard(card);
+
+            MultiplayerUpdater.instance().sendTrapUpdate(trap);
 
         } else{
             card.setVisible(true);

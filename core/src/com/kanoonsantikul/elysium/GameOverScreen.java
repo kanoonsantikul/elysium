@@ -43,7 +43,7 @@ public class GameOverScreen extends ScreenAdapter
                 Elysium.WIDTH/2,
                 Elysium.HEIGHT/2);
         Assets.font.draw(game.batcher,
-                "Click to restart",
+                "Click anywhere to restart",
                 Elysium.WIDTH/2,
                 Elysium.HEIGHT/2 - 20);
         Assets.font.setColor(Color.WHITE);
@@ -52,7 +52,7 @@ public class GameOverScreen extends ScreenAdapter
 
     @Override
     public void onClicked(float x, float y){
-        game.setScreen(new GameScreen(game));
+        game.setScreen(new StartMultiplayerScreen(game));
     }
 
     @Override

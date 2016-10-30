@@ -18,11 +18,6 @@ public class World implements InputHandler.InputListener{
     private static GameStateChangeListener listener;
     protected static LinkedList<GameObject> gameObjects;
 
-    protected LinkedList<Tile> tiles;
-    protected Player player1;
-    protected Player player2;
-    protected Player player;
-
     protected EndTurnButton endTurnButton;
     protected CardBar cardBar;
     protected Trap trapInstance;
@@ -32,6 +27,11 @@ public class World implements InputHandler.InputListener{
     protected LinkedList<Tile> pathTracker;
     protected LinkedList<Tile> targetTiles;
     protected LinkedList<DamageEffect> effects;
+
+    protected LinkedList<Tile> tiles;
+    protected Player player;
+    protected Player enemy;
+    protected boolean isMyTurn;
 
     protected LinkedList<Action> actionQueue;
     protected TurnManager turnManager;
@@ -44,15 +44,8 @@ public class World implements InputHandler.InputListener{
         public void onGameOver(GameOverScreen.Winner winner);
     }
 
-    public World(){
+    public World(int userNumber){
         world = this;
-
-        tiles = new LinkedList<Tile>();
-        initBoard();
-
-        player1 = new Player(tiles.get(Tile.getNumberOf(0, 2)));
-        player2 = new Player(tiles.get(Tile.getNumberOf(BOARD_HEIGHT - 1, 2)));
-        player = player1;
 
         endTurnButton = new EndTurnButton();
         cardBar = new CardBar();
@@ -61,10 +54,24 @@ public class World implements InputHandler.InputListener{
         random = new Random();
         effects = new LinkedList<DamageEffect>();
 
+        tiles = new LinkedList<Tile>();
+        initBoard();
+
+        if(userNumber == Player.PLAYER1){
+            player = new Player(Player.PLAYER1, tiles.get(Tile.getNumberOf(0, 2)));
+            enemy = new Player(Player.PLAYER2, tiles.get(Tile.getNumberOf(BOARD_HEIGHT - 1, 2)));
+            isMyTurn = true;
+            endTurnButton.setPressed(false);
+        } else if(userNumber == 2){
+            player = new Player(Player.PLAYER2, tiles.get(Tile.getNumberOf(BOARD_HEIGHT - 1, 2)));
+            enemy = new Player(Player.PLAYER1, tiles.get(Tile.getNumberOf(0, 2)));
+            isMyTurn = false;
+            endTurnButton.setPressed(true);
+        }
+
         gameObjects = new LinkedList<GameObject>();
-        gameObjects.add(player1);
-        gameObjects.add(player2);
-        initCard();
+        gameObjects.add(player);
+        gameObjects.add(enemy);
         gameObjects.addAll(tiles);
         gameObjects.add(endTurnButton);
 
@@ -119,9 +126,8 @@ public class World implements InputHandler.InputListener{
         fullCard.setCardId(FullCard.NULL_CARD);
 
         GameObject object = getObjectAt(x, y, null);
-        if(object instanceof EndTurnButton){
-            endTurnButton.setPressed(false);
-            turnManager.switchTurn();
+        if(object instanceof EndTurnButton && isMyTurn){
+            turnManager.endTurn();
         }
     }
 
@@ -131,8 +137,6 @@ public class World implements InputHandler.InputListener{
         if(object instanceof Card && mouseFocus == null){
             fullCard.setCardId(((Card)object).getId());
 
-        } else if(object instanceof EndTurnButton){
-            endTurnButton.setPressed(true);
         }
 
         if(state == dragCardState){
@@ -145,15 +149,11 @@ public class World implements InputHandler.InputListener{
         fullCard.setCardId(FullCard.NULL_CARD);
 
         GameObject object = getObjectAt(x, y, null);
+        mouseFocus = object;
         if(object == player && state == null){
-            mouseFocus = object;
-
             state = dragPlayerState;
             state.enterState(this);
-
         } else if(object instanceof Card && state == null){
-            mouseFocus = object;
-
             state = dragCardState;
             state.enterState(this);
         }
@@ -161,8 +161,6 @@ public class World implements InputHandler.InputListener{
 
     @Override
     public void onDragEnd(float x, float y){
-        endTurnButton.setPressed(false);
-        
         if(mouseFocus instanceof Player && state != null){
             state.exitState();
             state = null;
@@ -187,22 +185,13 @@ public class World implements InputHandler.InputListener{
         this.listener = listener;
     }
 
+    public void syncPlayerData(){
+        while(drawCard());
+    }
+
     public void update(){
         updateActionQueue();
-        if(player1.getHealth() <= 0 || player2.getHealth() <= 0){
-            GameOverScreen.Winner winner;
-            if(player1.getHealth() <= 0 && player2.getHealth() <= 0){
-                winner = GameOverScreen.Winner.NONE;
-            } else if(player1.getHealth() <= 0){
-                winner = GameOverScreen.Winner.PLAYER2;
-            } else{
-                winner = GameOverScreen.Winner.PLAYER1;
-            }
-
-            if(listener != null){
-                listener.onGameOver(winner);
-            }
-        }
+        updateGameState();
     }
 
     private void updateActionQueue(){
@@ -216,18 +205,30 @@ public class World implements InputHandler.InputListener{
         }
     }
 
+    private void updateGameState(){
+        if(player.getHealth() <= 0 || enemy.getHealth() <= 0){
+            GameOverScreen.Winner winner;
+            if(player.getHealth() <= 0 && enemy.getHealth() <= 0){
+                winner = GameOverScreen.Winner.NONE;
+            } else if(player.getHealth() <= 0){
+                winner = GameOverScreen.Winner.PLAYER2;
+            } else{
+                winner = GameOverScreen.Winner.PLAYER1;
+            }
+
+            if(listener != null){
+                listener.onGameOver(winner);
+            }
+        }
+    }
+
     private void initBoard(){
         for(int i=0; i<BOARD_WIDTH * BOARD_HEIGHT; i++){
             tiles.add(new Tile(i));
         }
     }
 
-    private void initCard(){
-        while(drawCard(player1));
-        while(drawCard(player2));
-    }
-
-    public boolean drawCard(Player player){
+    public boolean drawCard(){
         Card card;
         int cardId;
         if(player.getCards().size() < FULL_HAND){

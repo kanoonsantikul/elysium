@@ -41,6 +41,7 @@ project(":desktop") {
         compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
         compile "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
         compile "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
+        compile fileTree(dir: 'libs', include: '*.jar')
     }
 }
 
@@ -73,7 +74,7 @@ project(":core") {
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
-        compile fileTree(dir: 'libs', include: '*.jar')
+        compile files('libs/App42MultiPlayerGamingSDK.jar')
     }
 }
 

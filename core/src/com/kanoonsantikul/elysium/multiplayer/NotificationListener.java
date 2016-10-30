@@ -27,7 +27,7 @@ public class NotificationListener implements NotifyListener{
 	}
 
 	public void onUpdatePeersReceived(UpdateEvent event) {
-		//callBack.onGameUpdateReceived(new String(event.getUpdate()));
+		callBack.onGameUpdateReceived(new String(event.getUpdate()));
 	}
 
 	public void onUserJoinedLobby(LobbyData event, String username) {

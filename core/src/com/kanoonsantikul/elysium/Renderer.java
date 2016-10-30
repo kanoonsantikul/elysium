@@ -11,9 +11,6 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.Color;
 
 public class Renderer{
-    private static final float NAME_X = EndTurnButton.X - 5;
-    private static final float NAME_Y = EndTurnButton.Y + EndTurnButton.HEIGHT + 20;
-
     private static final float PLAYER_FONT_Y = -12f;
 
     World world;
@@ -41,8 +38,8 @@ public class Renderer{
         renderTrap();
         renderPathTracker();
         renderTargetTiles();
-        renderCharacter(world.player1);
-        renderCharacter(world.player2);
+        renderCharacter(world.player);
+        renderCharacter(world.enemy);
     }
 
     private void renderTiles(){
@@ -58,7 +55,7 @@ public class Renderer{
                     Tile.HEIGHT);
         }
 
-        if(!world.player.isLock()){
+        if(world.isMyTurn && !world.player.isLock()){
             batcher.draw(Assets.hilightTile,
                     world.player.getTile().getPosition().x,
                     world.player.getTile().getPosition().y,
@@ -122,7 +119,7 @@ public class Renderer{
     private void renderCharacter(Player player){
         String text = "" + player.getHealth();
         Texture texture;
-        if(player == world.player1){
+        if(player.getNumber() == Player.PLAYER1){
             texture = Assets.player1;
         } else{
             texture = Assets.player2;
@@ -144,14 +141,7 @@ public class Renderer{
 
 
     private void renderUI(float delta){
-        Texture cardBar;
-        if(world.player == world.player1){
-            cardBar = Assets.cardBarBlue;
-        } else{
-            cardBar = Assets.cardBarRed;
-        }
-
-        batcher.draw(cardBar,
+        batcher.draw(Assets.cardBar,
                 CardBar.X,
                 CardBar.Y,
                 CardBar.WIDTH,
@@ -169,23 +159,7 @@ public class Renderer{
                 EndTurnButton.WIDTH,
                 EndTurnButton.HEIGHT);
 
-        renderFont();
         renderEffect(delta);
-    }
-
-    private void renderFont(){
-        String turn;
-        if(world.player == world.player1){
-            turn = "Player 1";
-        } else{
-            turn = "Player 2";
-        }
-        Assets.font.setColor(Color.BLACK);
-        Assets.font.draw(batcher,
-                turn,
-                NAME_X,
-                NAME_Y);
-        Assets.font.setColor(Color.WHITE);
     }
 
     private void renderEffect(float delta){

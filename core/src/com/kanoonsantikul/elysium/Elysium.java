@@ -39,6 +39,8 @@ public class Elysium extends Game {
 
 	@Override
 	public void dispose () {
+		ConnectionManager.instance().disconnect();
+
 		batcher.dispose();
 		//gameScreen.dispose();
 		Assets.dispose();

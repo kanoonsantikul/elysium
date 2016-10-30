@@ -15,8 +15,8 @@ public class ToggleTrapAction extends Action{
 
     @Override
     public void act(){
-        getTrap(world.player1);
-        getTrap(world.player2);
+        getTrap(world.player);
+        getTrap(world.enemy);
         setActed(true);
     }
 
