@@ -2,7 +2,7 @@ package com.kanoonsantikul.elysium;
 
 import java.util.LinkedList;
 
-public class FuzzyBomb extends Trap{
+public class FuzzyBomb extends Trap implements WaitDataAction.DataListener{
     private static final int LOCK_TURN = 3;
     private World world = World.instance();
 
@@ -14,15 +14,50 @@ public class FuzzyBomb extends Trap{
     }
 
     @Override
+    public void onDataArrive(String data){
+        LinkedList<Tile> paths = new LinkedList<Tile>();
+        String[] pathString = data.split(":");
+        for(int i=0; i<pathString.length; i++){
+            int number = Integer.parseInt(pathString[i]);
+            paths.add(world.tiles.get(number));
+        }
+
+        world.actionQueue.add(new MoveAction(
+                actor,
+                paths,
+                world.actionQueue));
+    }
+
+    @Override
     public void onTurnStart(Player player){
-        if(isToggled && player == actor){
+        if(isToggled && player == actor && actor == world.player){
             setVisible(false);
             if(turnCount < LOCK_TURN){
+                LinkedList<Tile> paths = createPath();
+                String data = "";
+                for(int i=0; i<paths.size(); i++){
+                    data += paths.get(i).getNumber() + ":";
+                }
+                MultiplayerUpdater.instance().sendDataUpdate(data);
+
                 actor.setIsMoved(true);
                 world.actionQueue.add(new MoveAction(
                         player,
-                        createPath(),
+                        paths,
                         world.actionQueue));
+                turnCount++;
+            } else{
+                user.removeTrap(this);
+            }
+        }
+    }
+
+    @Override
+    public void onTurnEnd(Player player){
+        if(isToggled && player != actor && actor == world.enemy){
+            setVisible(false);
+            if(turnCount < LOCK_TURN){
+                world.actionQueue.add(new WaitDataAction(this));
                 turnCount++;
             } else{
                 user.removeTrap(this);
@@ -58,7 +93,8 @@ public class FuzzyBomb extends Trap{
             do{
                 neighbors = lastTile.getNeighbors(1, false);
                 tile = neighbors.get(world.random.nextInt(neighbors.size()));
-            }while(paths.contains(tile));
+            }while(paths.contains(tile)
+                    || world.getObjectAt(tile.getCenter(), Player.class, true) != null);
             lastTile = tile;
             paths.add(tile);
         }

@@ -13,6 +13,7 @@ public class MultiplayerUpdater implements
     private static final int TURN_UPDATE_TYPE = 2;
     private static final int CARD_UPDATE_TYPE = 3;
     private static final int TRAP_UPDATE_TYPE = 4;
+    private static final int DATA_UPDATE_TYPE = 5;
 
     private static MultiplayerUpdater multiplayerUpdater;
     private World world;
@@ -48,6 +49,8 @@ public class MultiplayerUpdater implements
                 updateCards(data);
             } else if(data.getInt("type") == TRAP_UPDATE_TYPE){
                 updateTrap(data);
+            } else if(data.getInt("type") == DATA_UPDATE_TYPE){
+                updateData(data.getString("message"));
             }
         } catch(Exception e){
 
@@ -125,6 +128,17 @@ public class MultiplayerUpdater implements
         }
     }
 
+    public void sendDataUpdate(String message){
+        try{
+            JSONObject data = new JSONObject();
+            data.put("type", DATA_UPDATE_TYPE);
+            data.put("message", message);
+            ConnectionManager.instance().sendGameUpdate(data.toString());
+        } catch(Exception e){
+
+        }
+    }
+
     private void updateLocation(JSONObject data){
         try {
             BoardObject actor;
@@ -183,6 +197,15 @@ public class MultiplayerUpdater implements
             world.enemy.addTrap(trap);
         } catch(Exception e){
 
+        }
+    }
+
+    private void updateData(String message){
+        for(int i=0 ;i<world.actionQueue.size(); i++){
+            if(world.actionQueue.get(i) instanceof WaitDataAction){
+                ((WaitDataAction)world.actionQueue.get(i))
+                        .onDataArrive(message);
+            }
         }
     }
 }
