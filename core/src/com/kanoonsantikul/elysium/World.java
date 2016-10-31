@@ -10,7 +10,7 @@ import com.badlogic.gdx.Gdx;
 
 public class World implements InputHandler.InputListener{
     public static final int BOARD_WIDTH = 5;
-    public static final int BOARD_HEIGHT = 9;
+    public static final int BOARD_HEIGHT = 7;
     public static final int FULL_HAND = 4;
     public static final float ALPHA = 0.55f;
 
@@ -18,12 +18,12 @@ public class World implements InputHandler.InputListener{
     private static GameStateChangeListener listener;
     protected static LinkedList<GameObject> gameObjects;
 
+    protected Random random;
     protected EndTurnButton endTurnButton;
     protected CardBar cardBar;
     protected Trap trapInstance;
     protected FullCard fullCard;
     protected GameObject mouseFocus;
-    protected Random random;
     protected LinkedList<Tile> pathTracker;
     protected LinkedList<Tile> targetTiles;
     protected LinkedList<DamageEffect> effects;
@@ -47,11 +47,11 @@ public class World implements InputHandler.InputListener{
     public World(int userNumber){
         world = this;
 
+        random = new Random();
         endTurnButton = new EndTurnButton();
         cardBar = new CardBar();
         trapInstance = new Trap(0, null, null);
         fullCard = new FullCard();
-        random = new Random();
         effects = new LinkedList<DamageEffect>();
 
         tiles = new LinkedList<Tile>();
@@ -136,7 +136,6 @@ public class World implements InputHandler.InputListener{
         GameObject object = getObjectAt(x, y ,null);
         if(object instanceof Card && mouseFocus == null){
             fullCard.setCardId(((Card)object).getId());
-
         }
 
         if(state == dragCardState){
