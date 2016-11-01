@@ -3,11 +3,13 @@ package com.kanoonsantikul.elysium;
 import java.util.LinkedList;
 
 public class ExplosiveBomb extends Trap{
+    public static final int ID = 4;
+    public static final int COST = 2;
     private static final int DAMAGE = 100;
     private static final int RANGE = 1;
 
-    public ExplosiveBomb(int id, Tile tile, Player user){
-        super(id, tile, user);
+    public ExplosiveBomb(Tile tile, Player user){
+        super(ID, COST, tile, user);
     }
 
     @Override

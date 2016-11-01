@@ -3,14 +3,16 @@ package com.kanoonsantikul.elysium;
 import java.util.LinkedList;
 
 public class FuzzyBomb extends Trap implements WaitDataAction.DataListener{
+    public static final int ID = 6;
+    public static final int COST = 2;
     private static final int LOCK_TURN = 3;
     private World world = World.instance();
 
     private Player actor;
     private int turnCount = 0;
 
-    public FuzzyBomb(int id, Tile tile, Player user){
-        super(id, tile, user);
+    public FuzzyBomb(Tile tile, Player user){
+        super(ID, COST, tile, user);
     }
 
     @Override

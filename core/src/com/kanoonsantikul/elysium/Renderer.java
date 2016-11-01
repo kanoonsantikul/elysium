@@ -11,7 +11,8 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.Color;
 
 public class Renderer{
-    private static final float PLAYER_FONT_Y = -12f;
+    private static final float FONT_SMALL_SPACING = 12f;
+    private static final float FONT_SPACING = 17f;
 
     World world;
     SpriteBatch batcher;
@@ -136,7 +137,7 @@ public class Renderer{
                 batcher,
                 text,
                 player.getCenter().x - glyph.width / 2f,
-                player.getPosition().y - PLAYER_FONT_Y);
+                player.getPosition().y + FONT_SMALL_SPACING);
     }
 
 
@@ -147,6 +148,19 @@ public class Renderer{
                 CardBar.WIDTH,
                 CardBar.HEIGHT);
 
+        renderPlayerMaterial();
+        renderEndTurnButton();
+        renderEffect(delta);
+    }
+
+    private void renderPlayerMaterial(){
+        Assets.font.draw(batcher,
+                "MATERIAL: " + world.player.getMaterial(),
+                300,
+                150);
+    }
+
+    private void renderEndTurnButton(){
         Texture endTurnButton;
         if(world.endTurnButton.isPressed()){
             endTurnButton = Assets.endTurnButtonPressed;
@@ -158,8 +172,6 @@ public class Renderer{
                 EndTurnButton.Y,
                 EndTurnButton.WIDTH,
                 EndTurnButton.HEIGHT);
-
-        renderEffect(delta);
     }
 
     private void renderEffect(float delta){
@@ -174,12 +186,10 @@ public class Renderer{
             } else{
                 String damage = world.effects.get(i).getDamage() + "";
                 GlyphLayout glyph = Assets.font.draw(batcher, damage, -400, -400);
-                Assets.font.setColor(Color.BLACK);
                 Assets.font.draw(batcher,
                         damage,
                         effect.getEmitters().first().getX() - glyph.width / 2,
                         effect.getEmitters().first().getY() + glyph.height / 2);
-                Assets.font.setColor(Color.WHITE);
             }
         }
     }
@@ -190,7 +200,7 @@ public class Renderer{
         for(int i=0; i<cards.size(); i++){
             card = cards.get(i);
             if(!card.isVisible()){
-                Trap trap = world.trapInstance;
+                Trap trap = TrapBuilder.getInstance(card.getId());
                 batcher.setColor(1, 1, 1, World.ALPHA);
                 batcher.draw(Assets.traps[trap.getId()],
                         trap.getPosition().x,
@@ -200,11 +210,17 @@ public class Renderer{
                 batcher.setColor(1,1,1,1);
                 continue;
             }
+
             batcher.draw(Assets.cards[card.getId()],
                     card.getPosition().x,
                     card.getPosition().y,
                     Card.WIDTH,
                     Card.HEIGHT);
+
+            Assets.font.draw(batcher,
+                    TrapBuilder.getInstance(card.getId()).getCost() + "",
+                    card.getPosition().x + Card.WIDTH / 2,
+                    card.getPosition().y + Card.HEIGHT + FONT_SPACING);
         }
 
         int cardId = world.fullCard.getCardId();

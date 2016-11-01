@@ -9,8 +9,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.Gdx;
 
 public class World implements InputHandler.InputListener{
-    public static final int BOARD_WIDTH = 5;
-    public static final int BOARD_HEIGHT = 7;
+    public static final int BOARD_WIDTH = 4;
+    public static final int BOARD_HEIGHT = 9;
     public static final int FULL_HAND = 4;
     public static final float ALPHA = 0.55f;
 
@@ -21,7 +21,6 @@ public class World implements InputHandler.InputListener{
     protected Random random;
     protected EndTurnButton endTurnButton;
     protected CardBar cardBar;
-    protected Trap trapInstance;
     protected FullCard fullCard;
     protected GameObject mouseFocus;
     protected LinkedList<Tile> pathTracker;
@@ -41,7 +40,7 @@ public class World implements InputHandler.InputListener{
     protected WorldState dragPlayerState;
 
     public interface GameStateChangeListener{
-        public void onGameOver(GameOverScreen.Winner winner);
+        public void onGameOver(GameOverScreen.WinState winState);
     }
 
     public World(int userNumber){
@@ -50,21 +49,21 @@ public class World implements InputHandler.InputListener{
         random = new Random();
         endTurnButton = new EndTurnButton();
         cardBar = new CardBar();
-        trapInstance = new Trap(0, null, null);
         fullCard = new FullCard();
+        targetTiles = new LinkedList<Tile>();
         effects = new LinkedList<DamageEffect>();
 
         tiles = new LinkedList<Tile>();
         initBoard();
 
         if(userNumber == Player.PLAYER1){
-            player = new Player(Player.PLAYER1, tiles.get(Tile.getNumberOf(0, 2)));
+            player = new Player(Player.PLAYER1, tiles.get(Tile.getNumberOf(0, 1)));
             enemy = new Player(Player.PLAYER2, tiles.get(Tile.getNumberOf(BOARD_HEIGHT - 1, 2)));
             isMyTurn = true;
             endTurnButton.setPressed(false);
         } else if(userNumber == 2){
             player = new Player(Player.PLAYER2, tiles.get(Tile.getNumberOf(BOARD_HEIGHT - 1, 2)));
-            enemy = new Player(Player.PLAYER1, tiles.get(Tile.getNumberOf(0, 2)));
+            enemy = new Player(Player.PLAYER1, tiles.get(Tile.getNumberOf(0, 1)));
             isMyTurn = false;
             endTurnButton.setPressed(true);
         }
@@ -136,6 +135,8 @@ public class World implements InputHandler.InputListener{
         GameObject object = getObjectAt(x, y ,null);
         if(object instanceof Card && mouseFocus == null){
             fullCard.setCardId(((Card)object).getId());
+        } else if((object = getObjectAt(x, y, Trap.class)) != null){
+            fullCard.setCardId(((Trap)object).getId());
         }
 
         if(state == dragCardState){
@@ -190,7 +191,7 @@ public class World implements InputHandler.InputListener{
 
     public void update(){
         updateActionQueue();
-        updateGameState();
+        CheckPlayerHealth();
     }
 
     private void updateActionQueue(){
@@ -204,19 +205,19 @@ public class World implements InputHandler.InputListener{
         }
     }
 
-    private void updateGameState(){
+    private void CheckPlayerHealth(){
         if(player.getHealth() <= 0 || enemy.getHealth() <= 0){
-            GameOverScreen.Winner winner;
+            GameOverScreen.WinState winState;
             if(player.getHealth() <= 0 && enemy.getHealth() <= 0){
-                winner = GameOverScreen.Winner.NONE;
+                winState = GameOverScreen.WinState.DRAW;
             } else if(player.getHealth() <= 0){
-                winner = GameOverScreen.Winner.PLAYER2;
+                winState = GameOverScreen.WinState.LOSE;
             } else{
-                winner = GameOverScreen.Winner.PLAYER1;
+                winState = GameOverScreen.WinState.WIN;
             }
 
             if(listener != null){
-                listener.onGameOver(winner);
+                listener.onGameOver(winState);
             }
         }
     }

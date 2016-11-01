@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.Color;
 
 public class Assets{
     public static Texture tile;
@@ -80,6 +81,7 @@ public class Assets{
                 Gdx.files.internal("font/font.fnt"),
                 new TextureRegion(loadTexture("font/font.png")),
                 false);
+        font.setColor(Color.BLACK);
         fontSmall = new BitmapFont(
                 Gdx.files.internal("font/font-small.fnt"),
                 new TextureRegion(loadTexture("font/font-small.png")),
