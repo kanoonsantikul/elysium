@@ -2,14 +2,15 @@ package com.kanoonsantikul.elysium;
 
 public class BearTrap extends Trap{
     public static final int ID = 1;
-    public static final int COST = 2;
+    public static final float WEIGHT = 0.1f;
+    public static final int COST = 3;
     private static final int LOCK_TURN = 2;
 
     private Player actor;
     private int turnCount = 0;
 
     public BearTrap(Tile tile, Player user){
-        super(ID, COST, tile, user);
+        super(ID, WEIGHT, COST, tile, user);
     }
 
     @Override

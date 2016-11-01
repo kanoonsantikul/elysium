@@ -2,7 +2,7 @@ package com.kanoonsantikul.elysium;
 
 public class TrapBuilder{
     private static final Trap[] trapInstance = new Trap[]{
-        new Trap(0, 0, null, null),
+        new Trap(0, 0, 0, null, null),
         new BearTrap(null, null),
         new BoobyTrap(null, null),
         new TickingTimeBomb(null, null),
@@ -20,4 +20,23 @@ public class TrapBuilder{
     public static Trap getInstance(int id){
         return trapInstance[id];
     }
+
+    public static int randomTrapId(){
+        double completeWeight = 0.0;
+        for(Trap trap : trapInstance){
+            completeWeight += trap.getWeight();
+        }
+
+        double random = Math.random() * completeWeight;
+        double countWeight = 0.0;
+        for(Trap trap : trapInstance) {
+            countWeight += trap.getWeight();
+            if(countWeight >= random){
+                return trap.getId();
+            }
+        }
+
+        return 0;
+    }
+
 }
