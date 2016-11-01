@@ -7,26 +7,26 @@ import com.badlogic.gdx.ScreenAdapter;
 
 public class GameOverScreen extends ScreenAdapter
         implements InputHandler.InputListener{
-    public enum Winner{
-        PLAYER1, PLAYER2, NONE
+    public enum WinState{
+        WIN, LOSE, DRAW
     };
 
     private Elysium game;
-    private Winner winner;
-    private String winnerString;
+    private WinState winState;
+    private String text;
 
-    public GameOverScreen(Elysium game, Winner winner){
+    public GameOverScreen(Elysium game, WinState winState){
         this.game = game;
-        this.winner = winner;
+        this.winState = winState;
 
         game.inputHandler.setListener(this);
 
-        if(winner == Winner.PLAYER1){
-            winnerString = "player 1";
-        } else if(winner == Winner.PLAYER2){
-            winnerString = "player 2";
+        if(winState == WinState.WIN){
+            text = "YOU WIN";
+        } else if(winState == WinState.LOSE){
+            text = "YOU LOSE";
         } else{
-            winnerString = "no winner";
+            text = "DRAW";
         }
     }
 
@@ -37,16 +37,14 @@ public class GameOverScreen extends ScreenAdapter
         gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         game.batcher.begin();
-        Assets.font.setColor(Color.BLACK);
         Assets.font.draw(game.batcher,
-                "Winner is " + winnerString,
+                text,
                 Elysium.WIDTH/2,
                 Elysium.HEIGHT/2);
         Assets.font.draw(game.batcher,
                 "Click anywhere to restart",
                 Elysium.WIDTH/2,
                 Elysium.HEIGHT/2 - 20);
-        Assets.font.setColor(Color.WHITE);
         game.batcher.end();
     }
 

@@ -1,14 +1,16 @@
 package com.kanoonsantikul.elysium;
 
 public class SpikeTrap extends Trap{
+    public static final int ID = 8;
+    public static final int COST = 2;
     private static final int LOCK_TURN = 1;
     private static final int DAMAGE = 300;
 
     private Player actor;
     private int turnCount = 0;
 
-    public SpikeTrap(int id, Tile tile, Player user){
-        super(id, tile, user);
+    public SpikeTrap(Tile tile, Player user){
+        super(ID, COST, tile, user);
     }
 
     @Override

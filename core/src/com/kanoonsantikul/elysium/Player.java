@@ -14,7 +14,8 @@ public class Player extends BoardObject{
 
     private int moveRange = 3;
     private int trapRange = 2;
-    private int health = 2000;
+    private int health = 1000;
+    private int material = 0;
     private LinkedList<Card> cards;
     private LinkedList<Trap> traps;
     private boolean isMoved;
@@ -64,6 +65,14 @@ public class Player extends BoardObject{
 
     public void setHealth(int health){
         this.health = health;
+    }
+
+    public int getMaterial(){
+        return this.material;
+    }
+
+    public void addMaterial(int diff){
+        this.material += diff;
     }
 
     public LinkedList<Card> getCards(){

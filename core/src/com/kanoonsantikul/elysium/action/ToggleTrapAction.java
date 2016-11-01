@@ -15,22 +15,22 @@ public class ToggleTrapAction extends Action{
 
     @Override
     public void act(){
-        getTrap(world.player);
-        getTrap(world.enemy);
+        if(world.player.getNumber() == Player.PLAYER1){
+            getTrap(world.player);
+            getTrap(world.enemy);
+        } else{
+            getTrap(world.enemy);
+            getTrap(world.player);
+        }
         setActed(true);
     }
 
     private void getTrap(Player player){
-        Trap trap = null;
         for(int i=0; i<player.getTraps().size(); i++){
-            trap = player.getTraps().get(i);
-            if(trap.getCenter().equals(tile.getCenter())){
+            if(player.getTraps().get(i).getTile() == tile){
+                player.getTraps().get(i).toggle(actor);
                 break;
             }
-            trap = null;
-        }
-        if(trap != null){
-            trap.toggle(actor);
         }
     }
 }

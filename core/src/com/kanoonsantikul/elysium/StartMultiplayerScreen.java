@@ -35,12 +35,10 @@ public class StartMultiplayerScreen extends ScreenAdapter implements
 
         game.batcher.begin();
         GlyphLayout glyph = Assets.font.draw(game.batcher, text, -400, -400);
-        Assets.font.setColor(Color.BLACK);
         Assets.font.draw(game.batcher,
                 text,
                 Elysium.WIDTH/2 - glyph.width / 2,
                 Elysium.HEIGHT/2 + glyph.height / 2);
-        Assets.font.setColor(Color.WHITE);
         game.batcher.end();
     }
 

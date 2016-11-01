@@ -4,14 +4,16 @@ import java.util.List;
 import java.util.LinkedList;
 
 public class SnareTrap extends Trap{
+    public static final int ID = 5;
+    public static final int COST = 2;
     private static final int LOCK_TURN = 1;
     private static final int MOVE_RANGE = 2;
 
     private Player actor;
     private int turnCount = 0;
 
-    public SnareTrap(int id, Tile tile, Player user){
-        super(id, tile, user);
+    public SnareTrap(Tile tile, Player user){
+        super(ID, COST, tile, user);
     }
 
     @Override

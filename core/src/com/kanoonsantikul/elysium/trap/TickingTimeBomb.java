@@ -3,13 +3,15 @@ package com.kanoonsantikul.elysium;
 import com.badlogic.gdx.Gdx;
 
 public class TickingTimeBomb extends Trap{
-    private static final int LOCK_TURN = 2;
-    private static final int DAMAGE = 200;
+    public static final int ID = 3;
+    public static final int COST = 2;
+    private static final int LOCK_TURN = 1;
+    private static final int DAMAGE = 300;
 
     private int turnCount = 0;
 
-    public TickingTimeBomb(int id, Tile tile, Player user){
-        super(id, tile, user);
+    public TickingTimeBomb(Tile tile, Player user){
+        super(ID, COST, tile, user);
     }
 
     @Override

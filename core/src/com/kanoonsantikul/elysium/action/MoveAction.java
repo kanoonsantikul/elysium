@@ -40,10 +40,15 @@ public class MoveAction extends Action{
             } else if(!move()){
                 currentTargetPosition = null;
                 lastTile = paths.poll();
+
+                if(actor instanceof Player){
+                    ((Player)actor).addMaterial(1);
+                }
             }
         } else{
             actor.setLock(false);
             ((BoardObject)actor).setTile(lastTile);
+
             if(actor instanceof Player){
                 ((Player)actor).setIsMoved(true);
                 if(actionQueue != null){

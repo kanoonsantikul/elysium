@@ -31,7 +31,7 @@ public class GameScreen extends ScreenAdapter implements
     }
 
     @Override
-    public void onGameOver(GameOverScreen.Winner winner){
-        game.setScreen(new GameOverScreen(game, winner));
+    public void onGameOver(GameOverScreen.WinState winState){
+        game.setScreen(new GameOverScreen(game, winState));
     }
 }

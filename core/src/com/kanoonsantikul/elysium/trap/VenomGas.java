@@ -1,14 +1,16 @@
 package com.kanoonsantikul.elysium;
 
 public class VenomGas extends Trap{
+    public static final int ID = 7;
+    public static final int COST = 2;
     private static final int LOCK_TURN = 4;
     private static final int DAMAGE = 100;
 
     private Player actor;
     private int turnCount = 0;
 
-    public VenomGas(int id, Tile tile, Player user){
-        super(id, tile, user);
+    public VenomGas(Tile tile, Player user){
+        super(ID, COST, tile, user);
     }
 
     @Override
