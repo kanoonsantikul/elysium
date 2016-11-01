@@ -229,15 +229,10 @@ public class World implements InputHandler.InputListener{
     }
 
     public boolean drawCard(){
-        Card card;
         int cardId;
         if(player.getCards().size() < FULL_HAND){
-            do{
-                cardId = random.nextInt(Assets.traps.length);
-            }while(cardId == 0);
-
-            card = new Card(cardId);
-            player.addCard(card);
+            cardId = TrapBuilder.randomTrapId();
+            player.addCard(new Card(cardId));
             return true;
         }
         return false;

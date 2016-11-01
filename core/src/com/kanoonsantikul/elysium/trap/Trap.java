@@ -9,12 +9,14 @@ public class Trap extends BoardObject implements TurnStateChangeListener, Clonea
     public static final float HEIGHT = Assets.traps[0].getHeight() * Elysium.DEVICE_RATIO;
 
     protected int id;
+    protected float weight;
     protected int cost;
     protected Player user;
     protected boolean isToggled = false;
 
-    public Trap (int id, int cost, Tile tile, Player user){
+    public Trap (int id, float weight, int cost, Tile tile, Player user){
         this.id = id;
+        this.weight = weight;
         this.cost = cost;
         if(tile != null){
             setTile(tile);
@@ -37,6 +39,10 @@ public class Trap extends BoardObject implements TurnStateChangeListener, Clonea
 
     public int getId(){
         return id;
+    }
+
+    public float getWeight(){
+        return weight;
     }
 
     public int getCost(){
