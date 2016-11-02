@@ -17,9 +17,12 @@ public class Assets{
     public static Texture endTurnButton;
     public static Texture endTurnButtonPressed;
     public static Texture cardBar;
+    public static Texture materialSmall;
+    public static Texture material;
     public static Texture[] cards;
     public static Texture[] fullCards;
     public static Texture[] traps;
+    public static Texture[] notifyText;
 
     public static BitmapFont font;
     public static BitmapFont fontSmall;
@@ -39,6 +42,8 @@ public class Assets{
         player2 = loadTexture("player2.png");
         endTurnButton = loadTexture("end-turn-button.png");
         endTurnButtonPressed = loadTexture("end-turn-button-pressed.png");
+        materialSmall = loadTexture("material-small.png");
+        material = loadTexture("material.png");
         cardBar = loadTexture("card-bar.png");
 
         cards = new Texture[]{
@@ -77,6 +82,11 @@ public class Assets{
             loadTexture("spike-trap.png")
         };
 
+        notifyText = new Texture[]{
+            loadTexture("text-box.png"),
+            loadTexture("no-material-text.png")
+        };
+
         font = new BitmapFont(
                 Gdx.files.internal("font/font.fnt"),
                 new TextureRegion(loadTexture("font/font.png")),
@@ -101,12 +111,19 @@ public class Assets{
         player1.dispose();
         player2.dispose();
         endTurnButton.dispose();
+        endTurnButtonPressed.dispose();
+        materialSmall.dispose();
+        material.dispose();
         cardBar.dispose();
 
         for(int i=0; i<cards.length; i++){
             cards[i].dispose();
             fullCards[i].dispose();
             traps[i].dispose();
+        }
+
+        for(int i=0 ;i<notifyText.length; i++){
+            notifyText[i].dispose();
         }
 
         font.dispose();

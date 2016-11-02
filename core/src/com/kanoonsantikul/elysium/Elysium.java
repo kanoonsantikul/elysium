@@ -28,7 +28,7 @@ public class Elysium extends Game {
 		setupInput();
 
 		setScreen(new StartMultiplayerScreen(this));
-		//setScreen(new GameScreen(this));
+		//setScreen(new GameScreen(this, 1));
 		//setScreen(new GameOverScreen(this, GameOverScreen.Winner.NONE));
 	}
 

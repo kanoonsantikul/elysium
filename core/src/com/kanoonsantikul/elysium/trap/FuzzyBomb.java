@@ -92,7 +92,7 @@ public class FuzzyBomb extends Trap implements WaitDataAction.DataListener{
         LinkedList<Tile> neighbors;
         for(int i=0; i<maxRange; i++){
             do{
-                neighbors = lastTile.getNeighbors(1, false);
+                neighbors = lastTile.getNeighbors(1, Tile.PLUS_RANGE);
                 tile = neighbors.get(world.random.nextInt(neighbors.size()));
             }while(paths.contains(tile)
                     || world.getObjectAt(tile.getCenter(), Player.class, false) != null);

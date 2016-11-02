@@ -3,7 +3,7 @@ package com.kanoonsantikul.elysium;
 public class ShowTextAction extends DelayAction{
     public static final int NOTIFY_NO_MATERIAL_TEXT = 1;
 
-    private static final long DELAY_MILLI = 2000;
+    private static final long DELAY_MILLI = 1500;
 
     private World world = World.instance();
     private int text;

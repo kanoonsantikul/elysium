@@ -25,8 +25,8 @@ public class DragPlayerState implements WorldState{
 
     @Override
     public void handleInput(float x, float y){
-        GameObject object = world.getObjectAt(x, y, null);
-        if(object instanceof Tile){
+        GameObject object = world.getObjectAt(x, y, Tile.class);
+        if(object != null){
             object = world.getObjectAt(object.getCenter(), null, false);
             if(object instanceof Tile){
                 updatePath((Tile)object);
@@ -61,7 +61,7 @@ public class DragPlayerState implements WorldState{
                 lastTile = pathTracker.getLast();
             }
 
-            if(lastTile.getNeighbors(1, false).contains(tile)
+            if(lastTile.getNeighbors(1, Tile.PLUS_RANGE).contains(tile)
                     && pathTracker.size() < player.getMoveRange()){
                 pathTracker.add(tile);
             }

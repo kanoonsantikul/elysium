@@ -41,9 +41,9 @@ public class DragCardState implements WorldState{
     @Override
     public void exitState(){
         if(lastFocusTile != null){
-            Trap trap = TrapBuilder.build(card.getId(), lastFocusTile, world.player);
+            Trap trap = TrapBuilder.getInstance(card.getId());
             if(trap.getCost() <= world.player.getMaterial()){
-                world.player.addMaterial(-trap.getCost());
+                trap = TrapBuilder.build(card.getId(), lastFocusTile, world.player);
                 world.player.addTrap(trap);
                 world.player.removeCard(card);
                 MultiplayerUpdater.instance().sendTrapUpdate(trap);
@@ -64,7 +64,7 @@ public class DragCardState implements WorldState{
     private void getTargetTile(){
         if(world.targetTiles.size() == 0 && !world.player.isLock()){
             LinkedList<Tile> neighborTiles = world.player.getTile()
-                    .getNeighbors(world.player.getTrapRange(), true);
+                    .getNeighbors(world.player.getTrapRange(), Tile.CIRCLE_RANGE);
 
             Tile tile;
             for(int i=0; i<neighborTiles.size(); i++){
