@@ -229,6 +229,8 @@ public class World implements InputHandler.InputListener{
         }
         tiles.get(Tile.getNumberOf(3,0)).setVisible(false);
         tiles.get(Tile.getNumberOf(4,0)).setVisible(false);
+        tiles.get(Tile.getNumberOf(5,0)).setVisible(false);
+        tiles.get(Tile.getNumberOf(3,3)).setVisible(false);
         tiles.get(Tile.getNumberOf(4,3)).setVisible(false);
         tiles.get(Tile.getNumberOf(5,3)).setVisible(false);
     }
