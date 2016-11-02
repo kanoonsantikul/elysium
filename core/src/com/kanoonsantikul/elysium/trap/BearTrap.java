@@ -35,5 +35,6 @@ public class BearTrap extends Trap{
 
         World.instance().actionQueue.add(
                 new ShowFullCardAction(id));
+        setVisible(false);
     }
 }

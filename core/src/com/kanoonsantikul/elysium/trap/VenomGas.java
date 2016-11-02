@@ -17,7 +17,6 @@ public class VenomGas extends Trap{
     @Override
     public void onTurnStart(Player player){
         if(isToggled && player == actor){
-            setVisible(false);
             if(turnCount < LOCK_TURN){
                 World.instance().actionQueue.add(
                         new DamageAction(actor.getTile(), DAMAGE));

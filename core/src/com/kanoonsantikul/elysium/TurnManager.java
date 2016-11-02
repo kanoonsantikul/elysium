@@ -32,13 +32,6 @@ public class TurnManager{
         world.endTurnButton.setPressed(true);
         world.isMyTurn = false;
 
-        for(int i=0; i<world.player.getTraps().size(); i++){
-            world.player.getTraps().get(i).setVisible(false);
-        }
-        for(int i=0; i<world.enemy.getTraps().size(); i++){
-            world.enemy.getTraps().get(i).setVisible(true);
-        }
-
         LinkedList<TurnStateChangeListener> listeners
                 = new LinkedList<TurnStateChangeListener>(this.listeners);
         for(int i=0; i<listeners.size(); i++){
@@ -55,13 +48,6 @@ public class TurnManager{
 
         world.player.setIsMoved(false);
         world.drawCard();
-
-        for(int i=0; i<world.player.getTraps().size(); i++){
-            world.player.getTraps().get(i).setVisible(true);
-        }
-        for(int i=0; i<world.enemy.getTraps().size(); i++){
-            world.enemy.getTraps().get(i).setVisible(false);
-        }
 
         LinkedList<TurnStateChangeListener> listeners
                 = new LinkedList<TurnStateChangeListener>(this.listeners);

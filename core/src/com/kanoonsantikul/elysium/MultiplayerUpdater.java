@@ -195,6 +195,7 @@ public class MultiplayerUpdater implements
                     world.tiles.get(data.getInt("tileNumber")),
                     world.enemy);
             world.enemy.addTrap(trap);
+            trap.setVisible(false);
         } catch(Exception e){
 
         }
@@ -208,5 +209,5 @@ public class MultiplayerUpdater implements
             }
         }
     }
-    
+
 }

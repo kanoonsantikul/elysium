@@ -151,6 +151,7 @@ public class Renderer{
         renderPlayerMaterial();
         renderEndTurnButton();
         renderEffect(delta);
+        renderNotifyText();
     }
 
     private void renderPlayerMaterial(){
@@ -191,6 +192,12 @@ public class Renderer{
                         effect.getEmitters().first().getX() - glyph.width / 2,
                         effect.getEmitters().first().getY() + glyph.height / 2);
             }
+        }
+    }
+
+    private void renderNotifyText(){
+        if(world.notifyText != 0){
+            
         }
     }
 

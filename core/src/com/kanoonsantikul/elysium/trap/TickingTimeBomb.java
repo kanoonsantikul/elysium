@@ -6,7 +6,7 @@ public class TickingTimeBomb extends Trap{
     public static final int ID = 3;
     public static final float WEIGHT = 0.4f;
     public static final int COST = 1;
-    private static final int LOCK_TURN = 1;
+    private static final int LOCK_TURN = 0;
     private static final int DAMAGE = 250;
 
     private int turnCount = 0;

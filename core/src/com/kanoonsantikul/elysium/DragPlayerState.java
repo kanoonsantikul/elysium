@@ -27,9 +27,12 @@ public class DragPlayerState implements WorldState{
     public void handleInput(float x, float y){
         GameObject object = world.getObjectAt(x, y, null);
         if(object instanceof Tile){
-            updatePath((Tile)object);
-        } else if(object == player){
-            pathTracker.clear();
+            object = world.getObjectAt(object.getCenter(), null, false);
+            if(object instanceof Tile){
+                updatePath((Tile)object);
+            } else if(object == world.player){
+                pathTracker.clear();
+            }
         }
     }
 
