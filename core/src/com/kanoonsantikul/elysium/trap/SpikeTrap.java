@@ -17,7 +17,6 @@ public class SpikeTrap extends Trap{
     @Override
     public void onTurnStart(Player player){
         if(isToggled && player == actor){
-            setVisible(false);
             if(turnCount < LOCK_TURN){
                 actor.setIsMoved(true);
                 turnCount++;

@@ -22,6 +22,7 @@ public class World implements InputHandler.InputListener{
     protected EndTurnButton endTurnButton;
     protected CardBar cardBar;
     protected FullCard fullCard;
+    protected int notifyText;
     protected GameObject mouseFocus;
     protected LinkedList<Tile> pathTracker;
     protected LinkedList<Tile> targetTiles;

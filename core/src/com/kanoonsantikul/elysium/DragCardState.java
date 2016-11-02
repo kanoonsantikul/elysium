@@ -50,6 +50,8 @@ public class DragCardState implements WorldState{
             } else{
                 card.setVisible(true);
                 card.positioning();
+                world.actionQueue.add(
+                        new ShowTextAction(ShowTextAction.NOTIFY_NO_MATERIAL_TEXT));
             }
         } else{
             card.setVisible(true);

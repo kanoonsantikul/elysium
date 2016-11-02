@@ -34,7 +34,6 @@ public class FuzzyBomb extends Trap implements WaitDataAction.DataListener{
     @Override
     public void onTurnStart(Player player){
         if(isToggled && player == actor && actor == world.player){
-            setVisible(false);
             if(turnCount < LOCK_TURN){
                 LinkedList<Tile> paths = createPath();
                 String data = "";
@@ -58,7 +57,6 @@ public class FuzzyBomb extends Trap implements WaitDataAction.DataListener{
     @Override
     public void onTurnEnd(Player player){
         if(isToggled && player != actor && actor == world.enemy){
-            setVisible(false);
             if(turnCount < LOCK_TURN){
                 world.actionQueue.add(new WaitDataAction(this));
                 turnCount++;
@@ -97,7 +95,7 @@ public class FuzzyBomb extends Trap implements WaitDataAction.DataListener{
                 neighbors = lastTile.getNeighbors(1, false);
                 tile = neighbors.get(world.random.nextInt(neighbors.size()));
             }while(paths.contains(tile)
-                    || world.getObjectAt(tile.getCenter(), Player.class, true) != null);
+                    || world.getObjectAt(tile.getCenter(), Player.class, false) != null);
             lastTile = tile;
             paths.add(tile);
         }
