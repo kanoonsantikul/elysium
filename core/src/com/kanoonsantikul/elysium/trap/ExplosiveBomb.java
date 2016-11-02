@@ -17,7 +17,7 @@ public class ExplosiveBomb extends Trap{
     public void toggle(GameObject actor){
         super.toggle(actor);
 
-        LinkedList<Tile> tiles = getTile().getNeighbors(RANGE, true);
+        LinkedList<Tile> tiles = getTile().getNeighbors(RANGE, Tile.RECTANGLE_RANGE);
 
         World.instance().actionQueue.add(
                 new ShowFullCardAction(id));

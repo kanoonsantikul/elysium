@@ -39,6 +39,12 @@ public class TurnManager{
             listeners.get(i).onTurnStart(world.enemy);
         }
 
+        world.actionQueue.add(new Action(null){
+            @Override
+            public void act(){
+                setActed(true);
+            }
+        });
         MultiplayerUpdater.instance().sendTurnUpdate();
     }
 

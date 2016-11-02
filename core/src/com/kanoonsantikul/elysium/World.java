@@ -227,6 +227,10 @@ public class World implements InputHandler.InputListener{
         for(int i=0; i<BOARD_WIDTH * BOARD_HEIGHT; i++){
             tiles.add(new Tile(i));
         }
+        tiles.get(Tile.getNumberOf(3,0)).setVisible(false);
+        tiles.get(Tile.getNumberOf(4,0)).setVisible(false);
+        tiles.get(Tile.getNumberOf(4,3)).setVisible(false);
+        tiles.get(Tile.getNumberOf(5,3)).setVisible(false);
     }
 
     public boolean drawCard(){

@@ -9,6 +9,10 @@ public class Tile extends GameObject{
     public static final float WIDTH = Assets.tile.getWidth() * Elysium.DEVICE_RATIO;
     public static final float HEIGHT = Assets.tile.getHeight() * Elysium.DEVICE_RATIO;
 
+    public static final int RECTANGLE_RANGE = 1;
+    public static final int PLUS_RANGE = 2;
+    public static final int CIRCLE_RANGE = 3;
+
     private static float INIT_X = 7f;
     private static float INIT_Y = 140f;
 
@@ -46,35 +50,80 @@ public class Tile extends GameObject{
         return number;
     }
 
-
-    public LinkedList<Tile> getNeighbors(int range, boolean neighbor8){
+    public LinkedList<Tile> getNeighbors(int range, int rangeType){
         LinkedList<Tile> tiles = World.instance().tiles;
         LinkedList<Tile> neighbors = new LinkedList<Tile>();
         Tile tile;
         int row, collum;
 
-        for(int i=-range; i<range + 1; i++){
-            for(int j=-range; j<range + 1; j++){
-                row = i + getRowOf(number);
-                collum = j + getCollumOf(number);
+        if(rangeType == RECTANGLE_RANGE){
+            for(int i=-range; i<range + 1; i++){
+                for(int j=-range; j<range + 1; j++){
+                    row = i + getRowOf(number);
+                    collum = j + getCollumOf(number);
 
-                if((row >= 0 && row < World.BOARD_HEIGHT)
-                        && (collum >=0 && collum < World.BOARD_WIDTH)
-                        && getNumberOf(row, collum) != number){
-                    if(!neighbor8){
-                        if(i == 0 ^ j == 0){
-                            tile = tiles.get(getNumberOf(row, collum));
+                    if(isHaveTile(row, collum)){
+                        tile = tiles.get(getNumberOf(row, collum));
+                        if(tile.isVisible()){
                             neighbors.add(tile);
                         }
-                    } else{
-                        tile = tiles.get(getNumberOf(row, collum));
+                    }
+                }
+            }
+        } else if(rangeType == PLUS_RANGE){
+            for(int i=-range; i<=range; i++){
+                row = i + getRowOf(number);
+                collum = i + getCollumOf(number);
+
+                if(isHaveTile(row, getCollumOf(number))){
+                    tile = tiles.get(getNumberOf(row, getCollumOf(number)));
+                    if(tile.isVisible()){
                         neighbors.add(tile);
                     }
                 }
-                tile = null;
+                if(isHaveTile(getRowOf(number), collum)){
+                    tile = tiles.get(getNumberOf(getRowOf(number), collum));
+                    if(tile.isVisible()){
+                        neighbors.add(tile);
+                    }
+                }
+            }
+        } else if(rangeType == CIRCLE_RANGE){
+            for(int i=-range; i<=0; i++){
+                for(int j=-range-i; j<=range+i; j++){
+                    row = i + getRowOf(number);
+                    collum = j + getCollumOf(number);
+                    
+                    if(isHaveTile(row, collum)){
+                        tile = tiles.get(getNumberOf(row, collum));
+                        if(tile.isVisible()){
+                            neighbors.add(tile);
+                        }
+                    }
+                }
+                Gdx.app.log("","");
+            }
+            for(int i=1; i<=range; i++){
+                for(int j=-range+i; j<=range-i; j++){
+                    row = i + getRowOf(number);
+                    collum = j + getCollumOf(number);
+
+                    if(isHaveTile(row, collum)){
+                        tile = tiles.get(getNumberOf(row, collum));
+                        if(tile.isVisible()){
+                            neighbors.add(tile);
+                        }
+                    }
+                }
             }
         }
+
         return neighbors;
     }
 
+    private boolean isHaveTile(int row, int collum){
+        return (row >= 0 && row < World.BOARD_HEIGHT)
+                && (collum >=0 && collum < World.BOARD_WIDTH)
+                && getNumberOf(row, collum) != number;
+    }
 }

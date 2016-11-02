@@ -2,7 +2,7 @@ package com.kanoonsantikul.elysium;
 
 public class BearTrap extends Trap{
     public static final int ID = 1;
-    public static final float WEIGHT = 0.1f;
+    public static final float WEIGHT = 0.07f;
     public static final int COST = 3;
     private static final int LOCK_TURN = 2;
 

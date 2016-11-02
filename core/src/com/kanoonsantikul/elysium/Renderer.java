@@ -14,6 +14,11 @@ public class Renderer{
     private static final float FONT_SMALL_SPACING = 12f;
     private static final float FONT_SPACING = 17f;
 
+    private static final float PLAYER1_DATA_X = 265;
+    private static final float PLAYER1_DATA_Y = 135;
+    private static final float PLAYER2_DATA_X = 355;
+    private static final float PLAYER2_DATA_Y = 135;
+
     World world;
     SpriteBatch batcher;
 
@@ -48,7 +53,9 @@ public class Renderer{
         Tile tile;
         for(int i=0; i<tiles.size(); i++){
             tile = tiles.get(i);
-
+            if(!tile.isVisible()){
+                continue;
+            }
             batcher.draw(Assets.tile,
                     tile.getPosition().x,
                     tile.getPosition().y,
@@ -148,17 +155,44 @@ public class Renderer{
                 CardBar.WIDTH,
                 CardBar.HEIGHT);
 
-        renderPlayerMaterial();
+        renderPlayerData(world.player);
+        renderPlayerData(world.enemy);
         renderEndTurnButton();
         renderEffect(delta);
         renderNotifyText();
     }
 
-    private void renderPlayerMaterial(){
+    private void renderPlayerData(Player player){
+        float x, y;
+        if(player == world.player){
+            x = PLAYER1_DATA_X;
+            y = PLAYER1_DATA_Y;
+        } else{
+            x = PLAYER2_DATA_X;
+            y = PLAYER2_DATA_Y;
+        }
+
+        batcher.draw(Assets.material,
+                x,
+                y,
+                Assets.material.getWidth(),
+                Assets.material.getHeight());
         Assets.font.draw(batcher,
-                "MATERIAL: " + world.player.getMaterial(),
-                300,
-                150);
+                "x " + player.getMaterial(),
+                x + Assets.material.getWidth(),
+                y + Assets.material.getHeight() / 2 + Assets.font.getXHeight());
+
+        Texture texture;
+        if(player.getNumber() == Player.PLAYER1){
+            texture = Assets.player1;
+        } else{
+            texture = Assets.player2;
+        }
+        batcher.draw(texture,
+                x,
+                y + Assets.material.getHeight() + 3,
+                texture.getWidth(),
+                texture.getHeight());
     }
 
     private void renderEndTurnButton(){
@@ -197,7 +231,12 @@ public class Renderer{
 
     private void renderNotifyText(){
         if(world.notifyText != 0){
-            
+            Texture textBox = Assets.notifyText[world.notifyText];
+            batcher.draw(textBox,
+                    Elysium.WIDTH / 2 - textBox.getWidth() / 2,
+                    Elysium.HEIGHT / 2 + textBox.getHeight() / 2,
+                    textBox.getWidth(),
+                    textBox.getHeight());
         }
     }
 
@@ -224,10 +263,16 @@ public class Renderer{
                     Card.WIDTH,
                     Card.HEIGHT);
 
+            batcher.draw(Assets.materialSmall,
+                    card.getPosition().x + Card.WIDTH / 5,
+                    card.getPosition().y + Card.HEIGHT + FONT_SMALL_SPACING / 3,
+                    Assets.materialSmall.getWidth(),
+                    Assets.materialSmall.getHeight());
             Assets.font.draw(batcher,
                     TrapBuilder.getInstance(card.getId()).getCost() + "",
-                    card.getPosition().x + Card.WIDTH / 2,
-                    card.getPosition().y + Card.HEIGHT + FONT_SPACING);
+                    card.getPosition().x + Card.WIDTH / 5 + Assets.materialSmall.getWidth() + 5,
+                    card.getPosition().y + Card.HEIGHT + FONT_SMALL_SPACING / 3
+                            + Assets.materialSmall.getHeight() / 2 + Assets.font.getXHeight());
         }
 
         int cardId = world.fullCard.getCardId();
