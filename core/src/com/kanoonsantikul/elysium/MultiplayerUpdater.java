@@ -37,8 +37,6 @@ public class MultiplayerUpdater implements
 
     @Override
     public void onGameUpdateReceived(String message){
-        Gdx.app.log("Received update", message);
-
         try{
             JSONObject data = new JSONObject(message);
             if(data.getInt("type") == LOCATION_UPDATE_TYPE){

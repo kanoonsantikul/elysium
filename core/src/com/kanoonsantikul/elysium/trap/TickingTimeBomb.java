@@ -1,7 +1,5 @@
 package com.kanoonsantikul.elysium;
 
-import com.badlogic.gdx.Gdx;
-
 public class TickingTimeBomb extends Trap{
     public static final int ID = 3;
     public static final float WEIGHT = 0.4f;
