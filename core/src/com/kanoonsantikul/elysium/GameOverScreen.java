@@ -20,6 +20,7 @@ public class GameOverScreen extends ScreenAdapter
         this.winState = winState;
 
         game.inputHandler.setListener(this);
+        ConnectionManager.instance().disconnect();
 
         if(winState == WinState.WIN){
             text = "YOU WIN";

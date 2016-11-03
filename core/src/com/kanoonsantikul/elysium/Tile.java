@@ -93,7 +93,7 @@ public class Tile extends GameObject{
                 for(int j=-range-i; j<=range+i; j++){
                     row = i + getRowOf(number);
                     collum = j + getCollumOf(number);
-                    
+
                     if(isHaveTile(row, collum)){
                         tile = tiles.get(getNumberOf(row, collum));
                         if(tile.isVisible()){
@@ -101,7 +101,6 @@ public class Tile extends GameObject{
                         }
                     }
                 }
-                Gdx.app.log("","");
             }
             for(int i=1; i<=range; i++){
                 for(int j=-range+i; j<=range-i; j++){

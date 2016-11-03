@@ -1,6 +1,7 @@
 package com.kanoonsantikul.elysium;
 
 import java.util.LinkedList;
+import java.util.Collections;
 
 import com.badlogic.gdx.Gdx;
 
@@ -32,12 +33,13 @@ public class TurnManager{
         world.endTurnButton.setPressed(true);
         world.isMyTurn = false;
 
+        //Collections.sort(listeners);
         LinkedList<TurnStateChangeListener> listeners
                 = new LinkedList<TurnStateChangeListener>(this.listeners);
         for(int i=0; i<listeners.size(); i++){
             listeners.get(i).onTurnEnd(world.player);
             listeners.get(i).onTurnStart(world.enemy);
-        }
+        };
 
         world.actionQueue.add(new Action(null){
             @Override
