@@ -4,7 +4,7 @@ import java.util.LinkedList;
 
 public class FuzzyBomb extends Trap implements WaitDataAction.DataListener{
     public static final int ID = 6;
-    public static final float WEIGHT = 0.2f;
+    public static final float WEIGHT = 0.1f;
     public static final int COST = 2;
     private static final int LOCK_TURN = 3;
     private World world = World.instance();

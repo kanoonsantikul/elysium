@@ -2,8 +2,8 @@ package com.kanoonsantikul.elysium;
 
 public class SpikeTrap extends Trap{
     public static final int ID = 8;
-    public static final float WEIGHT = 0.1f;
-    public static final int COST = 2;
+    public static final float WEIGHT = 0.2f;
+    public static final int COST = 3;
     private static final int LOCK_TURN = 1;
     private static final int DAMAGE = 300;
 
