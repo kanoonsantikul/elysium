@@ -124,6 +124,8 @@ public class World implements InputHandler.InputListener{
     @Override
     public void onClicked(float x, float y){
         fullCard.setCardId(FullCard.NULL_CARD);
+        fullCard.setPosition(
+                new Vector2( FullCard.AUTO_SHOW_X, FullCard.AUTO_SHOW_Y));
 
         GameObject object = getObjectAt(x, y, null);
         if(object instanceof EndTurnButton && isMyTurn){
@@ -136,8 +138,12 @@ public class World implements InputHandler.InputListener{
         GameObject object = getObjectAt(x, y ,null);
         if(object instanceof Card && mouseFocus == null){
             fullCard.setCardId(((Card)object).getId());
+            fullCard.setPosition(
+                    new Vector2( FullCard.PRESSED_SHOW_X, FullCard.PRESSED_SHOW_Y));
         } else if((object = getObjectAt(x, y, Trap.class)) != null){
             fullCard.setCardId(((Trap)object).getId());
+            fullCard.setPosition(
+                    new Vector2( FullCard.PRESSED_SHOW_X, FullCard.PRESSED_SHOW_Y));
         }
 
         if(state == dragCardState){
@@ -148,6 +154,8 @@ public class World implements InputHandler.InputListener{
     @Override
     public void onDragStart(float x, float y){
         fullCard.setCardId(FullCard.NULL_CARD);
+        fullCard.setPosition(
+                new Vector2( FullCard.AUTO_SHOW_X, FullCard.AUTO_SHOW_Y));
 
         GameObject object = getObjectAt(x, y, null);
         mouseFocus = object;

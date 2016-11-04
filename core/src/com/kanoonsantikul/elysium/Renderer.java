@@ -278,8 +278,8 @@ public class Renderer{
         int cardId = world.fullCard.getCardId();
         if(cardId != -1){
             batcher.draw(Assets.fullCards[cardId],
-                    FullCard.X,
-                    FullCard.Y,
+                    world.fullCard.getPosition().x,
+                    world.fullCard.getPosition().y,
                     FullCard.WIDTH,
                     FullCard.HEIGHT);
         }
