@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.Color;
 
-public class Assets{
+public class Assets {
     public static Texture tile;
     public static Texture hilightTile;
     public static Texture moveTile;
@@ -33,7 +33,7 @@ public class Assets{
 		return new Texture(Gdx.files.internal(file));
 	}
 
-    public static void load(){
+    public static void load () {
         tile = loadTexture("tile.png");
         hilightTile = loadTexture("hilight-tile.png");
         moveTile = loadTexture("move-tile.png");
@@ -46,7 +46,7 @@ public class Assets{
         material = loadTexture("material.png");
         cardBar = loadTexture("card-bar.png");
 
-        cards = new Texture[]{
+        cards = new Texture[] {
             loadTexture("card.png"),
             loadTexture("bear-trap-card.png"),
             loadTexture("booby-trap-card.png"),
@@ -58,7 +58,7 @@ public class Assets{
             loadTexture("spike-trap-card.png")
         };
 
-        fullCards = new Texture[]{
+        fullCards = new Texture[] {
             loadTexture("full-card.png"),
             loadTexture("bear-trap-full-card.png"),
             loadTexture("booby-trap-full-card.png"),
@@ -70,7 +70,7 @@ public class Assets{
             loadTexture("spike-trap-full-card.png")
         };
 
-        traps = new Texture[]{
+        traps = new Texture[] {
             loadTexture("trap.png"),
             loadTexture("bear-trap.png"),
             loadTexture("booby-trap.png"),
@@ -82,7 +82,7 @@ public class Assets{
             loadTexture("spike-trap.png")
         };
 
-        notifyText = new Texture[]{
+        notifyText = new Texture[] {
             loadTexture("text-box.png"),
             loadTexture("no-material-text.png")
         };
@@ -103,7 +103,7 @@ public class Assets{
                 Gdx.files.internal(""));
     }
 
-    public static void dispose(){
+    public static void dispose () {
         tile.dispose();
         hilightTile.dispose();
         moveTile.dispose();
@@ -116,13 +116,13 @@ public class Assets{
         material.dispose();
         cardBar.dispose();
 
-        for(int i=0; i<cards.length; i++){
+        for (int i = 0; i < cards.length; i++) {
             cards[i].dispose();
             fullCards[i].dispose();
             traps[i].dispose();
         }
 
-        for(int i=0 ;i<notifyText.length; i++){
+        for (int i = 0; i < notifyText.length; i++) {
             notifyText[i].dispose();
         }
 

@@ -4,7 +4,7 @@ import java.util.LinkedList;
 
 import com.badlogic.gdx.math.Vector2;
 
-public class Player extends BoardObject{
+public class Player extends BoardObject {
     public static final float WIDTH = Assets.player1.getWidth() * Elysium.DEVICE_RATIO;
     public static final float HEIGHT = Assets.player1.getHeight() * Elysium.DEVICE_RATIO;
 
@@ -20,7 +20,7 @@ public class Player extends BoardObject{
     private LinkedList<Trap> traps;
     private boolean isMoved;
 
-    public Player(int number, Tile tile){
+    public Player (int number, Tile tile) {
         this.number = number;
 
         cards = new LinkedList<Card>();
@@ -31,103 +31,101 @@ public class Player extends BoardObject{
         setCenter(tile.getCenter());
     }
 
-    public int getNumber(){
+    public int getNumber () {
         return this.number;
     }
 
-    public float getWidth(){
+    public float getWidth () {
         return WIDTH;
     }
 
-    public float getHeight(){
+    public float getHeight () {
         return HEIGHT;
     }
 
-    public int getMoveRange(){
+    public int getMoveRange () {
         return moveRange;
     }
 
-    public void setMoveRange(int moveRange){
+    public void setMoveRange (int moveRange) {
         this.moveRange = moveRange;
     }
 
-    public int getTrapRange(){
+    public int getTrapRange () {
         return trapRange;
     }
 
-    public void setTrapRange(int trapRange){
+    public void setTrapRange (int trapRange) {
         this.trapRange = trapRange;
     }
 
-    public int getHealth(){
+    public int getHealth () {
         return health;
     }
 
-    public void setHealth(int health){
+    public void setHealth (int health) {
         this.health = health;
     }
 
-    public int getMaterial(){
+    public int getMaterial () {
         return this.material;
     }
 
-    public void addMaterial(int diff){
+    public void addMaterial (int diff) {
         this.material += diff;
     }
 
-    public LinkedList<Card> getCards(){
+    public LinkedList<Card> getCards () {
         return cards;
     }
 
-    public void setCards(LinkedList<Card> cards){
+    public void setCards (LinkedList<Card> cards) {
         this.cards = cards;
     }
 
-    public void addCard(Card card){
+    public void addCard (Card card) {
         cards.add(card);
         World.gameObjects.add(card);
         updateCards();
     }
 
-    public void removeCard(Card card){
+    public void removeCard (Card card) {
         cards.remove(card);
         World.gameObjects.remove(card);
         updateCards();
     }
 
-    public void updateCards(){
-        Card card;
-        for(int i=0; i<cards.size(); i++){
-            card = cards.get(i);
-            card.setNumber(i);
+    public void updateCards () {
+        for (int i = 0; i < cards.size(); i++) {
+            cards.get(i).setNumber(i);
         }
 
         MultiplayerUpdater.instance().sendCardUpdate(cards);
     }
 
-    public LinkedList<Trap> getTraps(){
+    public LinkedList<Trap> getTraps () {
         return traps;
     }
 
-    public void addTrap(Trap trap){
+    public void addTrap (Trap trap) {
         traps.add(trap);
         World world = World.instance();
         world.gameObjects.add(trap);
         world.turnManager.addListener(trap);
     }
 
-    public void removeTrap(Trap trap){
+    public void removeTrap (Trap trap) {
         traps.remove(trap);
         World world = World.instance();
         world.gameObjects.remove(trap);
         world.turnManager.removeListener(trap);
     }
 
-    public boolean getIsMoved(){
+    public boolean getIsMoved () {
         return isMoved;
     }
 
-    public void setIsMoved(boolean isMoved){
+    public void setIsMoved (boolean isMoved) {
         this.isMoved = isMoved;
     }
 }

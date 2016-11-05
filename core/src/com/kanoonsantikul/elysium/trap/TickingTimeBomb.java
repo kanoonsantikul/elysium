@@ -1,6 +1,6 @@
 package com.kanoonsantikul.elysium;
 
-public class TickingTimeBomb extends Trap{
+public class TickingTimeBomb extends Trap {
     public static final int ID = 3;
     public static final float WEIGHT = 0.4f;
     public static final int COST = 1;
@@ -9,16 +9,16 @@ public class TickingTimeBomb extends Trap{
 
     private int turnCount = 0;
 
-    public TickingTimeBomb(Tile tile, Player user){
+    public TickingTimeBomb (Tile tile, Player user) {
         super(ID, WEIGHT, COST, tile, user);
     }
 
     @Override
-    public void onTurnStart(Player player){
-        if(player == user){
-            if(turnCount < LOCK_TURN){
+    public void onTurnStart (Player player) {
+        if (player == user) {
+            if (turnCount < LOCK_TURN) {
                 turnCount++;
-            } else{
+            } else {
                 World.instance().actionQueue.add(
                         new ShowFullCardAction(id));
                 World.instance().actionQueue.add(
@@ -29,6 +29,7 @@ public class TickingTimeBomb extends Trap{
     }
 
     @Override
-    public void toggle(GameObject actor){
+    public void toggle (GameObject actor) {
+        
     }
 }
