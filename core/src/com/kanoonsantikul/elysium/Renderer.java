@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.Color;
 
-public class Renderer{
+public class Renderer {
     private static final float FONT_SMALL_SPACING = 12f;
     private static final float FONT_SPACING = 17f;
 
@@ -22,12 +22,12 @@ public class Renderer{
     World world;
     SpriteBatch batcher;
 
-    public Renderer(World world, SpriteBatch batcher){
+    public Renderer (World world, SpriteBatch batcher) {
         this.world = world;
         this.batcher = batcher;
     }
 
-    public void render(float delta){
+    public void render (float delta) {
         GL20 gl = Gdx.gl;
         gl.glClearColor(91/255f, 222/255f, 162/255f, 1);
 		gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -39,7 +39,7 @@ public class Renderer{
         batcher.end();
     }
 
-    private void renderBoard(){
+    private void renderBoard () {
         renderTiles();
         renderTrap();
         renderPathTracker();
@@ -48,12 +48,10 @@ public class Renderer{
         renderCharacter(world.enemy);
     }
 
-    private void renderTiles(){
-        LinkedList<Tile> tiles = world.tiles;
-        Tile tile;
-        for(int i=0; i<tiles.size(); i++){
+    private void renderTiles () {
+        for (Tile tile : world.tiles) {
             tile = tiles.get(i);
-            if(!tile.isVisible()){
+            if (!tile.isVisible()) {
                 continue;
             }
             batcher.draw(Assets.tile,
@@ -63,7 +61,7 @@ public class Renderer{
                     Tile.HEIGHT);
         }
 
-        if(world.isMyTurn && !world.player.isLock()){
+        if (world.isMyTurn && !world.player.isLock()) {
             batcher.draw(Assets.hilightTile,
                     world.player.getTile().getPosition().x,
                     world.player.getTile().getPosition().y,
@@ -72,12 +70,9 @@ public class Renderer{
         }
     }
 
-    private void renderTrap(){
-        LinkedList<Trap> traps = world.player.getTraps();
-        Trap trap;
-        for(int i=0; i<traps.size() ;i++){
-            trap = traps.get(i);
-            if(trap.isToggled()){
+    private void renderTrap () {
+        for (Trap trap : world.player.getTraps()) {
+            if (trap.isToggled()) {
                 continue;
             }
             batcher.draw(Assets.traps[trap.getId()],
@@ -88,16 +83,14 @@ public class Renderer{
         }
     }
 
-    private void renderPathTracker(){
+    private void renderPathTracker () {
         LinkedList<Tile> pathTracker = world.pathTracker;
 
-        if(pathTracker == null){
+        if (pathTracker == null) {
             return;
         }
 
-        Tile moveTile;
-        for(int i=0; i<pathTracker.size(); i++){
-            moveTile = pathTracker.get(i);
+        for (Tile moveTile : pathTracker) {
             batcher.draw(Assets.moveTile,
                     moveTile.getPosition().x,
                     moveTile.getPosition().y,
@@ -106,16 +99,15 @@ public class Renderer{
         }
     }
 
-    private void renderTargetTiles(){
+    private void renderTargetTiles () {
         LinkedList<Tile> targetTiles = world.targetTiles;
 
-        if(targetTiles == null){
+        if (targetTiles == null) {
             return;
         }
 
         Tile targetTile;
-        for(int i=0; i<targetTiles.size(); i++){
-            targetTile = targetTiles.get(i);
+        for (Tile targetTile : targetTiles) {
             batcher.draw(Assets.targetTile,
                     targetTile.getPosition().x,
                     targetTile.getPosition().y,
@@ -124,12 +116,12 @@ public class Renderer{
         }
     }
 
-    private void renderCharacter(Player player){
+    private void renderCharacter (Player player) {
         String text = "" + player.getHealth();
         Texture texture;
-        if(player.getNumber() == Player.PLAYER1){
+        if (player.getNumber() == Player.PLAYER1) {
             texture = Assets.player1;
-        } else{
+        } else {
             texture = Assets.player2;
         }
 
@@ -148,7 +140,7 @@ public class Renderer{
     }
 
 
-    private void renderUI(float delta){
+    private void renderUI (float delta) {
         batcher.draw(Assets.cardBar,
                 CardBar.X,
                 CardBar.Y,
@@ -162,12 +154,12 @@ public class Renderer{
         renderNotifyText();
     }
 
-    private void renderPlayerData(Player player){
+    private void renderPlayerData (Player player) {
         float x, y;
-        if(player == world.player){
+        if (player == world.player) {
             x = PLAYER1_DATA_X;
             y = PLAYER1_DATA_Y;
-        } else{
+        } else {
             x = PLAYER2_DATA_X;
             y = PLAYER2_DATA_Y;
         }
@@ -183,9 +175,9 @@ public class Renderer{
                 y + Assets.material.getHeight() / 2 + Assets.font.getXHeight());
 
         Texture texture;
-        if(player.getNumber() == Player.PLAYER1){
+        if (player.getNumber() == Player.PLAYER1) {
             texture = Assets.player1;
-        } else{
+        } else {
             texture = Assets.player2;
         }
         batcher.draw(texture,
@@ -195,11 +187,11 @@ public class Renderer{
                 texture.getHeight());
     }
 
-    private void renderEndTurnButton(){
+    private void renderEndTurnButton () {
         Texture endTurnButton;
-        if(world.endTurnButton.isPressed()){
+        if (world.endTurnButton.isPressed()) {
             endTurnButton = Assets.endTurnButtonPressed;
-        } else{
+        } else {
             endTurnButton = Assets.endTurnButton;
         }
         batcher.draw(endTurnButton,
@@ -209,16 +201,16 @@ public class Renderer{
                 EndTurnButton.HEIGHT);
     }
 
-    private void renderEffect(float delta){
+    private void renderEffect (float delta) {
         ParticleEffect effect;
-        for(int i=0; i<world.effects.size(); i++){
+        for (int i = 0; i < world.effects.size(); i++) {
             effect = world.effects.get(i).getEffect();
             effect.draw(batcher);
             effect.update(delta);
 
-            if(effect.getEmitters().first().getPercentComplete() >= 0.5){
+            if (effect.getEmitters().first().getPercentComplete() >= 0.5) {
                 world.effects.remove(world.effects.get(i));
-            } else{
+            } else {
                 String damage = world.effects.get(i).getDamage() + "";
                 GlyphLayout glyph = Assets.font.draw(batcher, damage, -400, -400);
                 Assets.font.draw(batcher,
@@ -229,8 +221,8 @@ public class Renderer{
         }
     }
 
-    private void renderNotifyText(){
-        if(world.notifyText != 0){
+    private void renderNotifyText () {
+        if (world.notifyText != 0) {
             Texture textBox = Assets.notifyText[world.notifyText];
             batcher.draw(textBox,
                     Elysium.WIDTH / 2 - textBox.getWidth() / 2,
@@ -240,12 +232,10 @@ public class Renderer{
         }
     }
 
-    private void renderCard(){
-        LinkedList<Card> cards = world.player.getCards();
-        Card card;
-        for(int i=0; i<cards.size(); i++){
+    private void renderCard () {
+        for (Card card : world.player.getCards()) {
             card = cards.get(i);
-            if(!card.isVisible()){
+            if (!card.isVisible()) {
                 Trap trap = TrapBuilder.getInstance(card.getId());
                 batcher.setColor(1, 1, 1, World.ALPHA);
                 batcher.draw(Assets.traps[trap.getId()],
@@ -276,7 +266,7 @@ public class Renderer{
         }
 
         int cardId = world.fullCard.getCardId();
-        if(cardId != -1){
+        if (cardId != -1) {
             batcher.draw(Assets.fullCards[cardId],
                     world.fullCard.getPosition().x,
                     world.fullCard.getPosition().y,

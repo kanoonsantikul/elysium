@@ -5,20 +5,20 @@ import java.util.LinkedList;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 
-public class DragCardState implements WorldState{
+public class DragCardState implements WorldState {
     private World world;
     private Card card;
     private Tile lastFocusTile;
 
     @Override
-    public void enterState(World world){
+    public void enterState (World world) {
         this.world = world;
         this.card = (Card)world.mouseFocus;
     }
 
     @Override
-    public void handleInput(float x, float y){
-        if(world.isMyTurn){
+    public void handleInput (float x, float y) {
+        if (world.isMyTurn) {
             getTargetTile();
         }
 
@@ -30,7 +30,7 @@ public class DragCardState implements WorldState{
                 TrapBuilder.getInstance(card.getId())
                         .setCenter(lastFocusTile.getCenter());
             }
-        } else{
+        } else {
             card.setVisible(true);
             lastFocusTile = null;
         }
@@ -39,21 +39,21 @@ public class DragCardState implements WorldState{
     }
 
     @Override
-    public void exitState(){
-        if(lastFocusTile != null){
+    public void exitState() {
+        if (lastFocusTile != null) {
             Trap trap = TrapBuilder.getInstance(card.getId());
-            if(trap.getCost() <= world.player.getMaterial()){
+            if (trap.getCost() <= world.player.getMaterial()) {
                 trap = TrapBuilder.build(card.getId(), lastFocusTile, world.player);
                 world.player.addTrap(trap);
                 world.player.removeCard(card);
                 MultiplayerUpdater.instance().sendTrapUpdate(trap);
-            } else{
+            } else {
                 card.setVisible(true);
                 card.positioning();
                 world.actionQueue.add(
                         new ShowTextAction(ShowTextAction.NOTIFY_NO_MATERIAL_TEXT));
             }
-        } else{
+        } else {
             card.setVisible(true);
             card.positioning();
         }
@@ -61,19 +61,20 @@ public class DragCardState implements WorldState{
         world.targetTiles.clear();
     }
 
-    private void getTargetTile(){
+    private void getTargetTile () {
         if(world.targetTiles.size() == 0 && !world.player.isLock()){
             LinkedList<Tile> neighborTiles = world.player.getTile()
                     .getNeighbors(world.player.getTrapRange(), Tile.CIRCLE_RANGE);
 
             Tile tile;
-            for(int i=0; i<neighborTiles.size(); i++){
+            for (int i = 0; i < neighborTiles.size(); i++) {
                 tile = neighborTiles.get(i);
                 if(world.getObjectAt(tile.getCenter(), Trap.class, false) == null){
                     world.targetTiles.add(tile);
                 }
             }
-        }
+
+        }    
     }
 
 }

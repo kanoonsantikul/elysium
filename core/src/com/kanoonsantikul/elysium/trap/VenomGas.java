@@ -1,6 +1,6 @@
 package com.kanoonsantikul.elysium;
 
-public class VenomGas extends Trap{
+public class VenomGas extends Trap {
     public static final int ID = 7;
     public static final float WEIGHT = 0.2f;
     public static final int COST = 2;
@@ -10,26 +10,26 @@ public class VenomGas extends Trap{
     private Player actor;
     private int turnCount = 0;
 
-    public VenomGas(Tile tile, Player user){
+    public VenomGas (Tile tile, Player user) {
         super(ID, WEIGHT, COST, tile, user);
     }
 
     @Override
-    public void onTurnStart(Player player){
-        if(isToggled && player == actor){
-            if(turnCount < LOCK_TURN){
+    public void onTurnStart (Player player) {
+        if (isToggled && player == actor) {
+            if (turnCount < LOCK_TURN) {
                 World.instance().actionQueue.add(
                         new DamageAction(actor.getTile(), DAMAGE));
                 turnCount++;
-            } else{
+            } else {
                 user.removeTrap(this);
             }
         }
     }
 
     @Override
-    public void toggle(GameObject actor){
-        if(isToggled){
+    public void toggle (GameObject actor) {
+        if (isToggled) {
             return;
         }
         super.toggle(actor);

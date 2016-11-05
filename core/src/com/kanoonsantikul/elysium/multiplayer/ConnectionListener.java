@@ -8,19 +8,20 @@ public class ConnectionListener implements ConnectionRequestListener {
 
 	ConnectionManager callBack;
 
-	public ConnectionListener(ConnectionManager callBack){
+	public ConnectionListener (ConnectionManager callBack) {
 		this.callBack = callBack;
 	}
 
-	public void onConnectDone(ConnectEvent event) {
-		if(event.getResult() == WarpResponseResultCode.SUCCESS){
+	public void onConnectDone (ConnectEvent event) {
+		if (event.getResult() == WarpResponseResultCode.SUCCESS) {
 			callBack.onConnectDone(true);
-		}else{
+		} else {
 			callBack.onConnectDone(false);
 		}
 	}
 
-	public void onDisconnectDone(ConnectEvent event) {
+	public void onDisconnectDone (ConnectEvent event) {
+
 	}
 
 	@Override

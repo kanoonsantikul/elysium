@@ -9,38 +9,38 @@ import com.shephertz.app42.gaming.multiplayer.client.events.RoomData;
 import com.shephertz.app42.gaming.multiplayer.client.events.UpdateEvent;
 import com.shephertz.app42.gaming.multiplayer.client.listener.NotifyListener;
 
-public class NotificationListener implements NotifyListener{
+public class NotificationListener implements NotifyListener {
 
 	private ConnectionManager callBack;
 
-	public NotificationListener(ConnectionManager callBack) {
+	public NotificationListener (ConnectionManager callBack) {
 		this.callBack = callBack;
 	}
 
-	public void onChatReceived(ChatEvent event) {
+	public void onChatReceived (ChatEvent event) {
 	}
 
-	public void onRoomCreated(RoomData event) {
+	public void onRoomCreated (RoomData event) {
 	}
 
-	public void onRoomDestroyed(RoomData event) {
+	public void onRoomDestroyed (RoomData event) {
 	}
 
-	public void onUpdatePeersReceived(UpdateEvent event) {
+	public void onUpdatePeersReceived (UpdateEvent event) {
 		callBack.onGameUpdateReceived(new String(event.getUpdate()));
 	}
 
-	public void onUserJoinedLobby(LobbyData event, String username) {
+	public void onUserJoinedLobby (LobbyData event, String username) {
 	}
 
-	public void onUserJoinedRoom(RoomData event, String username) {
+	public void onUserJoinedRoom (RoomData event, String username) {
 		callBack.onUserJoinedRoom(event.getId(), username);
 	}
 
-	public void onUserLeftLobby(LobbyData event, String username) {
+	public void onUserLeftLobby (LobbyData event, String username) {
 	}
 
-	public void onUserLeftRoom(RoomData roomData, String userName) {
+	public void onUserLeftRoom (RoomData roomData, String userName) {
 		//callBack.onUserLeftRoom(roomData.getId(), userName);
 	}
 
@@ -61,7 +61,7 @@ public class NotificationListener implements NotifyListener{
 	}
 
     @Override
-    public void onPrivateUpdateReceived(String arg0, byte[] arg1, boolean arg2){
+    public void onPrivateUpdateReceived (String arg0, byte[] arg1, boolean arg2){
     }
 
 	@Override
@@ -83,6 +83,6 @@ public class NotificationListener implements NotifyListener{
 	}
 
     @Override
-    public void onNextTurnRequest(String arg0){
+    public void onNextTurnRequest (String arg0){
     }
 }

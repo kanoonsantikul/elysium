@@ -6,8 +6,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.ScreenAdapter;
 
 public class GameOverScreen extends ScreenAdapter
-        implements InputHandler.InputListener{
-    public enum WinState{
+        implements InputHandler.InputListener {
+    public enum WinState {
         WIN, LOSE, DRAW
     };
 
@@ -15,16 +15,16 @@ public class GameOverScreen extends ScreenAdapter
     private WinState winState;
     private String text;
 
-    public GameOverScreen(Elysium game, WinState winState){
+    public GameOverScreen (Elysium game, WinState winState) {
         this.game = game;
         this.winState = winState;
 
         game.inputHandler.setListener(this);
         ConnectionManager.instance().disconnect();
 
-        if(winState == WinState.WIN){
+        if (winState == WinState.WIN) {
             text = "YOU WIN";
-        } else if(winState == WinState.LOSE){
+        } else if (winState == WinState.LOSE) {
             text = "YOU LOSE";
         } else{
             text = "DRAW";
@@ -32,7 +32,7 @@ public class GameOverScreen extends ScreenAdapter
     }
 
     @Override
-	public void render (float delta){
+	public void render (float delta) {
         GL20 gl = Gdx.gl;
         gl.glClearColor(91/255f, 222/255f, 162/255f, 1);
         gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -50,17 +50,17 @@ public class GameOverScreen extends ScreenAdapter
     }
 
     @Override
-    public void onClicked(float x, float y){
+    public void onClicked (float x, float y) {
         game.setScreen(new StartMultiplayerScreen(game));
     }
 
     @Override
-    public void onPressed(float x, float y){
+    public void onPressed (float x, float y) {
 
     }
 
     @Override
-    public void onDragStart(float x, float y){
+    public void onDragStart (float x, float y) {
 
     }
 
@@ -70,7 +70,7 @@ public class GameOverScreen extends ScreenAdapter
     }
 
     @Override
-    public void onDragged(float x, float y){
+    public void onDragged (float x, float y) {
 
     }
 }

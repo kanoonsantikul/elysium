@@ -6,39 +6,39 @@ import java.util.LinkedList;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.Gdx;
 
-public class DragPlayerState implements WorldState{
+public class DragPlayerState implements WorldState {
     private World world;
     private Player player;
     private LinkedList<Tile> pathTracker;
 
     @Override
-    public void enterState(World world){
+    public void enterState (World world) {
         this.world = world;
         player = world.player;
         pathTracker = new LinkedList<Tile>();
         world.pathTracker = pathTracker;
 
-        if(!world.isMyTurn || player.isLock() || player.getIsMoved()){
+        if (!world.isMyTurn || player.isLock() || player.getIsMoved()) {
             world.state = null;
         }
     }
 
     @Override
-    public void handleInput(float x, float y){
+    public void handleInput (float x, float y) {
         GameObject object = world.getObjectAt(x, y, Tile.class);
-        if(object != null){
+        if (object != null) {
             object = world.getObjectAt(object.getCenter(), null, false);
-            if(object instanceof Tile){
+            if (object instanceof Tile) {
                 updatePath((Tile)object);
-            } else if(object == world.player){
+            } else if (object == world.player) {
                 pathTracker.clear();
             }
         }
     }
 
     @Override
-    public void exitState(){
-        if(pathTracker.size() > 0){
+    public void exitState () {
+        if (pathTracker.size() > 0) {
             world.actionQueue.addLast(new MoveAction(
                     player,
                     pathTracker,
@@ -48,24 +48,24 @@ public class DragPlayerState implements WorldState{
         world.pathTracker = null;
     }
 
-    private void updatePath(Tile tile){
-        if(tile == null){
+    private void updatePath (Tile tile) {
+        if (tile == null) {
             return;
         }
 
-        if(!pathTracker.contains(tile)){
+        if (!pathTracker.contains(tile)) {
             Tile lastTile;
-            if(pathTracker.size() == 0){
+            if (pathTracker.size() == 0) {
                 lastTile = player.getTile();
-            } else{
+            } else {
                 lastTile = pathTracker.getLast();
             }
 
-            if(lastTile.getNeighbors(1, Tile.PLUS_RANGE).contains(tile)
-                    && pathTracker.size() < player.getMoveRange()){
+            if (lastTile.getNeighbors(1, Tile.PLUS_RANGE).contains(tile)
+                    && pathTracker.size() < player.getMoveRange()) {
                 pathTracker.add(tile);
             }
-        } else{
+        } else {
             int listPosition = pathTracker.indexOf(tile);
             List subPath = pathTracker.subList(0, listPosition + 1);
             pathTracker = new LinkedList(subPath);

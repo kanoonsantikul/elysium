@@ -1,6 +1,6 @@
 package com.kanoonsantikul.elysium;
 
-public class BearTrap extends Trap{
+public class BearTrap extends Trap {
     public static final int ID = 1;
     public static final float WEIGHT = 0.085f;
     public static final int COST = 3;
@@ -9,25 +9,25 @@ public class BearTrap extends Trap{
     private Player actor;
     private int turnCount = 0;
 
-    public BearTrap(Tile tile, Player user){
+    public BearTrap (Tile tile, Player user) {
         super(ID, WEIGHT, COST, tile, user);
     }
 
     @Override
-    public void onTurnStart(Player player){
-        if(isToggled && player == actor){
-            if(turnCount < LOCK_TURN){
+    public void onTurnStart (Player player) {
+        if (isToggled && player == actor) {
+            if (turnCount < LOCK_TURN) {
                 actor.setIsMoved(true);
                 turnCount++;
-            } else{
+            } else {
                 user.removeTrap(this);
             }
         }
     }
 
     @Override
-    public void toggle(GameObject actor){
-        if(isToggled){
+    public void toggle (GameObject actor) {
+        if (isToggled) {
             return;
         }
         super.toggle(actor);

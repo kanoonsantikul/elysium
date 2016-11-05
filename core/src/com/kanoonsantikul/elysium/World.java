@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.Gdx;
 
-public class World implements InputHandler.InputListener{
+public class World implements InputHandler.InputListener {
     public static final int BOARD_WIDTH = 4;
     public static final int BOARD_HEIGHT = 9;
     public static final int FULL_HAND = 4;
@@ -40,11 +40,11 @@ public class World implements InputHandler.InputListener{
     protected WorldState dragCardState;
     protected WorldState dragPlayerState;
 
-    public interface GameStateChangeListener{
+    public interface GameStateChangeListener {
         public void onGameOver(GameOverScreen.WinState winState);
     }
 
-    public World(int userNumber){
+    public World (int userNumber) {
         world = this;
 
         random = new Random();
@@ -57,12 +57,12 @@ public class World implements InputHandler.InputListener{
         tiles = new LinkedList<Tile>();
         initBoard();
 
-        if(userNumber == Player.PLAYER1){
+        if (userNumber == Player.PLAYER1) {
             player = new Player(Player.PLAYER1, tiles.get(Tile.getNumberOf(0, 1)));
             enemy = new Player(Player.PLAYER2, tiles.get(Tile.getNumberOf(BOARD_HEIGHT - 1, 2)));
             isMyTurn = true;
             endTurnButton.setPressed(false);
-        } else if(userNumber == 2){
+        } else if (userNumber == 2) {
             player = new Player(Player.PLAYER2, tiles.get(Tile.getNumberOf(BOARD_HEIGHT - 1, 2)));
             enemy = new Player(Player.PLAYER1, tiles.get(Tile.getNumberOf(0, 1)));
             isMyTurn = false;
@@ -82,30 +82,29 @@ public class World implements InputHandler.InputListener{
         dragPlayerState = new DragPlayerState();
     }
 
-    public static World instance(){
-        if(world != null){
+    public static World instance () {
+        if (world != null) {
             return world;
         }
         return null;
     }
 
-    public static GameObject getObjectAt(float x, float y, Class type){
+    public static GameObject getObjectAt (float x, float y, Class type) {
         return getObjectAt(x, y, type, false);
     }
 
-    public static GameObject getObjectAt(
+    public static GameObject getObjectAt (
             float x,
             float y,
             Class type,
-            boolean ignoreVisible){
-        GameObject object;
-        for(int i=0; i<gameObjects.size(); i++){
+            boolean ignoreVisible) {
+        for (GameObject object : gameObjects) {
             object = gameObjects.get(i);
-            if(object.isInBound(x, y)){
-                if(type == null || type.isAssignableFrom(object.getClass())){
-                    if(!ignoreVisible && object.isVisible()){
+            if (object.isInBound(x, y)) {
+                if type == null || type.isAssignableFrom(object.getClass())) {
+                    if (!ignoreVisible && object.isVisible()) {
                         return object;
-                    } else if(ignoreVisible){
+                    } else if(ignoreVisible) {
                         return object;
                     }
                 }
@@ -114,66 +113,66 @@ public class World implements InputHandler.InputListener{
         return null;
     }
 
-    public static GameObject getObjectAt(
+    public static GameObject getObjectAt (
             Vector2 position,
             Class type,
-            boolean ignoreVisible){
+            boolean ignoreVisible) {
         return getObjectAt(position.x, position.y, type, ignoreVisible);
     }
 
     @Override
-    public void onClicked(float x, float y){
+    public void onClicked (float x, float y) {
         fullCard.setCardId(FullCard.NULL_CARD);
         fullCard.setPosition(
                 new Vector2( FullCard.AUTO_SHOW_X, FullCard.AUTO_SHOW_Y));
 
         GameObject object = getObjectAt(x, y, null);
-        if(object instanceof EndTurnButton && isMyTurn){
+        if (object instanceof EndTurnButton && isMyTurn) {
             turnManager.endTurn();
         }
     }
 
     @Override
-    public void onPressed(float x, float y){
+    public void onPressed (float x, float y) {
         GameObject object = getObjectAt(x, y ,null);
-        if(object instanceof Card && mouseFocus == null){
+        if (object instanceof Card && mouseFocus == null) {
             fullCard.setCardId(((Card)object).getId());
             fullCard.setPosition(
                     new Vector2( FullCard.PRESSED_SHOW_X, FullCard.PRESSED_SHOW_Y));
-        } else if((object = getObjectAt(x, y, Trap.class)) != null){
+        } else if ((object = getObjectAt(x, y, Trap.class)) != null) {
             fullCard.setCardId(((Trap)object).getId());
             fullCard.setPosition(
                     new Vector2( FullCard.PRESSED_SHOW_X, FullCard.PRESSED_SHOW_Y));
         }
 
-        if(state == dragCardState){
+        if (state == dragCardState) {
             state.handleInput(x, y);
         }
     }
 
     @Override
-    public void onDragStart(float x, float y){
+    public void onDragStart (float x, float y) {
         fullCard.setCardId(FullCard.NULL_CARD);
         fullCard.setPosition(
                 new Vector2( FullCard.AUTO_SHOW_X, FullCard.AUTO_SHOW_Y));
 
         GameObject object = getObjectAt(x, y, null);
         mouseFocus = object;
-        if(object == player && state == null){
+        if (object == player && state == null) {
             state = dragPlayerState;
             state.enterState(this);
-        } else if(object instanceof Card && state == null){
+        } else if (object instanceof Card && state == null) {
             state = dragCardState;
             state.enterState(this);
         }
     }
 
     @Override
-    public void onDragEnd(float x, float y){
-        if(mouseFocus instanceof Player && state != null){
+    public void onDragEnd (float x, float y) {
+        if (mouseFocus instanceof Player && state != null) {
             state.exitState();
             state = null;
-        } else if(mouseFocus instanceof Card && state != null){
+        } else if (mouseFocus instanceof Card && state != null) {
             state.exitState();
             state = null;
         }
@@ -182,57 +181,57 @@ public class World implements InputHandler.InputListener{
     }
 
     @Override
-    public void onDragged(float x, float y){
-        if(mouseFocus instanceof Player && state != null){
+    public void onDragged (float x, float y) {
+        if (mouseFocus instanceof Player && state != null) {
             state.handleInput(x, y);
-        } else if(mouseFocus instanceof Card && state != null){
+        } else if (mouseFocus instanceof Card && state != null) {
             state.handleInput(x, y);
         }
     }
 
-    public void setListener(GameStateChangeListener listener){
+    public void setListener (GameStateChangeListener listener) {
         this.listener = listener;
     }
 
-    public void syncPlayerData(){
-        while(drawCard());
+    public void syncPlayerData () {
+        while (drawCard());
     }
 
-    public void update(){
+    public void update () {
         updateActionQueue();
         CheckPlayerHealth();
     }
 
-    private void updateActionQueue(){
-        if(actionQueue.size() > 0){
+    private void updateActionQueue () {
+        if (actionQueue.size() > 0) {
             Action action = actionQueue.getFirst();
-            if(action.isActed()){
+            if (action.isActed()) {
                 actionQueue.removeFirst();
-            } else{
+            } else {
                 action.act();
             }
         }
     }
 
-    private void CheckPlayerHealth(){
-        if(player.getHealth() <= 0 || enemy.getHealth() <= 0){
+    private void CheckPlayerHealth () {
+        if (player.getHealth() <= 0 || enemy.getHealth() <= 0) {
             GameOverScreen.WinState winState;
-            if(player.getHealth() <= 0 && enemy.getHealth() <= 0){
+            if (player.getHealth() <= 0 && enemy.getHealth() <= 0) {
                 winState = GameOverScreen.WinState.DRAW;
-            } else if(player.getHealth() <= 0){
+            } else if (player.getHealth() <= 0) {
                 winState = GameOverScreen.WinState.LOSE;
-            } else{
+            } else {
                 winState = GameOverScreen.WinState.WIN;
             }
 
-            if(listener != null){
+            if (listener != null) {
                 listener.onGameOver(winState);
             }
         }
     }
 
-    private void initBoard(){
-        for(int i=0; i<BOARD_WIDTH * BOARD_HEIGHT; i++){
+    private void initBoard () {
+        for (int i=0; i<BOARD_WIDTH * BOARD_HEIGHT; i++) {
             tiles.add(new Tile(i));
         }
         tiles.get(Tile.getNumberOf(3,0)).setVisible(false);
@@ -243,9 +242,9 @@ public class World implements InputHandler.InputListener{
         tiles.get(Tile.getNumberOf(5,3)).setVisible(false);
     }
 
-    public boolean drawCard(){
+    public boolean drawCard () {
         int cardId;
-        if(player.getCards().size() < FULL_HAND){
+        if (player.getCards().size() < FULL_HAND) {
             cardId = TrapBuilder.randomTrapId();
             player.addCard(new Card(cardId));
             return true;

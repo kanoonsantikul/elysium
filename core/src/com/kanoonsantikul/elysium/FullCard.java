@@ -2,7 +2,7 @@ package com.kanoonsantikul.elysium;
 
 import com.badlogic.gdx.math.Vector2;
 
-public class FullCard extends GameObject{
+public class FullCard extends GameObject {
     public static final float WIDTH = Assets.fullCards[0].getWidth() * Elysium.DEVICE_RATIO;
     public static final float HEIGHT = Assets.fullCards[0].getHeight() * Elysium.DEVICE_RATIO;
 
@@ -16,23 +16,23 @@ public class FullCard extends GameObject{
 
     private int cardId;
 
-    public FullCard(){
+    public FullCard () {
         setCardId(NULL_CARD);
     }
 
-    public float getWidth(){
+    public float getWidth () {
         return WIDTH;
     }
 
-    public float getHeight(){
+    public float getHeight () {
         return HEIGHT;
     }
 
-    public int getCardId(){
+    public int getCardId () {
         return cardId;
     }
 
-    public void setCardId(int cardId){
+    public void setCardId (int cardId) {
         this.cardId = cardId;
     }
 }

@@ -8,7 +8,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 
 public class MultiplayerUpdater implements
-        ConnectionManager.ConnectionStateListener{
+        ConnectionManager.ConnectionStateListener {
     private static final int LOCATION_UPDATE_TYPE = 1;
     private static final int TURN_UPDATE_TYPE = 2;
     private static final int CARD_UPDATE_TYPE = 3;
@@ -18,39 +18,39 @@ public class MultiplayerUpdater implements
     private static MultiplayerUpdater multiplayerUpdater;
     private World world;
 
-    public MultiplayerUpdater(World world){
+    public MultiplayerUpdater (World world) {
         this.world = world;
         multiplayerUpdater = this;
     }
 
-    public static MultiplayerUpdater instance(){
+    public static MultiplayerUpdater instance () {
         return multiplayerUpdater;
     }
 
     @Override
-    public void onGameStarted(int userNumber) {
+    public void onGameStarted (int userNumber) {
     }
 
     @Override
-    public void onWaitingStarted(){
+    public void onWaitingStarted () {
     }
 
     @Override
-    public void onGameUpdateReceived(String message){
-        try{
+    public void onGameUpdateReceived (String message) {
+        try {
             JSONObject data = new JSONObject(message);
-            if(data.getInt("type") == LOCATION_UPDATE_TYPE){
+            if (data.getInt("type") == LOCATION_UPDATE_TYPE) {
                 updateLocation(data);
-            } else if(data.getInt("type") == TURN_UPDATE_TYPE){
+            } else if (data.getInt("type") == TURN_UPDATE_TYPE) {
                 updateTurn();
-            } else if(data.getInt("type") == CARD_UPDATE_TYPE){
+            } else if (data.getInt("type") == CARD_UPDATE_TYPE) {
                 updateCards(data);
-            } else if(data.getInt("type") == TRAP_UPDATE_TYPE){
+            } else if (data.getInt("type") == TRAP_UPDATE_TYPE) {
                 updateTrap(data);
-            } else if(data.getInt("type") == DATA_UPDATE_TYPE){
+            } else if (data.getInt("type") == DATA_UPDATE_TYPE) {
                 updateData(data.getString("message"));
             }
-        } catch(Exception e){
+        } catch(Exception e) {
 
         }
     }

@@ -4,7 +4,7 @@ import java.util.LinkedList;
 
 import com.badlogic.gdx.math.Vector2;
 
-public class MoveAction extends Action{
+public class MoveAction extends Action {
 
     private LinkedList<Tile> paths;
     private LinkedList<Action> actionQueue;
@@ -16,9 +16,9 @@ public class MoveAction extends Action{
 
     private Tile lastTile;
 
-    public MoveAction(BoardObject actor,
+    public MoveAction (BoardObject actor,
             LinkedList<Tile> paths,
-            LinkedList<Action> actionQueue){
+            LinkedList<Action> actionQueue) {
         super(actor);
 
         this.paths = paths;
@@ -29,29 +29,29 @@ public class MoveAction extends Action{
     }
 
     @Override
-    public void act(){
-        if(!actor.isLock()){
+    public void act() {
+        if (!actor.isLock()) {
             preAction();
         }
 
-        if(paths.size() > 0){
-            if(currentTargetPosition == null){
+        if (paths.size() > 0) {
+            if (currentTargetPosition == null) {
                 changeDirection();
-            } else if(!move()){
+            } else if (!move()) {
                 currentTargetPosition = null;
                 lastTile = paths.poll();
 
-                if(actor instanceof Player){
+                if (actor instanceof Player) {
                     ((Player)actor).addMaterial(1);
                 }
             }
-        } else{
+        } else {
             actor.setLock(false);
             ((BoardObject)actor).setTile(lastTile);
 
-            if(actor instanceof Player){
+            if (actor instanceof Player) {
                 ((Player)actor).setIsMoved(true);
-                if(actionQueue != null){
+                if (actionQueue != null) {
                     actionQueue.add(
                             new ToggleTrapAction((Player)actor, lastTile));
                 }
@@ -60,28 +60,28 @@ public class MoveAction extends Action{
         }
     }
 
-    private void preAction(){
+    private void preAction() {
         actor.setLock(true);
-        if(((BoardObject)actor).getTile() != lastTile){
+        if (((BoardObject)actor).getTile() != lastTile) {
             paths.clear();
             lastTile = ((BoardObject)actor).getTile();
             actionQueue = null;
         }
     }
 
-    private void changeDirection(){
+    private void changeDirection() {
         currentTargetPosition = paths.peek().getCenter();
         speedX = SPEED;
         speedY = SPEED;
-        if(actor.getPosition().x > currentTargetPosition.x){
+        if (actor.getPosition().x > currentTargetPosition.x) {
             speedX *= -1;
         }
-        if(actor.getPosition().y > currentTargetPosition.y){
+        if (actor.getPosition().y > currentTargetPosition.y) {
             speedY *= -1;
         }
     }
 
-    private boolean move(){
+    private boolean move() {
         boolean reachedX = !(
                 (speedX > 0 && actor.getCenter().x < currentTargetPosition.x) ||
                 (speedX < 0 && actor.getCenter().x > currentTargetPosition.x));
@@ -89,20 +89,21 @@ public class MoveAction extends Action{
                 (speedY > 0 && actor.getCenter().y < currentTargetPosition.y) ||
                 (speedY < 0 && actor.getCenter().y > currentTargetPosition.y));
 
-        if(!reachedX){
+        if (!reachedX) {
             actor.setCenter(new Vector2(
                     actor.getCenter().x + speedX,
                     actor.getCenter().y));
-        } else{
+        } else {
             actor.setCenter(new Vector2(
                     currentTargetPosition.x,
                     actor.getCenter().y));
         }
-        if(!reachedY){
+
+        if (!reachedY) {
             actor.setCenter(new Vector2(
                     actor.getCenter().x,
                     actor.getCenter().y + speedY));
-        } else{
+        } else {
             actor.setCenter(new Vector2(
                     actor.getCenter().x,
                     currentTargetPosition.y));
