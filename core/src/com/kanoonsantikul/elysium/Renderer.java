@@ -14,10 +14,10 @@ public class Renderer {
     private static final float FONT_SMALL_SPACING = 12f;
     private static final float FONT_SPACING = 17f;
 
-    private static final float PLAYER1_DATA_X = 265;
-    private static final float PLAYER1_DATA_Y = 135;
-    private static final float PLAYER2_DATA_X = 355;
-    private static final float PLAYER2_DATA_Y = 135;
+    private static final float PLAYER_DATA_X = 257;
+    private static final float PLAYER_DATA_Y = Elysium.HEIGHT - Assets.player1Pic.getHeight() - 20;
+    private static final float ENEMY_DATA_X = PLAYER_DATA_X + Assets.player1Pic.getWidth();
+    private static final float ENEMY_DATA_Y = PLAYER_DATA_Y;
 
     World world;
     SpriteBatch batcher;
@@ -50,7 +50,6 @@ public class Renderer {
 
     private void renderTiles () {
         for (Tile tile : world.tiles) {
-            tile = tiles.get(i);
             if (!tile.isVisible()) {
                 continue;
             }
@@ -106,7 +105,6 @@ public class Renderer {
             return;
         }
 
-        Tile targetTile;
         for (Tile targetTile : targetTiles) {
             batcher.draw(Assets.targetTile,
                     targetTile.getPosition().x,
@@ -156,35 +154,52 @@ public class Renderer {
 
     private void renderPlayerData (Player player) {
         float x, y;
-        if (player == world.player) {
-            x = PLAYER1_DATA_X;
-            y = PLAYER1_DATA_Y;
-        } else {
-            x = PLAYER2_DATA_X;
-            y = PLAYER2_DATA_Y;
+        Texture texture;
+        String name;
+
+        if(player == world.player){
+            x = PLAYER_DATA_X;
+            y = PLAYER_DATA_Y;
+            name = "YOU";
+
+            if(player.getNumber() == Player.PLAYER1){
+                texture = Assets.player1Pic;
+            } else {
+                texture = Assets.player2Pic;
+            }
+        } else{
+            x = ENEMY_DATA_X;
+            y = ENEMY_DATA_Y;
+            name = "ENEMY";
+
+            if(player.getNumber() == Player.PLAYER1){
+                texture = Assets.player1PicSmall;
+            } else {
+                texture = Assets.player2PicSmall;
+            }
         }
+
+        batcher.draw(texture,
+                x,
+                y,
+                texture.getWidth(),
+                texture.getHeight());
+        Assets.font.setColor(Color.WHITE);
+        Assets.font.draw(batcher,
+                name,
+                x + 10,
+                y + 20);
+        Assets.font.setColor(Color.BLACK);
 
         batcher.draw(Assets.material,
                 x,
-                y,
+                y - Assets.material.getHeight() - 3,
                 Assets.material.getWidth(),
                 Assets.material.getHeight());
         Assets.font.draw(batcher,
                 "x " + player.getMaterial(),
                 x + Assets.material.getWidth(),
-                y + Assets.material.getHeight() / 2 + Assets.font.getXHeight());
-
-        Texture texture;
-        if (player.getNumber() == Player.PLAYER1) {
-            texture = Assets.player1;
-        } else {
-            texture = Assets.player2;
-        }
-        batcher.draw(texture,
-                x,
-                y + Assets.material.getHeight() + 3,
-                texture.getWidth(),
-                texture.getHeight());
+                y - Assets.material.getHeight() * 2 / 3 + Assets.font.getXHeight());
     }
 
     private void renderEndTurnButton () {
@@ -234,7 +249,6 @@ public class Renderer {
 
     private void renderCard () {
         for (Card card : world.player.getCards()) {
-            card = cards.get(i);
             if (!card.isVisible()) {
                 Trap trap = TrapBuilder.getInstance(card.getId());
                 batcher.setColor(1, 1, 1, World.ALPHA);
@@ -262,7 +276,7 @@ public class Renderer {
                     TrapBuilder.getInstance(card.getId()).getCost() + "",
                     card.getPosition().x + Card.WIDTH / 5 + Assets.materialSmall.getWidth() + 5,
                     card.getPosition().y + Card.HEIGHT + FONT_SMALL_SPACING / 3
-                            + Assets.materialSmall.getHeight() / 2 + Assets.font.getXHeight());
+                            + Assets.materialSmall.getHeight() / 3 + Assets.font.getXHeight());
         }
 
         int cardId = world.fullCard.getCardId();
