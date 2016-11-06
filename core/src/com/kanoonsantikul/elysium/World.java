@@ -99,9 +99,8 @@ public class World implements InputHandler.InputListener {
             Class type,
             boolean ignoreVisible) {
         for (GameObject object : gameObjects) {
-            object = gameObjects.get(i);
             if (object.isInBound(x, y)) {
-                if type == null || type.isAssignableFrom(object.getClass())) {
+                if (type == null || type.isAssignableFrom(object.getClass())) {
                     if (!ignoreVisible && object.isVisible()) {
                         return object;
                     } else if(ignoreVisible) {

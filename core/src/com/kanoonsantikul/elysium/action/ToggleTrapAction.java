@@ -11,10 +11,10 @@ public class ToggleTrapAction extends Action {
         this.tile = tile;
     }
 
-    public static void toggleTrap (Player player ,Tile tile) {
-        for (int i = 0; i < player.toggleTraps().size(); i++) {
-            if (player.toggleTraps().get(i).getTile() == tile) {
-                player.toggleTraps().get(i).toggle(actor);
+    public static void toggleTrap (Player player ,Tile tile, Player actor) {
+        for (Trap trap : player.getTraps()) {
+            if (trap.getTile() == tile) {
+                trap.toggle(actor);
                 break;
             }
         }
@@ -23,11 +23,11 @@ public class ToggleTrapAction extends Action {
     @Override
     public void act() {
         if(world.player.getNumber() == Player.PLAYER1) {
-            toggleTrap(world.player, tile);
-            toggleTrap(world.enemy, tile);
+            toggleTrap(world.player, tile, (Player)actor);
+            toggleTrap(world.enemy, tile, (Player)actor);
         } else {
-            toggleTrap(world.enemy, tile);
-            toggleTrap(world.player, tile);
+            toggleTrap(world.enemy, tile, (Player)actor);
+            toggleTrap(world.player, tile, (Player)actor);
         }
         setActed(true);
     }

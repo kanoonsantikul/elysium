@@ -13,7 +13,11 @@ public class Assets {
     public static Texture moveTile;
     public static Texture targetTile;
     public static Texture player1;
+    public static Texture player1Pic;
+    public static Texture player1PicSmall;
     public static Texture player2;
+    public static Texture player2Pic;
+    public static Texture player2PicSmall;
     public static Texture endTurnButton;
     public static Texture endTurnButtonPressed;
     public static Texture cardBar;
@@ -39,7 +43,11 @@ public class Assets {
         moveTile = loadTexture("move-tile.png");
         targetTile = loadTexture("target-tile.png");
         player1 = loadTexture("player1.png");
+        player1Pic = loadTexture("player1-pic.png");
+        player1PicSmall = loadTexture("player1-pic-small.png");
         player2 = loadTexture("player2.png");
+        player2Pic = loadTexture("player2-pic.png");
+        player2PicSmall = loadTexture("player2-pic-small.png");
         endTurnButton = loadTexture("end-turn-button.png");
         endTurnButtonPressed = loadTexture("end-turn-button-pressed.png");
         materialSmall = loadTexture("material-small.png");
@@ -109,7 +117,11 @@ public class Assets {
         moveTile.dispose();
         targetTile.dispose();
         player1.dispose();
+        player1Pic.dispose();
+        player1PicSmall.dispose();
         player2.dispose();
+        player2Pic.dispose();
+        player2PicSmall.dispose();
         endTurnButton.dispose();
         endTurnButtonPressed.dispose();
         materialSmall.dispose();

@@ -7,7 +7,7 @@ public class FullCard extends GameObject {
     public static final float HEIGHT = Assets.fullCards[0].getHeight() * Elysium.DEVICE_RATIO;
 
     public static final float AUTO_SHOW_X = Elysium.WIDTH - WIDTH - 10;
-    public static final float AUTO_SHOW_Y = Elysium.HEIGHT - HEIGHT - 20;
+    public static final float AUTO_SHOW_Y = Assets.cardBar.getHeight() + 20;
 
     public static final float PRESSED_SHOW_X = Elysium.WIDTH / 2 - WIDTH / 2;
     public static final float PRESSED_SHOW_Y = Elysium.HEIGHT / 2 - HEIGHT / 2 + 60;
