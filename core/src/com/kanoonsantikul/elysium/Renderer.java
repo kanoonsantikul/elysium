@@ -29,7 +29,7 @@ public class Renderer {
 
     public void render (float delta) {
         GL20 gl = Gdx.gl;
-        gl.glClearColor(91/255f, 222/255f, 162/255f, 1);
+        gl.glClearColor(127/255f, 174/255f, 108/255f, 1);
 		gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batcher.begin();

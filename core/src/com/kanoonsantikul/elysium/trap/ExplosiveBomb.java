@@ -14,7 +14,7 @@ public class ExplosiveBomb extends Trap {
     }
 
     @Override
-    public void toggle (GameObject actor) {
+    public void toggle (Player actor) {
         super.toggle(actor);
 
         LinkedList<Tile> tiles = getTile().getNeighbors(RANGE, Tile.RECTANGLE_RANGE);

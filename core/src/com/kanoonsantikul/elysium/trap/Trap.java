@@ -62,7 +62,7 @@ public class Trap extends BoardObject implements TurnStateChangeListener, Clonea
         return isToggled;
     }
 
-    public void toggle (GameObject actor) {
+    public void toggle (Player actor) {
         isToggled = true;
     }
 
@@ -75,7 +75,7 @@ public class Trap extends BoardObject implements TurnStateChangeListener, Clonea
             trap.user = user;
             user.addMaterial(-cost);
         } catch(Exception e) {
-            
+
         }
         return trap;
     }

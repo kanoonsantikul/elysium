@@ -21,6 +21,9 @@ public class MoveAction extends Action {
             LinkedList<Action> actionQueue) {
         super(actor);
 
+        if(actor == null){
+            setActed(true);
+        }
         this.paths = paths;
         this.actionQueue = actionQueue;
         lastTile = actor.getTile();

@@ -10,7 +10,9 @@ public class TrapBuilder {
         new SnareTrap(null, null),
         new FuzzyBomb(null, null),
         new VenomGas(null, null),
-        new SpikeTrap(null, null)
+        new SpikeTrap(null, null),
+        new WormHole(null, null),
+        new BloodBank(null, null)
     };
 
     public static Trap build (int id, Tile tile, Player user) {

@@ -27,17 +27,20 @@ public class SpikeTrap extends Trap {
     }
 
     @Override
-    public void toggle (GameObject actor) {
+    public void toggle (Player actor) {
         if (isToggled) {
             return;
         }
         super.toggle(actor);
-        this.actor = (Player)actor;
+        this.actor = actor;
 
         World.instance().actionQueue.add(
                 new ShowFullCardAction(id));
         World.instance().actionQueue.add(
                 new DamageAction(getTile(), DAMAGE));
         setVisible(false);
+        if(actor == null){
+            user.removeTrap(this);
+        }
     }
 }

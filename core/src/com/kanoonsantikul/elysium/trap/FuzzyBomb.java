@@ -67,16 +67,19 @@ public class FuzzyBomb extends Trap implements WaitDataAction.DataListener {
     }
 
     @Override
-    public void toggle (GameObject actor) {
+    public void toggle (Player actor) {
         if (isToggled) {
             return;
         }
         super.toggle(actor);
-        this.actor = (Player)actor;
+        this.actor = actor;
 
         World.instance().actionQueue.add(
                 new ShowFullCardAction(id));
         setVisible(false);
+        if(actor == null){
+            user.removeTrap(this);
+        }
     }
 
     public LinkedList<Tile> createPath () {

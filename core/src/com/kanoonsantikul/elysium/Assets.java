@@ -63,7 +63,9 @@ public class Assets {
             loadTexture("snare-trap-card.png"),
             loadTexture("fuzzy-bomb-card.png"),
             loadTexture("venom-gas-card.png"),
-            loadTexture("spike-trap-card.png")
+            loadTexture("spike-trap-card.png"),
+            loadTexture("worm-hole-card.png"),
+            loadTexture("blood-bank-card.png")
         };
 
         fullCards = new Texture[] {
@@ -75,7 +77,9 @@ public class Assets {
             loadTexture("snare-trap-full-card.png"),
             loadTexture("fuzzy-bomb-full-card.png"),
             loadTexture("venom-gas-full-card.png"),
-            loadTexture("spike-trap-full-card.png")
+            loadTexture("spike-trap-full-card.png"),
+            loadTexture("worm-hole-full-card.png"),
+            loadTexture("blood-bank-full-card.png")
         };
 
         traps = new Texture[] {
@@ -87,7 +91,9 @@ public class Assets {
             loadTexture("snare-trap.png"),
             loadTexture("fuzzy-bomb.png"),
             loadTexture("venom-gas.png"),
-            loadTexture("spike-trap.png")
+            loadTexture("spike-trap.png"),
+            loadTexture("worm-hole.png"),
+            loadTexture("blood-bank.png")
         };
 
         notifyText = new Texture[] {
