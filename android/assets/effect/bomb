@@ -221,4 +221,4 @@ additive: true
 behind: false
 premultipliedAlpha: false
 - Image Path -
-/home/kanoonsantikul/pre_particle.png
+particle.png
