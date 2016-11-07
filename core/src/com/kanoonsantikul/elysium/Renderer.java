@@ -267,18 +267,28 @@ public class Renderer {
                     Card.WIDTH,
                     Card.HEIGHT);
 
-            batcher.draw(Assets.materialSmall,
-                    card.getPosition().x + Card.WIDTH / 5,
-                    card.getPosition().y + Card.HEIGHT + FONT_SMALL_SPACING / 3,
-                    Assets.materialSmall.getWidth(),
-                    Assets.materialSmall.getHeight());
-            Assets.font.draw(batcher,
-                    TrapBuilder.getInstance(card.getId()).getCost() + "",
-                    card.getPosition().x + Card.WIDTH / 5 + Assets.materialSmall.getWidth() + 5,
-                    card.getPosition().y + Card.HEIGHT + FONT_SMALL_SPACING / 3
-                            + Assets.materialSmall.getHeight() / 3 + Assets.font.getXHeight());
+            if (!card.isMoving()) {
+                renderCardMaterial(card);
+            }
         }
 
+        renderFullCard();
+    }
+
+    public void renderCardMaterial (Card card) {
+        batcher.draw(Assets.materialSmall,
+                card.getPosition().x + Card.WIDTH / 5,
+                card.getPosition().y + Card.HEIGHT + FONT_SMALL_SPACING / 3,
+                Assets.materialSmall.getWidth(),
+                Assets.materialSmall.getHeight());
+        Assets.font.draw(batcher,
+                TrapBuilder.getInstance(card.getId()).getCost() + "",
+                card.getPosition().x + Card.WIDTH / 5 + Assets.materialSmall.getWidth() + 5,
+                card.getPosition().y + Card.HEIGHT + FONT_SMALL_SPACING / 3
+                        + Assets.materialSmall.getHeight() / 3 + Assets.font.getXHeight());
+    }
+
+    public void renderFullCard () {
         int cardId = world.fullCard.getCardId();
         if (cardId != -1) {
             batcher.draw(Assets.fullCards[cardId],
@@ -288,5 +298,4 @@ public class Renderer {
                     FullCard.HEIGHT);
         }
     }
-
 }

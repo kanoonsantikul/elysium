@@ -13,6 +13,7 @@ public class Card extends GameObject {
     private int id;
     private int number;
     private float alpha = 1;
+    private boolean isMoving;
 
     public Card (int id) {
         setId(id);
@@ -48,6 +49,14 @@ public class Card extends GameObject {
         float y = INIT_Y;
         float x = INIT_X + (WIDTH + 5)* number;
         setPosition(new Vector2(x, y));
+    }
+
+    public boolean isMoving () {
+        return isMoving;
+    }
+
+    public void setIsMoving (boolean isMoving) {
+        this.isMoving = isMoving;
     }
 
     public void setAlpha (float alpha) {
