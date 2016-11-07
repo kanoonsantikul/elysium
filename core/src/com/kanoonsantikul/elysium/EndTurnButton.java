@@ -2,7 +2,7 @@ package com.kanoonsantikul.elysium;
 
 import com.badlogic.gdx.math.Vector2;
 
-public class EndTurnButton extends GameObject{
+public class EndTurnButton extends GameObject {
     public static final float WIDTH = Assets.endTurnButton.getWidth() * Elysium.DEVICE_RATIO;
     public static final float HEIGHT = Assets.endTurnButton.getHeight() * Elysium.DEVICE_RATIO;
 
@@ -11,23 +11,23 @@ public class EndTurnButton extends GameObject{
 
     private boolean isPressed;
 
-    public EndTurnButton(){
+    public EndTurnButton () {
         setPosition(new Vector2(X, Y));
     }
 
-    public float getWidth(){
+    public float getWidth () {
         return WIDTH;
     }
 
-    public float getHeight(){
+    public float getHeight () {
         return HEIGHT;
     }
 
-    public boolean isPressed(){
+    public boolean isPressed () {
         return isPressed;
     }
 
-    public void setPressed(boolean isPressed){
+    public void setPressed (boolean isPressed) {
         this.isPressed = isPressed;
     }
 }

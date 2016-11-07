@@ -9,17 +9,17 @@ import com.shephertz.app42.gaming.multiplayer.client.events.RoomEvent;
 
 import com.badlogic.gdx.Gdx;
 
-public class ConnectionManager{
-    public static interface ConnectionStateListener{
-        public void onWaitingStarted();
-        public void onGameStarted(int userNumber);
-        public void onGameUpdateReceived(String message);
-    }
-
+public class ConnectionManager {
     public static final String APP_KEY = "14a611b4b3075972be364a7270d9b69a5d2b24898ac483e32d4dc72b2df039ef";
     public static final String SECRET_KEY = "55216a9a165b08d93f9390435c9be4739888d971a17170591979e5837f618059";
 
     private static ConnectionManager connectionManager;
+
+    public static interface ConnectionStateListener {
+        public void onWaitingStarted();
+        public void onGameStarted(int userNumber);
+        public void onGameUpdateReceived(String message);
+    }
 
     private WarpClient warpClient;
     private ConnectionStateListener listener;
@@ -30,7 +30,7 @@ public class ConnectionManager{
     private boolean isConnected = false;
     boolean isUDPEnabled = false;
 
-    public ConnectionManager(){
+    public ConnectionManager () {
         initAppwarp();
         warpClient.addConnectionRequestListener(new ConnectionListener(this));
         warpClient.addRoomRequestListener(new RoomListener(this));
@@ -38,24 +38,24 @@ public class ConnectionManager{
         warpClient.addNotificationListener(new NotificationListener(this));
     }
 
-    public static ConnectionManager instance(){
-        if(connectionManager == null){
+    public static ConnectionManager instance () {
+        if (connectionManager == null) {
             connectionManager = new ConnectionManager();
         }
         return connectionManager;
     }
 
-    public void setListener(ConnectionStateListener listener){
+    public void setListener (ConnectionStateListener listener) {
         this.listener = listener;
     }
 
-    public void connect(String username){
+    public void connect (String username) {
         this.username = username;
         warpClient.connectWithUserName(username);
     }
 
-    public void disconnect(){
-        if(isConnected){
+    public void disconnect () {
+        if (isConnected) {
 			warpClient.unsubscribeRoom(roomId);
 			warpClient.leaveRoom(roomId);
 			warpClient.deleteRoom(roomId);
@@ -68,95 +68,95 @@ public class ConnectionManager{
         warpClient.disconnect();
     }
 
-    public void sendGameUpdate(String msg){
-        if(isConnected){
-            if(isUDPEnabled){
+    public void sendGameUpdate (String msg) {
+        if (isConnected) {
+            if (isUDPEnabled) {
                 warpClient.sendUDPUpdatePeers((username+"#@"+msg).getBytes());
-            }else{
+            } else {
                 warpClient.sendUpdatePeers((username+"#@"+msg).getBytes());
             }
         }
     }
 
-    public void onConnectDone(boolean status){
+    public void onConnectDone (boolean status) {
         Gdx.app.log("onConnectDone: "+status,"");
-        if(status){
+        if (status) {
             warpClient.initUDP();
             warpClient.joinRoomInRange(1, 1, false);
-        } else{
+        } else {
             isConnected = false;
             handleError();
         }
     }
 
-    public void onRoomCreated(String roomId){
-        if(roomId != null){
+    public void onRoomCreated (String roomId) {
+        if (roomId != null) {
             warpClient.joinRoom(roomId);
-        }else{
+        } else {
             handleError();
         }
     }
 
-    public void onJoinRoomDone(RoomEvent event){
+    public void onJoinRoomDone (RoomEvent event) {
         Gdx.app.log("onJoinRoomDone: "+event.getResult(), "");
-        if(event.getResult() == WarpResponseResultCode.SUCCESS){
+        if (event.getResult() == WarpResponseResultCode.SUCCESS) {
             this.roomId = event.getData().getId();
             warpClient.subscribeRoom(roomId);
 
-        } else if(event.getResult() == WarpResponseResultCode.RESOURCE_NOT_FOUND){
+        } else if (event.getResult() == WarpResponseResultCode.RESOURCE_NOT_FOUND) {
             HashMap<String, Object> data = new HashMap<String, Object>();
             data.put("result", "");
             warpClient.createRoom("elysium", "test", 2, data);
 
-        } else{
+        } else {
             warpClient.disconnect();
             handleError();
         }
     }
 
-    public void onRoomSubscribed(String roomId){
+    public void onRoomSubscribed (String roomId) {
         Gdx.app.log("onSubscribeRoomDone: "+roomId, "");
-        if(roomId != null){
+        if (roomId != null) {
             isConnected = true;
             warpClient.getLiveRoomInfo(roomId);
-        } else{
+        } else {
             warpClient.disconnect();
             handleError();
         }
     }
 
-    public void onGetLiveRoomInfo(String[] liveUsers){
+    public void onGetLiveRoomInfo (String[] liveUsers) {
         Gdx.app.log("onGetLiveRoomInfo: "+liveUsers.length,"");
         userNumber = liveUsers.length;
 
-        if(liveUsers != null){
-            if(liveUsers.length == 2){
+        if (liveUsers != null) {
+            if (liveUsers.length == 2) {
                 startGame(userNumber);
-            } else{
+            } else {
                 waitForOtherUser();
             }
-        } else{
+        } else {
             warpClient.disconnect();
             handleError();
         }
     }
 
-    public void onUserJoinedRoom(String roomId, String username){
-        if(!this.username.equals(username)){
+    public void onUserJoinedRoom (String roomId, String username) {
+        if (!this.username.equals(username)) {
             startGame(userNumber);
         }
     }
 
-    public void onGameUpdateReceived(String message){
+    public void onGameUpdateReceived (String message) {
         String username = message.substring(0, message.indexOf("#@"));
         String data = message.substring(message.indexOf("#@")+2, message.length());
 
-        if(!this.username.equals(username) && listener != null){
+        if (!this.username.equals(username) && listener != null) {
             listener.onGameUpdateReceived(data);
         }
     }
 
-    private void initAppwarp(){
+    private void initAppwarp () {
         try {
             WarpClient.initialize(APP_KEY, SECRET_KEY);
             warpClient = WarpClient.getInstance();
@@ -165,21 +165,21 @@ public class ConnectionManager{
         }
     }
 
-    private void handleError(){
-        if(roomId != null && roomId.length() > 0){
+    private void handleError() {
+        if (roomId != null && roomId.length() > 0) {
             warpClient.deleteRoom(roomId);
         }
         disconnect();
     }
 
-    private void startGame(int userNumber){
-        if(listener != null){
+    private void startGame (int userNumber) {
+        if (listener != null) {
             listener.onGameStarted(userNumber);
         }
     }
 
-    private void waitForOtherUser(){
-        if(listener != null){
+    private void waitForOtherUser () {
+        if (listener != null) {
             listener.onWaitingStarted();
         }
     }

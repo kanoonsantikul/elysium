@@ -4,7 +4,7 @@ import com.kanoonsantikul.elysium.TurnManager.TurnStateChangeListener;
 
 import com.badlogic.gdx.math.Vector2;
 
-public class Trap extends BoardObject implements TurnStateChangeListener, Cloneable{
+public class Trap extends BoardObject implements TurnStateChangeListener, Cloneable {
     public static final float WIDTH = Assets.traps[0].getWidth() * Elysium.DEVICE_RATIO;
     public static final float HEIGHT = Assets.traps[0].getHeight() * Elysium.DEVICE_RATIO;
 
@@ -14,67 +14,67 @@ public class Trap extends BoardObject implements TurnStateChangeListener, Clonea
     protected Player user;
     protected boolean isToggled = false;
 
-    public Trap (int id, float weight, int cost, Tile tile, Player user){
+    public Trap (int id, float weight, int cost, Tile tile, Player user) {
         this.id = id;
         this.weight = weight;
         this.cost = cost;
-        if(tile != null){
+        if (tile != null) {
             setTile(tile);
             setCenter(tile.getCenter());
         }
-        if(user != null){
+        if (user != null) {
             this.user = user;
             user.addMaterial(-cost);
         }
     }
 
     @Override
-    public void onTurnStart(Player player){
+    public void onTurnStart (Player player) {
 
     }
 
     @Override
-    public void onTurnEnd(Player player){
+    public void onTurnEnd (Player player) {
 
     }
 
-    public int getId(){
+    public int getId () {
         return id;
     }
 
-    public float getWeight(){
+    public float getWeight () {
         return weight;
     }
 
-    public int getCost(){
+    public int getCost () {
         return cost;
     }
 
-    public float getWidth(){
+    public float getWidth () {
         return WIDTH;
     }
 
-    public float getHeight(){
+    public float getHeight () {
         return HEIGHT;
     }
 
-    public boolean isToggled(){
+    public boolean isToggled () {
         return isToggled;
     }
 
-    public void toggle(GameObject actor){
+    public void toggle (Player actor) {
         isToggled = true;
     }
 
-    public Trap createCopy(Tile tile, Player user){
+    public Trap createCopy (Tile tile, Player user) {
         Trap trap = null;
-        try{
+        try {
             trap = (Trap)this.clone();
             trap.setTile(tile);
             trap.setCenter(tile.getCenter());
             trap.user = user;
             user.addMaterial(-cost);
-        } catch(Exception e){
+        } catch(Exception e) {
 
         }
         return trap;

@@ -4,13 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 
 public class GameScreen extends ScreenAdapter implements
-        World.GameStateChangeListener{
+        World.GameStateChangeListener {
     private Elysium game;
     private World world;
     private MultiplayerUpdater multiplayerUpdater;
     private Renderer renderer;
 
-    public GameScreen(Elysium game, int userNumber){
+    public GameScreen (Elysium game, int userNumber) {
         this.game = game;
 
         world = new World(userNumber);
@@ -31,7 +31,7 @@ public class GameScreen extends ScreenAdapter implements
     }
 
     @Override
-    public void onGameOver(GameOverScreen.WinState winState){
+    public void onGameOver (GameOverScreen.WinState winState) {
         game.setScreen(new GameOverScreen(game, winState));
     }
 }

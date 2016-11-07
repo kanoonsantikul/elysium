@@ -33,7 +33,7 @@ public class Elysium extends Game {
 	}
 
 	@Override
-	public void render() {
+	public void render () {
 		super.render();
 	}
 
@@ -46,7 +46,7 @@ public class Elysium extends Game {
 		Assets.dispose();
 	}
 
-    private void setupInput(){
+    private void setupInput () {
         InputMultiplexer inputs = new InputMultiplexer();
         inputHandler =
                 new InputHandler(new GestureDetector.GestureAdapter());

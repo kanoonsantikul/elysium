@@ -9,14 +9,14 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;;
 import com.badlogic.gdx.ScreenAdapter;
 
 public class StartMultiplayerScreen extends ScreenAdapter implements
-        ConnectionManager.ConnectionStateListener{
+        ConnectionManager.ConnectionStateListener {
 
     private static String username;
 
     private Elysium game;
     private String text;
 
-    public StartMultiplayerScreen(Elysium game){
+    public StartMultiplayerScreen (Elysium game) {
         this.game = game;
 
         Random random = new Random();
@@ -28,7 +28,7 @@ public class StartMultiplayerScreen extends ScreenAdapter implements
     }
 
     @Override
-    public void render (float delta){
+    public void render (float delta) {
         GL20 gl = Gdx.gl;
         gl.glClearColor(91/255f, 222/255f, 162/255f, 1);
         gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -43,16 +43,17 @@ public class StartMultiplayerScreen extends ScreenAdapter implements
     }
 
     @Override
-    public void onGameStarted(int userNumber) {
+    public void onGameStarted (int userNumber) {
         game.setScreen(new GameScreen(game, userNumber));
     }
 
     @Override
-    public void onWaitingStarted(){
+    public void onWaitingStarted () {
         text = "Waiting for other player";
     }
 
     @Override
-    public void onGameUpdateReceived(String message){
+    public void onGameUpdateReceived(String message) {
+        
     }
 }
