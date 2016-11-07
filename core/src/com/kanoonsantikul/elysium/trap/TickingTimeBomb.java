@@ -19,17 +19,19 @@ public class TickingTimeBomb extends Trap {
             if (turnCount < LOCK_TURN) {
                 turnCount++;
             } else {
-                World.instance().actionQueue.add(
-                        new ShowFullCardAction(id));
-                World.instance().actionQueue.add(
-                        new DamageAction(getTile(), DAMAGE));
-                user.removeTrap(this);
+                toggle(null);
             }
         }
     }
 
     @Override
-    public void toggle (GameObject actor) {
-        
+    public void toggle (Player actor) {
+        if(actor == null){
+            World.instance().actionQueue.add(
+                    new ShowFullCardAction(id));
+            World.instance().actionQueue.add(
+                    new DamageAction(getTile(), DAMAGE));
+            user.removeTrap(this);
+        }
     }
 }

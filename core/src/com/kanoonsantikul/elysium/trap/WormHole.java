@@ -1,12 +1,11 @@
 package com.kanoonsantikul.elysium;
 
-public class BoobyTrap extends Trap {
-    public static final int ID = 2;
-    public static final float WEIGHT = 0.2f;
-    public static final int COST = 2;
-    private static final int DAMAGE = 200;
+public class WormHole extends Trap {
+    public static final int ID = 9;
+    public static final float WEIGHT = 0.08f;
+    public static final int COST = 5;
 
-    public BoobyTrap (Tile tile, Player user) {
+    public WormHole (Tile tile, Player user) {
         super(ID, WEIGHT, COST, tile, user);
     }
 
@@ -17,7 +16,7 @@ public class BoobyTrap extends Trap {
         World.instance().actionQueue.add(
                 new ShowFullCardAction(id));
         World.instance().actionQueue.add(
-                new DamageAction(getTile(), DAMAGE));
+                new AddMaterialAction(actor, -actor.getMaterial()));
         user.removeTrap(this);
     }
 }

@@ -30,12 +30,12 @@ public class SnareTrap extends Trap {
     }
 
     @Override
-    public void toggle (GameObject actor) {
+    public void toggle (Player actor) {
         if (isToggled) {
             return;
         }
         super.toggle(actor);
-        this.actor = (Player)actor;
+        this.actor = actor;
 
         LinkedList<Tile> path = new LinkedList<Tile>();
         int row = Tile.getRowOf(getTile().getNumber());
@@ -52,5 +52,8 @@ public class SnareTrap extends Trap {
         World.instance().actionQueue.add(
                 new MoveAction((Player)actor, path, World.instance().actionQueue));
         setVisible(false);
+        if(actor == null){
+            user.removeTrap(this);
+        }
     }
 }
