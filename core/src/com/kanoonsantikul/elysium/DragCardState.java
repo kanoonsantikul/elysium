@@ -14,6 +14,7 @@ public class DragCardState implements WorldState {
     public void enterState (World world) {
         this.world = world;
         this.card = (Card)world.mouseFocus;
+        card.setIsMoving(true);
     }
 
     @Override
@@ -57,7 +58,8 @@ public class DragCardState implements WorldState {
             card.setVisible(true);
             card.positioning();
         }
-
+        
+        card.setIsMoving(false);
         world.targetTiles.clear();
     }
 
@@ -74,7 +76,7 @@ public class DragCardState implements WorldState {
                 }
             }
 
-        }    
+        }
     }
 
 }
