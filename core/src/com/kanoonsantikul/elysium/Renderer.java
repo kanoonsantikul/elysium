@@ -19,8 +19,10 @@ public class Renderer {
     private static final float ENEMY_DATA_X = PLAYER_DATA_X + Assets.player1Pic.getWidth();
     private static final float ENEMY_DATA_Y = PLAYER_DATA_Y;
 
-    World world;
-    SpriteBatch batcher;
+    public static GlyphLayout textLayout = new GlyphLayout();
+
+    private World world;
+    private SpriteBatch batcher;
 
     public Renderer (World world, SpriteBatch batcher) {
         this.world = world;
@@ -115,7 +117,7 @@ public class Renderer {
     }
 
     private void renderCharacter (Player player) {
-        String text = "" + player.getHealth();
+        String health = "" + player.getHealth();
         Texture texture;
         if (player.getNumber() == Player.PLAYER1) {
             texture = Assets.player1;
@@ -129,21 +131,21 @@ public class Renderer {
                 Player.WIDTH,
                 Player.HEIGHT);
 
-        GlyphLayout glyph = Assets.fontSmall.draw(batcher, text, -400, -400);
+        textLayout.setText(Assets.fontSmall, health);
         Assets.fontSmall.draw(
                 batcher,
-                text,
-                player.getCenter().x - glyph.width / 2f,
+                health,
+                player.getCenter().x - textLayout.width / 2f,
                 player.getPosition().y + FONT_SMALL_SPACING);
     }
 
 
     private void renderUI (float delta) {
         batcher.draw(Assets.cardBar,
-                CardBar.X,
-                CardBar.Y,
-                CardBar.WIDTH,
-                CardBar.HEIGHT);
+                0,
+                0,
+                Assets.cardBar.getWidth(),
+                Assets.cardBar.getHeight());
 
         renderPlayerData(world.player);
         renderPlayerData(world.enemy);
@@ -217,21 +219,16 @@ public class Renderer {
     }
 
     private void renderEffect (float delta) {
-        ParticleEffect effect;
-        for (int i = 0; i < world.effects.size(); i++) {
-            effect = world.effects.get(i).getEffect();
-            effect.draw(batcher);
-            effect.update(delta);
-
-            if (effect.getEmitters().first().getPercentComplete() >= 0.5) {
-                world.effects.remove(world.effects.get(i));
+        LinkedList<Effect> effectPool = new LinkedList<Effect>(world.effectPool);
+        for (Effect effect : effectPool) {
+            if (!effect.draw(batcher, delta)) {
+                world.effectPool.remove(effect);
             } else {
-                String damage = world.effects.get(i).getDamage() + "";
-                GlyphLayout glyph = Assets.font.draw(batcher, damage, -400, -400);
+                textLayout.setText(Assets.font, effect.getMessage());
                 Assets.font.draw(batcher,
-                        damage,
-                        effect.getEmitters().first().getX() - glyph.width / 2,
-                        effect.getEmitters().first().getY() + glyph.height / 2);
+                        effect.getMessage(),
+                        effect.getCenter().x - textLayout.width / 2,
+                        effect.getCenter().y + textLayout.height / 2);
             }
         }
     }
@@ -290,7 +287,7 @@ public class Renderer {
 
     public void renderFullCard () {
         int cardId = world.fullCard.getCardId();
-        if (cardId != -1) {
+        if (cardId != FullCard.NULL_CARD) {
             batcher.draw(Assets.fullCards[cardId],
                     world.fullCard.getPosition().x,
                     world.fullCard.getPosition().y,

@@ -4,6 +4,7 @@ import com.kanoonsantikul.elysium.InputHandler.GestureHandler;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.InputMultiplexer;
@@ -42,8 +43,15 @@ public class Elysium extends Game {
 		ConnectionManager.instance().disconnect();
 
 		batcher.dispose();
-		//gameScreen.dispose();
 		Assets.dispose();
+	}
+
+	@Override
+	public void setScreen (Screen screen) {
+		if (this.screen != null) {
+			this.screen.dispose();
+		}
+		super.setScreen(screen);
 	}
 
     private void setupInput () {

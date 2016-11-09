@@ -12,7 +12,7 @@ public class HealthAction extends Action {
     }
 
     @Override
-    public void act() {
+    public void act () {
         if (player != null) {
             player.setHealth(player.getHealth() + health);
         }

@@ -20,13 +20,12 @@ public class World implements InputHandler.InputListener {
 
     protected Random random;
     protected EndTurnButton endTurnButton;
-    protected CardBar cardBar;
     protected FullCard fullCard;
     protected int notifyText;
     protected GameObject mouseFocus;
     protected LinkedList<Tile> pathTracker;
     protected LinkedList<Tile> targetTiles;
-    protected LinkedList<DamageEffect> effects;
+    protected LinkedList<Effect> effectPool;
 
     protected LinkedList<Tile> tiles;
     protected Player player;
@@ -49,10 +48,9 @@ public class World implements InputHandler.InputListener {
 
         random = new Random();
         endTurnButton = new EndTurnButton();
-        cardBar = new CardBar();
         fullCard = new FullCard();
         targetTiles = new LinkedList<Tile>();
-        effects = new LinkedList<DamageEffect>();
+        effectPool = new LinkedList<Effect>();
 
         tiles = new LinkedList<Tile>();
         initBoard();
@@ -78,8 +76,8 @@ public class World implements InputHandler.InputListener {
         actionQueue = new LinkedList<Action>();
         turnManager = new TurnManager(this);
 
-        dragCardState = new DragCardState();
-        dragPlayerState = new DragPlayerState();
+        dragCardState = new DragCardState(this);
+        dragPlayerState = new DragPlayerState(this);
     }
 
     public static World instance () {
@@ -121,7 +119,7 @@ public class World implements InputHandler.InputListener {
 
     @Override
     public void onClicked (float x, float y) {
-        fullCard.setCardId(FullCard.NULL_CARD);
+        fullCard.setCardId(FullCard.NULL_CARD, FullCard.PRESSED_SHOW_TYPE);
         fullCard.setPosition(
                 new Vector2( FullCard.AUTO_SHOW_X, FullCard.AUTO_SHOW_Y));
 
@@ -135,23 +133,17 @@ public class World implements InputHandler.InputListener {
     public void onPressed (float x, float y) {
         GameObject object = getObjectAt(x, y ,null);
         if (object instanceof Card && mouseFocus == null) {
-            fullCard.setCardId(((Card)object).getId());
-            fullCard.setPosition(
-                    new Vector2( FullCard.PRESSED_SHOW_X, FullCard.PRESSED_SHOW_Y));
-        } else if ((object = getObjectAt(x, y, Trap.class)) != null) {
-            fullCard.setCardId(((Trap)object).getId());
-            fullCard.setPosition(
-                    new Vector2( FullCard.PRESSED_SHOW_X, FullCard.PRESSED_SHOW_Y));
-        }
+            fullCard.setCardId(((Card)object).getId(), FullCard.PRESSED_SHOW_TYPE);
 
-        if (state == dragCardState) {
-            state.handleInput(x, y);
+        } else if ((object = getObjectAt(x, y, Trap.class)) != null) {
+            fullCard.setCardId(((Trap)object).getId(), FullCard.PRESSED_SHOW_TYPE);
+
         }
     }
 
     @Override
     public void onDragStart (float x, float y) {
-        fullCard.setCardId(FullCard.NULL_CARD);
+        fullCard.setCardId(FullCard.NULL_CARD, FullCard.PRESSED_SHOW_TYPE);
         fullCard.setPosition(
                 new Vector2( FullCard.AUTO_SHOW_X, FullCard.AUTO_SHOW_Y));
 
@@ -159,15 +151,19 @@ public class World implements InputHandler.InputListener {
         mouseFocus = object;
         if (object == player && state == null) {
             state = dragPlayerState;
-            state.enterState(this);
+            state.enterState();
         } else if (object instanceof Card && state == null) {
             state = dragCardState;
-            state.enterState(this);
+            state.enterState();
         }
     }
 
     @Override
     public void onDragEnd (float x, float y) {
+        fullCard.setCardId(FullCard.NULL_CARD, FullCard.PRESSED_SHOW_TYPE);
+        fullCard.setPosition(
+                new Vector2( FullCard.AUTO_SHOW_X, FullCard.AUTO_SHOW_Y));
+
         if (mouseFocus instanceof Player && state != null) {
             state.exitState();
             state = null;
@@ -181,6 +177,10 @@ public class World implements InputHandler.InputListener {
 
     @Override
     public void onDragged (float x, float y) {
+        fullCard.setCardId(FullCard.NULL_CARD, FullCard.PRESSED_SHOW_TYPE);
+        fullCard.setPosition(
+                new Vector2( FullCard.AUTO_SHOW_X, FullCard.AUTO_SHOW_Y));
+
         if (mouseFocus instanceof Player && state != null) {
             state.handleInput(x, y);
         } else if (mouseFocus instanceof Card && state != null) {
@@ -197,8 +197,25 @@ public class World implements InputHandler.InputListener {
     }
 
     public void update () {
+        if (state == dragCardState && isMyTurn && !player.isLock()) {
+            getTargetTile();
+        }
         updateActionQueue();
         CheckPlayerHealth();
+    }
+
+    public void getTargetTile () {
+        targetTiles.clear();
+        LinkedList<Tile> neighborTiles = player.getTile()
+                .getNeighbors(player.getTrapRange(), Tile.CIRCLE_RANGE);
+
+        Tile tile;
+        for (int i = 0; i < neighborTiles.size(); i++) {
+            tile = neighborTiles.get(i);
+            if(getObjectAt(tile.getCenter(), Trap.class, false) == null){
+                targetTiles.add(tile);
+            }
+        }
     }
 
     private void updateActionQueue () {

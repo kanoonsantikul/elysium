@@ -9,12 +9,16 @@ import com.badlogic.gdx.Gdx;
 public class DragPlayerState implements WorldState {
     private World world;
     private Player player;
+
     private LinkedList<Tile> pathTracker;
 
-    @Override
-    public void enterState (World world) {
+    public DragPlayerState(World world){
         this.world = world;
         player = world.player;
+    }
+
+    @Override
+    public void enterState () {
         pathTracker = new LinkedList<Tile>();
         world.pathTracker = pathTracker;
 
@@ -25,26 +29,22 @@ public class DragPlayerState implements WorldState {
 
     @Override
     public void handleInput (float x, float y) {
-        GameObject object = world.getObjectAt(x, y, Tile.class);
-        if (object != null) {
-            object = world.getObjectAt(object.getCenter(), null, false);
-            if (object instanceof Tile) {
-                updatePath((Tile)object);
-            } else if (object == world.player) {
+        GameObject mouseOver = world.getObjectAt(x, y, Tile.class);
+        if (mouseOver != null) {
+            mouseOver = world.getObjectAt(mouseOver.getCenter(), null, false);
+
+            if (mouseOver instanceof Tile) {
+                updatePath((Tile)mouseOver);
+            } else if (mouseOver == player) {
                 pathTracker.clear();
             }
+
         }
     }
 
     @Override
     public void exitState () {
-        if (pathTracker.size() > 0) {
-            world.actionQueue.addLast(new MoveAction(
-                    player,
-                    pathTracker,
-                    world.actionQueue));
-        }
-
+        world.actionQueue.add(new MoveBoardObjectAction(player, pathTracker));
         world.pathTracker = null;
     }
 

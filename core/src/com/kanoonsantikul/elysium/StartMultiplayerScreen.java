@@ -34,11 +34,11 @@ public class StartMultiplayerScreen extends ScreenAdapter implements
         gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         game.batcher.begin();
-        GlyphLayout glyph = Assets.font.draw(game.batcher, text, -400, -400);
+        Renderer.textLayout.setText(Assets.font, text);
         Assets.font.draw(game.batcher,
                 text,
-                Elysium.WIDTH/2 - glyph.width / 2,
-                Elysium.HEIGHT/2 + glyph.height / 2);
+                Elysium.WIDTH/2 - Renderer.textLayout.width / 2,
+                Elysium.HEIGHT/2 + Renderer.textLayout.height / 2);
         game.batcher.end();
     }
 
@@ -54,6 +54,6 @@ public class StartMultiplayerScreen extends ScreenAdapter implements
 
     @Override
     public void onGameUpdateReceived(String message) {
-        
+
     }
 }

@@ -13,11 +13,11 @@ public class ShowTextAction extends DelayAction {
         this.text = text;
     }
 
-    public void enter() {
+    public void enter () {
         world.notifyText = text;
     }
 
-    public void exit() {
+    public void exit () {
         world.notifyText = 0;
     }
 }

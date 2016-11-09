@@ -10,14 +10,14 @@ public class Action {
         setActed(false);
     }
 
-    public void act() {
+    public void act () {
     }
 
-    public boolean isActed() {
+    public boolean isActed () {
         return acted;
     }
 
-    public void setActed(boolean acted) {
+    public void setActed (boolean acted) {
         this.acted = acted;
     }
 }

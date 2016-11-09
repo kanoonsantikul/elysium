@@ -21,8 +21,8 @@ public class ToggleTrapAction extends Action {
     }
 
     @Override
-    public void act() {
-        if(world.player.getNumber() == Player.PLAYER1) {
+    public void act () {
+        if (world.player.getNumber() == Player.PLAYER1) {
             toggleTrap(world.player, tile, (Player)actor);
             toggleTrap(world.enemy, tile, (Player)actor);
         } else {
