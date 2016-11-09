@@ -70,6 +70,7 @@ public class Tile extends GameObject {
                     }
                 }
             }
+
         } else if (rangeType == PLUS_RANGE) {
             for (int i =- range; i <= range; i++) {
                 row = i + getRowOf(number);
@@ -88,6 +89,7 @@ public class Tile extends GameObject {
                     }
                 }
             }
+
         } else if (rangeType == CIRCLE_RANGE) {
             for (int i =- range; i <= 0; i++) {
                 for (int j =- range-i; j <= range+i; j++) {
@@ -115,6 +117,7 @@ public class Tile extends GameObject {
                     }
                 }
             }
+            
         }
 
         return neighbors;

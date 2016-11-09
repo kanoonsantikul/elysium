@@ -14,7 +14,7 @@ public abstract class DelayAction extends Action {
     }
 
     @Override
-    public void act() {
+    public void act () {
         if (startTime == 0) {
             enter();
             startTime = System.currentTimeMillis();

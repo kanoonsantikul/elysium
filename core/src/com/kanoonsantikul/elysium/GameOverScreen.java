@@ -23,9 +23,9 @@ public class GameOverScreen extends ScreenAdapter
         ConnectionManager.instance().disconnect();
 
         if (winState == WinState.WIN) {
-            text = "YOU WIN";
+            text = "VICTORY";
         } else if (winState == WinState.LOSE) {
-            text = "YOU LOSE";
+            text = "LOSE";
         } else{
             text = "DRAW";
         }

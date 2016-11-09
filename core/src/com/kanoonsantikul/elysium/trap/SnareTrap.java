@@ -37,20 +37,20 @@ public class SnareTrap extends Trap {
         super.toggle(actor);
         this.actor = actor;
 
-        LinkedList<Tile> path = new LinkedList<Tile>();
+        LinkedList<Tile> paths = new LinkedList<Tile>();
         int row = Tile.getRowOf(getTile().getNumber());
         int collum = Tile.getCollumOf(getTile().getNumber());
+
         for (int i = 1; i <= MOVE_RANGE; i++) {
             if (row + i < World.BOARD_HEIGHT) {
-                path.add(World.instance()
+                paths.add(World.instance()
                         .tiles.get(Tile.getNumberOf(row + i, collum)));
             }
         }
 
         World.instance().actionQueue.add(
                 new ShowFullCardAction(id));
-        World.instance().actionQueue.add(
-                new MoveAction((Player)actor, path, World.instance().actionQueue));
+        World.instance().actionQueue.add(new MoveBoardObjectAction(actor, paths));
         setVisible(false);
         if(actor == null){
             user.removeTrap(this);

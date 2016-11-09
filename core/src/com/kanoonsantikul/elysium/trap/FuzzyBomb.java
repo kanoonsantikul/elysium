@@ -20,15 +20,12 @@ public class FuzzyBomb extends Trap implements WaitDataAction.DataListener {
     public void onDataArrive (String data) {
         LinkedList<Tile> paths = new LinkedList<Tile>();
         String[] pathString = data.split(":");
+
         for (int i = 0; i < pathString.length; i++) {
             int number = Integer.parseInt(pathString[i]);
             paths.add(world.tiles.get(number));
         }
-
-        world.actionQueue.add(new MoveAction(
-                actor,
-                paths,
-                world.actionQueue));
+        world.actionQueue.add(new MoveBoardObjectAction(actor, paths));
     }
 
     @Override
@@ -43,10 +40,7 @@ public class FuzzyBomb extends Trap implements WaitDataAction.DataListener {
                 MultiplayerUpdater.instance().sendDataUpdate(data);
 
                 actor.setIsMoved(true);
-                world.actionQueue.add(new MoveAction(
-                        player,
-                        paths,
-                        world.actionQueue));
+                world.actionQueue.add(new MoveBoardObjectAction(actor, paths));
                 turnCount++;
             } else {
                 user.removeTrap(this);

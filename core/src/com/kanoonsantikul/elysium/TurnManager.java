@@ -33,20 +33,22 @@ public class TurnManager {
         world.endTurnButton.setPressed(true);
         world.isMyTurn = false;
 
-        LinkedList<TurnStateChangeListener> listeners
-                = new LinkedList<TurnStateChangeListener>(this.listeners);
-        for (int i=0; i<listeners.size(); i++){
-            listeners.get(i).onTurnEnd(world.player);
-            listeners.get(i).onTurnStart(world.enemy);
-        };
-
         world.actionQueue.add(new Action (null) {
             @Override
             public void act() {
+                LinkedList<TurnStateChangeListener> listeners
+                        = new LinkedList<TurnStateChangeListener>(TurnManager.this.listeners);
+                for (int i=0; i<listeners.size(); i++){
+                    listeners.get(i).onTurnEnd(world.player);
+                    listeners.get(i).onTurnStart(world.enemy);
+                };
+
+                MultiplayerUpdater.instance().sendTurnUpdate();
+
                 setActed(true);
             }
         });
-        MultiplayerUpdater.instance().sendTurnUpdate();
+
     }
 
     public void startTurn() {
@@ -70,5 +72,7 @@ public class TurnManager {
                 world.actionQueue.add(action);
             }
         }
+
     }
+
 }

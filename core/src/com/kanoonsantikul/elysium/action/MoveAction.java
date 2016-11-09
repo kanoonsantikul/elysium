@@ -5,92 +5,75 @@ import java.util.LinkedList;
 import com.badlogic.gdx.math.Vector2;
 
 public class MoveAction extends Action {
-
-    private LinkedList<Tile> paths;
-    private LinkedList<Action> actionQueue;
-    private Vector2 currentTargetPosition;
-
     private final float SPEED = 3;
     private float speedX;
     private float speedY;
 
-    private Tile lastTile;
+    private Vector2 initial;
+    private Vector2 target;
 
-    public MoveAction (BoardObject actor,
-            LinkedList<Tile> paths,
-            LinkedList<Action> actionQueue) {
+    public MoveAction (GameObject actor,
+            Vector2 initial,
+            Vector2 target) {
         super(actor);
-
-        if(actor == null){
-            setActed(true);
-        }
-        this.paths = paths;
-        this.actionQueue = actionQueue;
-        lastTile = actor.getTile();
-
-        MultiplayerUpdater.instance().sendLocationUpdate(actor, paths, actionQueue);
+        this.initial = initial;
+        this. target = target;
     }
 
     @Override
-    public void act() {
+    public void act () {
         if (!actor.isLock()) {
-            preAction();
+            if (!validatePosition()) {
+                return;
+            } else {
+                obtainDirection();
+            }
         }
 
-        if (paths.size() > 0) {
-            if (currentTargetPosition == null) {
-                changeDirection();
-            } else if (!move()) {
-                currentTargetPosition = null;
-                lastTile = paths.poll();
-
-                if (actor instanceof Player) {
-                    ((Player)actor).addMaterial(1);
-                }
-            }
-        } else {
+        if (!move()) {
             actor.setLock(false);
-            ((BoardObject)actor).setTile(lastTile);
 
+            if (actor instanceof BoardObject) {
+                Tile tile = (Tile)World.instance().getObjectAt(actor.getCenter(), Tile.class, false);
+                ((BoardObject)actor).setTile(tile);
+            }
             if (actor instanceof Player) {
                 ((Player)actor).setIsMoved(true);
-                if (actionQueue != null) {
-                    actionQueue.add(
-                            new ToggleTrapAction((Player)actor, lastTile));
-                }
+                ((Player)actor).addMaterial(1);
             }
+
             setActed(true);
         }
     }
 
-    private void preAction() {
+    private boolean validatePosition () {
         actor.setLock(true);
-        if (((BoardObject)actor).getTile() != lastTile) {
-            paths.clear();
-            lastTile = ((BoardObject)actor).getTile();
-            actionQueue = null;
+        if (!actor.getCenter().equals(initial) || actor == null) {
+            setActed(true);
+            return false;
+        } else {
+            return true;
         }
     }
 
-    private void changeDirection() {
-        currentTargetPosition = paths.peek().getCenter();
+    private void obtainDirection () {
         speedX = SPEED;
         speedY = SPEED;
-        if (actor.getPosition().x > currentTargetPosition.x) {
+        if (initial.x > target.x) {
             speedX *= -1;
         }
-        if (actor.getPosition().y > currentTargetPosition.y) {
+        if (initial.y > target.y) {
             speedY *= -1;
         }
     }
 
-    private boolean move() {
+    private boolean move () {
         boolean reachedX = !(
-                (speedX > 0 && actor.getCenter().x < currentTargetPosition.x) ||
-                (speedX < 0 && actor.getCenter().x > currentTargetPosition.x));
+                (speedX > 0 && actor.getCenter().x < target.x) ||
+                (speedX < 0 && actor.getCenter().x > target.x));
         boolean reachedY = !(
-                (speedY > 0 && actor.getCenter().y < currentTargetPosition.y) ||
-                (speedY < 0 && actor.getCenter().y > currentTargetPosition.y));
+                (speedY > 0 && actor.getCenter().y < target.y) ||
+                (speedY < 0 && actor.getCenter().y > target.y));
 
         if (!reachedX) {
             actor.setCenter(new Vector2(
@@ -98,7 +81,7 @@ public class MoveAction extends Action {
                     actor.getCenter().y));
         } else {
             actor.setCenter(new Vector2(
-                    currentTargetPosition.x,
+                    target.x,
                     actor.getCenter().y));
         }
 
@@ -109,7 +92,7 @@ public class MoveAction extends Action {
         } else {
             actor.setCenter(new Vector2(
                     actor.getCenter().x,
-                    currentTargetPosition.y));
+                    target.y));
         }
 
         return !reachedX || !reachedY;

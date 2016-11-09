@@ -14,19 +14,19 @@ public class DamageAction extends Action {
     }
 
     @Override
-    public void act() {
-        ParticleEffect effect = new ParticleEffect(Assets.bombEffect);
-        effect.getEmitters().first().setPosition(
+    public void act () {
+        ParticleEffect particle = new ParticleEffect(Assets.bombEffect);
+        World.instance().effectPool.add(new Effect(
+                particle,
+                damage + "",
                 tile.getCenter().x,
-                tile.getCenter().y);
-        World.instance().effects.add(
-                new DamageEffect(effect, damage));
+                tile.getCenter().y));
 
         Player player = (Player)World.getObjectAt(tile.getCenter(), Player.class, false);
         if (player != null) {
             player.setHealth(player.getHealth() - damage);
         }
-        
+
         setActed(true);
     }
 

@@ -12,7 +12,7 @@ public class AddMaterialAction extends Action {
     }
 
     @Override
-    public void act() {
+    public void act () {
         if (player != null) {
             player.addMaterial(material);
         }

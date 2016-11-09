@@ -55,18 +55,14 @@ public class MultiplayerUpdater implements
         }
     }
 
-    public void sendLocationUpdate(
-            BoardObject actor,
-            LinkedList<Tile> paths,
-            LinkedList<Action> actionQueue){
-
+    public void sendLocationUpdate (BoardObject actor, LinkedList<Tile> paths) {
         try {
             JSONObject data = new JSONObject();
             data.put("type", LOCATION_UPDATE_TYPE);
 
-            if(actor == world.player){
+            if (actor == world.player) {
                 data.put("actor", "enemy");
-            } else{
+            } else {
                 return;
             }
 
@@ -76,19 +72,13 @@ public class MultiplayerUpdater implements
             }
             data.put("paths", pathString);
 
-            if(actionQueue != null){
-                data.put("haveQueue", true);
-            } else{
-                data.put("haveQueue", false);
-            }
-
             ConnectionManager.instance().sendGameUpdate(data.toString());
         } catch (Exception e) {
             // exception in sendLocation
         }
     }
 
-    public void sendTurnUpdate(){
+    public void sendTurnUpdate () {
         try {
             JSONObject data = new JSONObject();
             data.put("type", TURN_UPDATE_TYPE);
@@ -98,110 +88,105 @@ public class MultiplayerUpdater implements
         }
     }
 
-    public void sendCardUpdate(LinkedList<Card> cards){
-        try{
+    public void sendCardUpdate (LinkedList<Card> cards) {
+        try {
             JSONObject data = new JSONObject();
             data.put("type", CARD_UPDATE_TYPE);
 
             String cardString = "";
-            for(int i=0; i<cards.size(); i++){
+            for (int i = 0; i < cards.size(); i++) {
                 cardString += cards.get(i).getId() + ":";
             }
             data.put("cards", cardString);
             ConnectionManager.instance().sendGameUpdate(data.toString());
-        } catch(Exception e){
+        } catch(Exception e) {
 
         }
     }
 
-    public void sendTrapUpdate(Trap trap){
-        try{
+    public void sendTrapUpdate (Trap trap) {
+        try {
             JSONObject data = new JSONObject();
             data.put("type", TRAP_UPDATE_TYPE);
             data.put("trapId", trap.getId());
             data.put("tileNumber", trap.getTile().getNumber());
             ConnectionManager.instance().sendGameUpdate(data.toString());
-        } catch(Exception e){
+        } catch(Exception e) {
 
         }
     }
 
-    public void sendDataUpdate(String message){
-        try{
+    public void sendDataUpdate (String message) {
+        try {
             JSONObject data = new JSONObject();
             data.put("type", DATA_UPDATE_TYPE);
             data.put("message", message);
             ConnectionManager.instance().sendGameUpdate(data.toString());
-        } catch(Exception e){
+        } catch(Exception e) {
 
         }
     }
 
-    private void updateLocation(JSONObject data){
+    private void updateLocation (JSONObject data) {
         try {
             BoardObject actor;
-            if(data.getString("actor").equals("player")){
+            if (data.getString("actor").equals("player")) {
                 actor = world.player;
-            } else{
+            } else {
                 actor = world.enemy;
             }
 
             LinkedList<Tile> paths = new LinkedList<Tile>();
             String[] pathString = data.getString("paths").split(":");
-            for(int i=0; i<pathString.length; i++){
+
+            for (int i = 0; i < pathString.length; i++) {
                 int number = Integer.parseInt(pathString[i]);
                 paths.add(world.tiles.get(number));
             }
+            world.actionQueue.add(new MoveBoardObjectAction(actor, paths));
 
-            if(data.getBoolean("haveQueue") == true){
-                world.actionQueue.add(new MoveAction(
-                        actor, paths, world.actionQueue));
-            } else{
-                world.actionQueue.add(new MoveAction(
-                        actor, paths, null));
-            }
         } catch (Exception e) {
             // exception in onMoveNotificationReceived
         }
     }
 
-    private void updateTurn(){
+    private void updateTurn () {
         world.turnManager.startTurn();
     }
 
-    private void updateCards(JSONObject data){
-        try{
+    private void updateCards (JSONObject data) {
+        try {
             world.enemy.getCards().clear();
 
             LinkedList<Card> cards = new LinkedList<Card>();
             String[] cardString = data.getString("cards").split(":");
-            for(int i=0; i<cardString.length; i++){
+            for (int i = 0; i < cardString.length; i++) {
                 int id = Integer.parseInt(cardString[i]);
                 cards.add(new Card(id));
             }
 
             world.enemy.setCards(cards);
-        } catch(Exception e){
+        } catch(Exception e) {
 
         }
     }
 
-    private void updateTrap(JSONObject data){
-        try{
+    private void updateTrap (JSONObject data) {
+        try {
             Trap trap = TrapBuilder.build(
                     data.getInt("trapId"),
                     world.tiles.get(data.getInt("tileNumber")),
                     world.enemy);
             world.enemy.addTrap(trap);
             trap.setVisible(false);
-        } catch(Exception e){
+        } catch(Exception e) {
 
         }
     }
 
-    private void updateData(String message){
-        for(int i=0 ;i<world.actionQueue.size(); i++){
-            if(world.actionQueue.get(i) instanceof WaitDataAction){
+    private void updateData (String message) {
+        for (int i = 0; i < world.actionQueue.size(); i++) {
+            if (world.actionQueue.get(i) instanceof WaitDataAction) {
                 ((WaitDataAction)world.actionQueue.get(i))
                         .onDataArrive(message);
             }
