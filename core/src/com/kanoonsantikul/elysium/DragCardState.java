@@ -38,31 +38,31 @@ public class DragCardState implements WorldState {
     @Override
     public void onDragStart (float x, float y) {
         this.card = (Card)world.getObjectAt(x, y, Card.class);
-        card.setIsMoving(true);
+        card.isMoving = true;
     }
 
     @Override
     public void onDragEnd (float x, float y) {
         if (lastFocusTile != null) {
             Trap trap = TrapBuilder.getInstance(card.getId());
-            if (trap.getCost() <= world.player.getMaterial()) {
+            if (trap.getCost() <= world.player.material) {
                 trap = TrapBuilder.build(card.getId(), lastFocusTile, world.player);
                 world.player.addTrap(trap);
                 world.player.removeCard(card);
                 MultiplayerUpdater.instance().sendTrapUpdate(trap);
 
             } else {
-                card.setVisible(true);
+                card.isVisible = true;
                 card.positioning();
                 world.actionQueue.add(new ShowTextAction(
                         ShowTextAction.NOTIFY_NO_MATERIAL_TEXT));
             }
         } else {
-            card.setVisible(true);
+            card.isVisible = true;
             card.positioning();
         }
 
-        card.setIsMoving(false);
+        card.isMoving = false;
         world.targetTiles.clear();
         world.setState(world.handleState);
     }
@@ -73,12 +73,12 @@ public class DragCardState implements WorldState {
         if (world.isMyTurn && mouseOver instanceof Tile) {
             if (world.targetTiles.contains(mouseOver)) {
                 lastFocusTile = (Tile)mouseOver;
-                card.setVisible(false);
+                card.isVisible = true;
                 TrapBuilder.getInstance(card.getId())
                         .setCenter(lastFocusTile.getCenter());
             }
         } else {
-            card.setVisible(true);
+            card.isVisible = true;
             lastFocusTile = null;
         }
 

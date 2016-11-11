@@ -37,7 +37,7 @@ public class VenomGas extends Trap {
 
         World.instance().actionQueue.add(
                 new ShowFullCardAction(id));
-        setVisible(false);
+        isVisible = false;
         if(actor == null){
             user.removeTrap(this);
         }

@@ -7,9 +7,10 @@ public abstract class GameObject {
     public abstract float getWidth();
     public abstract float getHeight();
 
+    protected boolean isLock = false;
+    protected boolean isVisible = true;
+
     private Vector2 position;
-    private boolean lock = false;
-    private boolean visible = true;
 
     public void setPosition (Vector2 position) {
         this.position = position;
@@ -37,21 +38,5 @@ public abstract class GameObject {
             return true;
         }
         return false;
-    }
-
-    public boolean isLock() {
-        return lock;
-    }
-
-    public void setLock(boolean lock) {
-        this.lock = lock;
-    }
-
-    public boolean isVisible() {
-        return visible;
-    }
-
-    public void setVisible(boolean visible){
-        this.visible = visible;
     }
 }

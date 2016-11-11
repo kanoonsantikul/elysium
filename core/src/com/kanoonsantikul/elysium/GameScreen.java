@@ -19,7 +19,7 @@ public class GameScreen extends ScreenAdapter implements
 
         multiplayerUpdater = new MultiplayerUpdater(world);
         ConnectionManager.instance().setListener(multiplayerUpdater);
-        world.syncPlayerData();
+        world.syncPlayerCard();
 
         renderer = new Renderer(world, game.batcher);
     }

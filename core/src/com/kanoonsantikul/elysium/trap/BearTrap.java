@@ -17,7 +17,7 @@ public class BearTrap extends Trap {
     public void onTurnStart (Player player) {
         if (isToggled && player == actor) {
             if (turnCount < LOCK_TURN) {
-                actor.setIsMoved(true);
+                actor.isMoved = true;
                 turnCount++;
             } else {
                 user.removeTrap(this);
@@ -35,7 +35,7 @@ public class BearTrap extends Trap {
 
         World.instance().actionQueue.add(
                 new ShowFullCardAction(id));
-        setVisible(false);
+        isVisible = false;
         if(actor == null){
             user.removeTrap(this);
         }

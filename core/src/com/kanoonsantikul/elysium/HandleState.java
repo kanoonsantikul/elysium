@@ -19,6 +19,8 @@ public class HandleState implements WorldState {
 
     @Override
     public void onClicked (float x, float y) {
+        world.fullCard.setCardId(FullCard.NULL_CARD, FullCard.AUTO_SHOW_TYPE);
+
         GameObject object = world.getObjectAt(x, y, null);
         if (object instanceof EndTurnButton && world.isMyTurn) {
             world.turnManager.endTurn();
@@ -27,11 +29,20 @@ public class HandleState implements WorldState {
 
     @Override
     public void onPressed (float x, float y) {
+        GameObject object = world.getObjectAt(x, y, null);
+        if (object instanceof Card) {
+            world.fullCard.setCardId(((Card)object).getId(), FullCard.PRESSED_SHOW_TYPE);
 
+        } else if ((object = world.getObjectAt(x, y, Trap.class)) != null) {
+            world.fullCard.setCardId(((Trap)object).getId(), FullCard.PRESSED_SHOW_TYPE);
+
+        }
     }
 
     @Override
     public void onDragStart (float x, float y) {
+        world.fullCard.setCardId(FullCard.NULL_CARD, FullCard.AUTO_SHOW_TYPE);
+
         GameObject object = world.getObjectAt(x, y, null);
 
         if (object == world.player) {

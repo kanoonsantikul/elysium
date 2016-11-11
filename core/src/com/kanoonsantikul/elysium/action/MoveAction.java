@@ -22,7 +22,7 @@ public class MoveAction extends Action {
 
     @Override
     public void act () {
-        if (!actor.isLock()) {
+        if (!actor.isLock) {
             if (!validatePosition()) {
                 return;
             } else {
@@ -31,15 +31,15 @@ public class MoveAction extends Action {
         }
 
         if (!move()) {
-            actor.setLock(false);
+            actor.isLock = false;
 
             if (actor instanceof BoardObject) {
                 Tile tile = (Tile)World.instance().getObjectAt(actor.getCenter(), Tile.class, false);
                 ((BoardObject)actor).setTile(tile);
             }
             if (actor instanceof Player) {
-                ((Player)actor).setIsMoved(true);
-                ((Player)actor).addMaterial(1);
+                ((Player)actor).isMoved = true;
+                ((Player)actor).material++;
             }
 
             setActed(true);
@@ -47,7 +47,7 @@ public class MoveAction extends Action {
     }
 
     private boolean validatePosition () {
-        actor.setLock(true);
+        actor.isLock = true;
         if (!actor.getCenter().equals(initial) || actor == null) {
             setActed(true);
             return false;

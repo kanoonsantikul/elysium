@@ -18,7 +18,7 @@ public class SpikeTrap extends Trap {
     public void onTurnStart (Player player) {
         if (isToggled && player == actor) {
             if (turnCount < LOCK_TURN) {
-                actor.setIsMoved(true);
+                actor.isMoved = true;
                 turnCount++;
             } else {
                 user.removeTrap(this);
@@ -38,7 +38,7 @@ public class SpikeTrap extends Trap {
                 new ShowFullCardAction(id));
         World.instance().actionQueue.add(
                 new DamageAction(getTile(), DAMAGE));
-        setVisible(false);
+        isVisible = false;
         if(actor == null){
             user.removeTrap(this);
         }

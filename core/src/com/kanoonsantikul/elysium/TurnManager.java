@@ -30,7 +30,7 @@ public class TurnManager {
     }
 
     public void endTurn () {
-        world.endTurnButton.setPressed(true);
+        world.endTurnButton.isPressed = true;
         world.isMyTurn = false;
 
         world.actionQueue.add(new Action (null) {
@@ -52,10 +52,10 @@ public class TurnManager {
     }
 
     public void startTurn() {
-        world.endTurnButton.setPressed(false);
+        world.endTurnButton.isPressed = false;
         world.isMyTurn = true;
 
-        world.player.setIsMoved(false);
+        world.player.isMoved = false;
         world.drawCard();
 
         LinkedList<TurnStateChangeListener> listeners

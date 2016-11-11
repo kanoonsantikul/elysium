@@ -21,7 +21,7 @@ public class SnareTrap extends Trap {
     public void onTurnStart (Player player) {
         if (isToggled && player == actor) {
             if (turnCount < LOCK_TURN) {
-                actor.setIsMoved(true);
+                actor.isMoved = true;
                 turnCount++;
             } else {
                 user.removeTrap(this);
@@ -51,7 +51,7 @@ public class SnareTrap extends Trap {
         World.instance().actionQueue.add(
                 new ShowFullCardAction(id));
         World.instance().actionQueue.add(new MoveBoardObjectAction(actor, paths));
-        setVisible(false);
+        isVisible = false;
         if(actor == null){
             user.removeTrap(this);
         }

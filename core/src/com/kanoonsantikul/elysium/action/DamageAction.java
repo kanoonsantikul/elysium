@@ -24,7 +24,7 @@ public class DamageAction extends Action {
 
         Player player = (Player)World.getObjectAt(tile.getCenter(), Player.class, false);
         if (player != null) {
-            player.setHealth(player.getHealth() - damage);
+            player.health -= damage;
         }
 
         setActed(true);

@@ -12,7 +12,7 @@ public class ToggleTrapAction extends Action {
     }
 
     public static void toggleTrap (Player player ,Tile tile, Player actor) {
-        for (Trap trap : player.getTraps()) {
+        for (Trap trap : player.traps) {
             if (trap.getTile() == tile) {
                 trap.toggle(actor);
                 break;

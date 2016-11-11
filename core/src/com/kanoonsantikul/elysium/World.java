@@ -12,7 +12,6 @@ public class World implements InputHandler.InputListener {
     public static final int BOARD_WIDTH = 4;
     public static final int BOARD_HEIGHT = 9;
     public static final int FULL_HAND = 4;
-    public static final float ALPHA = 0.55f;
 
     private static World world;
     private static GameStateChangeListener listener;
@@ -60,12 +59,12 @@ public class World implements InputHandler.InputListener {
             player = new Player(Player.PLAYER1, tiles.get(Tile.getNumberOf(0, 1)));
             enemy = new Player(Player.PLAYER2, tiles.get(Tile.getNumberOf(BOARD_HEIGHT - 1, 2)));
             isMyTurn = true;
-            endTurnButton.setPressed(false);
+            endTurnButton.isPressed = false;
         } else if (userNumber == 2) {
             player = new Player(Player.PLAYER2, tiles.get(Tile.getNumberOf(BOARD_HEIGHT - 1, 2)));
             enemy = new Player(Player.PLAYER1, tiles.get(Tile.getNumberOf(0, 1)));
             isMyTurn = false;
-            endTurnButton.setPressed(true);
+            endTurnButton.isPressed = true;
         }
 
         gameObjects = new LinkedList<GameObject>();
@@ -102,7 +101,7 @@ public class World implements InputHandler.InputListener {
         for (GameObject object : gameObjects) {
             if (object.isInBound(x, y)) {
                 if (type == null || type.isAssignableFrom(object.getClass())) {
-                    if (!ignoreVisible && object.isVisible()) {
+                    if (!ignoreVisible && object.isVisible) {
                         return object;
                     } else if(ignoreVisible) {
                         return object;
@@ -122,54 +121,27 @@ public class World implements InputHandler.InputListener {
 
     @Override
     public void onClicked (float x, float y) {
-        fullCard.setCardId(FullCard.NULL_CARD, FullCard.PRESSED_SHOW_TYPE);
-        fullCard.setPosition(
-                new Vector2( FullCard.AUTO_SHOW_X, FullCard.AUTO_SHOW_Y));
-
         state.onClicked(x, y);
     }
 
     @Override
     public void onPressed (float x, float y) {
-        GameObject object = getObjectAt(x, y ,null);
-        if (object instanceof Card && mouseFocus == null) {
-            fullCard.setCardId(((Card)object).getId(), FullCard.PRESSED_SHOW_TYPE);
-
-        } else if ((object = getObjectAt(x, y, Trap.class)) != null) {
-            fullCard.setCardId(((Trap)object).getId(), FullCard.PRESSED_SHOW_TYPE);
-
-        }
+        state.onPressed(x, y);
     }
 
     @Override
     public void onDragStart (float x, float y) {
-        fullCard.setCardId(FullCard.NULL_CARD, FullCard.PRESSED_SHOW_TYPE);
-        fullCard.setPosition(
-                new Vector2( FullCard.AUTO_SHOW_X, FullCard.AUTO_SHOW_Y));
-
         state.onDragStart(x, y);
     }
 
     @Override
     public void onDragEnd (float x, float y) {
-        fullCard.setCardId(FullCard.NULL_CARD, FullCard.PRESSED_SHOW_TYPE);
-        fullCard.setPosition(
-                new Vector2( FullCard.AUTO_SHOW_X, FullCard.AUTO_SHOW_Y));
-
         state.onDragEnd(x, y);
     }
 
     @Override
     public void onDragged (float x, float y) {
-        fullCard.setCardId(FullCard.NULL_CARD, FullCard.PRESSED_SHOW_TYPE);
-        fullCard.setPosition(
-                new Vector2( FullCard.AUTO_SHOW_X, FullCard.AUTO_SHOW_Y));
-
         state.onDragged(x, y);
-    }
-
-    public void setListener (GameStateChangeListener listener) {
-        this.listener = listener;
     }
 
     public void setState (WorldState state) {
@@ -181,14 +153,18 @@ public class World implements InputHandler.InputListener {
         state.enterState();
     }
 
-    public void syncPlayerData () {
+    public void setListener (GameStateChangeListener listener) {
+        this.listener = listener;
+    }
+
+    public void syncPlayerCard () {
         while (drawCard());
     }
 
     public void update () {
-        if (state == dragCardState && isMyTurn && !player.isLock()) {
+        if (state == dragCardState && isMyTurn && !player.isLock) {
             getTargetTile();
-        } else if (player.isLock()) {
+        } else if (player.isLock) {
             targetTiles.clear();
         }
         updateActionQueue();
@@ -204,7 +180,7 @@ public class World implements InputHandler.InputListener {
 
         targetTiles.clear();
         LinkedList<Tile> neighborTiles = player.getTile()
-                .getNeighbors(player.getTrapRange(), Tile.CIRCLE_RANGE);
+                .getCircleNeighbors(player.trapRange);
 
         Tile tile;
         for (int i = 0; i < neighborTiles.size(); i++) {
@@ -227,11 +203,11 @@ public class World implements InputHandler.InputListener {
     }
 
     private void CheckPlayerHealth () {
-        if (player.getHealth() <= 0 || enemy.getHealth() <= 0) {
+        if (player.health <= 0 || enemy.health <= 0) {
             GameOverScreen.WinState winState;
-            if (player.getHealth() <= 0 && enemy.getHealth() <= 0) {
+            if (player.health <= 0 && enemy.health <= 0) {
                 winState = GameOverScreen.WinState.DRAW;
-            } else if (player.getHealth() <= 0) {
+            } else if (player.health <= 0) {
                 winState = GameOverScreen.WinState.LOSE;
             } else {
                 winState = GameOverScreen.WinState.WIN;
@@ -247,17 +223,17 @@ public class World implements InputHandler.InputListener {
         for (int i=0; i<BOARD_WIDTH * BOARD_HEIGHT; i++) {
             tiles.add(new Tile(i));
         }
-        tiles.get(Tile.getNumberOf(3,0)).setVisible(false);
-        tiles.get(Tile.getNumberOf(4,0)).setVisible(false);
-        tiles.get(Tile.getNumberOf(5,0)).setVisible(false);
-        tiles.get(Tile.getNumberOf(3,3)).setVisible(false);
-        tiles.get(Tile.getNumberOf(4,3)).setVisible(false);
-        tiles.get(Tile.getNumberOf(5,3)).setVisible(false);
+        tiles.get(Tile.getNumberOf(3,0)).isVisible = false;
+        tiles.get(Tile.getNumberOf(4,0)).isVisible = false;
+        tiles.get(Tile.getNumberOf(5,0)).isVisible = false;
+        tiles.get(Tile.getNumberOf(3,3)).isVisible = false;
+        tiles.get(Tile.getNumberOf(4,3)).isVisible = false;
+        tiles.get(Tile.getNumberOf(5,3)).isVisible = false;
     }
 
     public boolean drawCard () {
         int cardId;
-        if (player.getCards().size() < FULL_HAND) {
+        if (player.cards.size() < FULL_HAND) {
             cardId = TrapBuilder.randomTrapId();
             player.addCard(new Card(cardId));
             return true;

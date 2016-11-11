@@ -52,7 +52,7 @@ public class Renderer {
 
     private void renderTiles () {
         for (Tile tile : world.tiles) {
-            if (!tile.isVisible()) {
+            if (!tile.isVisible) {
                 continue;
             }
             batcher.draw(Assets.tile,
@@ -62,7 +62,7 @@ public class Renderer {
                     Tile.HEIGHT);
         }
 
-        if (world.isMyTurn && !world.player.isLock()) {
+        if (world.isMyTurn && !world.player.isLock) {
             batcher.draw(Assets.hilightTile,
                     world.player.getTile().getPosition().x,
                     world.player.getTile().getPosition().y,
@@ -72,7 +72,7 @@ public class Renderer {
     }
 
     private void renderTrap () {
-        for (Trap trap : world.player.getTraps()) {
+        for (Trap trap : world.player.traps) {
             if (trap.isToggled()) {
                 continue;
             }
@@ -117,7 +117,7 @@ public class Renderer {
     }
 
     private void renderCharacter (Player player) {
-        String health = "" + player.getHealth();
+        String health = "" + player.health;
         Texture texture;
         if (player.getNumber() == Player.PLAYER1) {
             texture = Assets.player1;
@@ -199,14 +199,14 @@ public class Renderer {
                 Assets.material.getWidth(),
                 Assets.material.getHeight());
         Assets.font.draw(batcher,
-                "x " + player.getMaterial(),
+                "x " + player.material,
                 x + Assets.material.getWidth(),
                 y - Assets.material.getHeight() * 2 / 3 + Assets.font.getXHeight());
     }
 
     private void renderEndTurnButton () {
         Texture endTurnButton;
-        if (world.endTurnButton.isPressed()) {
+        if (world.endTurnButton.isPressed) {
             endTurnButton = Assets.endTurnButtonPressed;
         } else {
             endTurnButton = Assets.endTurnButton;
@@ -245,10 +245,10 @@ public class Renderer {
     }
 
     private void renderCard () {
-        for (Card card : world.player.getCards()) {
-            if (!card.isVisible()) {
+        for (Card card : world.player.cards) {
+            if (!card.isVisible) {
                 Trap trap = TrapBuilder.getInstance(card.getId());
-                batcher.setColor(1, 1, 1, World.ALPHA);
+                batcher.setColor(1, 1, 1, Card.CARD_FADE_ALPHA);
                 batcher.draw(Assets.traps[trap.getId()],
                         trap.getPosition().x,
                         trap.getPosition().y,
@@ -264,7 +264,7 @@ public class Renderer {
                     Card.WIDTH,
                     Card.HEIGHT);
 
-            if (!card.isMoving()) {
+            if (!card.isMoving) {
                 renderCardMaterial(card);
             }
         }

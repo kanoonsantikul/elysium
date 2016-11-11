@@ -16,7 +16,7 @@ public class WormHole extends Trap {
         World.instance().actionQueue.add(
                 new ShowFullCardAction(id));
         World.instance().actionQueue.add(
-                new AddMaterialAction(actor, -actor.getMaterial()));
+                new AddMaterialAction(actor, -actor.material));
         user.removeTrap(this);
     }
 }

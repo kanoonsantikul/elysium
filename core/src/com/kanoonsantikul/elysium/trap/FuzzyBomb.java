@@ -39,7 +39,7 @@ public class FuzzyBomb extends Trap implements WaitDataAction.DataListener {
                 }
                 MultiplayerUpdater.instance().sendDataUpdate(data);
 
-                actor.setIsMoved(true);
+                actor.isMoved = true;
                 world.actionQueue.add(new MoveBoardObjectAction(actor, paths));
                 turnCount++;
             } else {
@@ -70,7 +70,7 @@ public class FuzzyBomb extends Trap implements WaitDataAction.DataListener {
 
         World.instance().actionQueue.add(
                 new ShowFullCardAction(id));
-        setVisible(false);
+        isVisible = false;
         if(actor == null){
             user.removeTrap(this);
         }
@@ -81,7 +81,7 @@ public class FuzzyBomb extends Trap implements WaitDataAction.DataListener {
 
         int maxRange;
         do{
-            maxRange = world.random.nextInt(actor.getMoveRange() + 1);
+            maxRange = world.random.nextInt(actor.moveRange + 1);
         }while(maxRange == 0);
 
         Tile lastTile = actor.getTile();
@@ -89,7 +89,7 @@ public class FuzzyBomb extends Trap implements WaitDataAction.DataListener {
         LinkedList<Tile> neighbors;
         for (int i = 0; i < maxRange; i++) {
             do {
-                neighbors = lastTile.getNeighbors(1, Tile.PLUS_RANGE);
+                neighbors = lastTile.getPlusNeighbors(1);
                 tile = neighbors.get(world.random.nextInt(neighbors.size()));
             } while (paths.contains(tile)
                     || world.getObjectAt(tile.getCenter(), Player.class, false) != null);

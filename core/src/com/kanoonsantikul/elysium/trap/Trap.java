@@ -24,7 +24,7 @@ public class Trap extends BoardObject implements TurnStateChangeListener, Clonea
         }
         if (user != null) {
             this.user = user;
-            user.addMaterial(-cost);
+            user.material -= cost;
         }
     }
 
@@ -73,7 +73,7 @@ public class Trap extends BoardObject implements TurnStateChangeListener, Clonea
             trap.setTile(tile);
             trap.setCenter(tile.getCenter());
             trap.user = user;
-            user.addMaterial(-cost);
+            user.material -= cost;
         } catch(Exception e) {
 
         }

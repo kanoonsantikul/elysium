@@ -156,7 +156,7 @@ public class MultiplayerUpdater implements
 
     private void updateCards (JSONObject data) {
         try {
-            world.enemy.getCards().clear();
+            world.enemy.cards.clear();
 
             LinkedList<Card> cards = new LinkedList<Card>();
             String[] cardString = data.getString("cards").split(":");
@@ -165,7 +165,7 @@ public class MultiplayerUpdater implements
                 cards.add(new Card(id));
             }
 
-            world.enemy.setCards(cards);
+            world.enemy.cards = cards;
         } catch(Exception e) {
 
         }
@@ -178,7 +178,7 @@ public class MultiplayerUpdater implements
                     world.tiles.get(data.getInt("tileNumber")),
                     world.enemy);
             world.enemy.addTrap(trap);
-            trap.setVisible(false);
+            trap.isVisible = false;
         } catch(Exception e) {
 
         }
