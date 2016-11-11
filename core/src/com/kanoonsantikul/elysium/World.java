@@ -199,12 +199,20 @@ public class World implements InputHandler.InputListener {
     public void update () {
         if (state == dragCardState && isMyTurn && !player.isLock()) {
             getTargetTile();
+        } else if (player.isLock()) {
+            targetTiles.clear();
         }
         updateActionQueue();
         CheckPlayerHealth();
     }
 
     public void getTargetTile () {
+        for (Action action : actionQueue) {
+            if (action instanceof MoveAction) {
+                return;
+            }
+        }
+
         targetTiles.clear();
         LinkedList<Tile> neighborTiles = player.getTile()
                 .getNeighbors(player.getTrapRange(), Tile.CIRCLE_RANGE);
