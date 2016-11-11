@@ -36,6 +36,7 @@ public class World implements InputHandler.InputListener {
     protected TurnManager turnManager;
 
     protected WorldState state;
+    protected WorldState handleState;
     protected WorldState dragCardState;
     protected WorldState dragPlayerState;
 
@@ -76,8 +77,10 @@ public class World implements InputHandler.InputListener {
         actionQueue = new LinkedList<Action>();
         turnManager = new TurnManager(this);
 
+        handleState = new HandleState(this);
         dragCardState = new DragCardState(this);
         dragPlayerState = new DragPlayerState(this);
+        setState(handleState);
     }
 
     public static World instance () {
@@ -123,10 +126,7 @@ public class World implements InputHandler.InputListener {
         fullCard.setPosition(
                 new Vector2( FullCard.AUTO_SHOW_X, FullCard.AUTO_SHOW_Y));
 
-        GameObject object = getObjectAt(x, y, null);
-        if (object instanceof EndTurnButton && isMyTurn) {
-            turnManager.endTurn();
-        }
+        state.onClicked(x, y);
     }
 
     @Override
@@ -147,15 +147,7 @@ public class World implements InputHandler.InputListener {
         fullCard.setPosition(
                 new Vector2( FullCard.AUTO_SHOW_X, FullCard.AUTO_SHOW_Y));
 
-        GameObject object = getObjectAt(x, y, null);
-        mouseFocus = object;
-        if (object == player && state == null) {
-            state = dragPlayerState;
-            state.enterState();
-        } else if (object instanceof Card && state == null) {
-            state = dragCardState;
-            state.enterState();
-        }
+        state.onDragStart(x, y);
     }
 
     @Override
@@ -164,15 +156,7 @@ public class World implements InputHandler.InputListener {
         fullCard.setPosition(
                 new Vector2( FullCard.AUTO_SHOW_X, FullCard.AUTO_SHOW_Y));
 
-        if (mouseFocus instanceof Player && state != null) {
-            state.exitState();
-            state = null;
-        } else if (mouseFocus instanceof Card && state != null) {
-            state.exitState();
-            state = null;
-        }
-
-        mouseFocus = null;
+        state.onDragEnd(x, y);
     }
 
     @Override
@@ -181,15 +165,20 @@ public class World implements InputHandler.InputListener {
         fullCard.setPosition(
                 new Vector2( FullCard.AUTO_SHOW_X, FullCard.AUTO_SHOW_Y));
 
-        if (mouseFocus instanceof Player && state != null) {
-            state.handleInput(x, y);
-        } else if (mouseFocus instanceof Card && state != null) {
-            state.handleInput(x, y);
-        }
+        state.onDragged(x, y);
     }
 
     public void setListener (GameStateChangeListener listener) {
         this.listener = listener;
+    }
+
+    public void setState (WorldState state) {
+        if (this.state != null) {
+            this.state.exitState();
+        }
+
+        this.state = state;
+        state.enterState();
     }
 
     public void syncPlayerData () {

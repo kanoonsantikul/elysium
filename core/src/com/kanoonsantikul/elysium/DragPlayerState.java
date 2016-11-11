@@ -12,23 +12,53 @@ public class DragPlayerState implements WorldState {
 
     private LinkedList<Tile> pathTracker;
 
-    public DragPlayerState(World world){
+    public DragPlayerState (World world) {
         this.world = world;
         player = world.player;
     }
 
     @Override
     public void enterState () {
+
+    }
+
+    @Override
+    public void exitState () {
+
+    }
+
+    @Override
+    public void onClicked (float x, float y) {
+
+    }
+
+    @Override
+    public void onPressed (float x, float y) {
+
+    }
+
+    @Override
+    public void onDragStart (float x, float y) {
         pathTracker = new LinkedList<Tile>();
         world.pathTracker = pathTracker;
 
         if (!world.isMyTurn || player.isLock() || player.getIsMoved()) {
-            world.state = null;
+            world.setState(world.handleState);
         }
     }
 
     @Override
-    public void handleInput (float x, float y) {
+    public void onDragEnd (float x, float y) {
+        if (pathTracker.size() > 0) {
+            world.actionQueue.add(new MoveBoardObjectAction(player, pathTracker));
+        }
+
+        world.pathTracker = null;
+        world.setState(world.handleState);
+    }
+
+    @Override
+    public void onDragged (float x, float y) {
         GameObject mouseOver = world.getObjectAt(x, y, Tile.class);
         if (mouseOver != null) {
             mouseOver = world.getObjectAt(mouseOver.getCenter(), null, false);
@@ -40,12 +70,6 @@ public class DragPlayerState implements WorldState {
             }
 
         }
-    }
-
-    @Override
-    public void exitState () {
-        world.actionQueue.add(new MoveBoardObjectAction(player, pathTracker));
-        world.pathTracker = null;
     }
 
     private void updatePath (Tile tile) {

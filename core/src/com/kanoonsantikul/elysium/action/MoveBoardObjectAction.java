@@ -30,7 +30,7 @@ public class MoveBoardObjectAction extends Action {
                     target));
         }
 
-        if(actor instanceof Player){
+        if (actor instanceof Player) {
             World.instance().actionQueue.add(new ToggleTrapAction(
                     (Player)actor,
                     paths.get(paths.size() - 1)));

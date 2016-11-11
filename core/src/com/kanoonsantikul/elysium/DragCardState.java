@@ -17,30 +17,32 @@ public class DragCardState implements WorldState {
 
     @Override
     public void enterState () {
-        this.card = (Card)world.mouseFocus;
-        card.setIsMoving(true);
-    }
 
-    @Override
-    public void handleInput (float x, float y) {
-        GameObject mouseOver = world.getObjectAt(x, y ,Tile.class);
-        if(world.isMyTurn && mouseOver instanceof Tile){
-            if(world.targetTiles.contains(mouseOver)){
-                lastFocusTile = (Tile)mouseOver;
-                card.setVisible(false);
-                TrapBuilder.getInstance(card.getId())
-                        .setCenter(lastFocusTile.getCenter());
-            }
-        } else {
-            card.setVisible(true);
-            lastFocusTile = null;
-        }
-
-        card.setCenter(new Vector2(x, y));
     }
 
     @Override
     public void exitState() {
+
+    }
+
+    @Override
+    public void onClicked (float x, float y) {
+
+    }
+
+    @Override
+    public void onPressed (float x, float y) {
+
+    }
+
+    @Override
+    public void onDragStart (float x, float y) {
+        this.card = (Card)world.getObjectAt(x, y, Card.class);
+        card.setIsMoving(true);
+    }
+
+    @Override
+    public void onDragEnd (float x, float y) {
         if (lastFocusTile != null) {
             Trap trap = TrapBuilder.getInstance(card.getId());
             if (trap.getCost() <= world.player.getMaterial()) {
@@ -62,5 +64,25 @@ public class DragCardState implements WorldState {
 
         card.setIsMoving(false);
         world.targetTiles.clear();
+        world.setState(world.handleState);
     }
+
+    @Override
+    public void onDragged (float x, float y) {
+        GameObject mouseOver = world.getObjectAt(x, y ,Tile.class);
+        if (world.isMyTurn && mouseOver instanceof Tile) {
+            if (world.targetTiles.contains(mouseOver)) {
+                lastFocusTile = (Tile)mouseOver;
+                card.setVisible(false);
+                TrapBuilder.getInstance(card.getId())
+                        .setCenter(lastFocusTile.getCenter());
+            }
+        } else {
+            card.setVisible(true);
+            lastFocusTile = null;
+        }
+
+        card.setCenter(new Vector2(x, y));
+    }
+
 }
