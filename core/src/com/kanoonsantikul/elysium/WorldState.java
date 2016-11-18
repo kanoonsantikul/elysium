@@ -15,4 +15,6 @@ public interface WorldState {
 
     public void onDragged (float x, float y);
 
+    public void update ();
+
 }

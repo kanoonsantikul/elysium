@@ -85,4 +85,8 @@ public class DragCardState implements WorldState {
         card.setCenter(new Vector2(x, y));
     }
 
+    @Override
+    public void update () {
+
+    }
 }

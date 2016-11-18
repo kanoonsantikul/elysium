@@ -97,4 +97,8 @@ public class DragPlayerState implements WorldState {
         }
     }
 
+    @Override
+    public void update () {
+
+    }
 }

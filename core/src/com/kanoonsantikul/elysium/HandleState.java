@@ -64,4 +64,8 @@ public class HandleState implements WorldState {
 
     }
 
+    @Override
+    public void update () {
+        
+    }
 }
