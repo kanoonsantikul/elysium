@@ -1,11 +1,11 @@
 # Elysium
-OOP game project develop using libgdx
+OOP game project develop using libgdx.
 
-## How to Compile
-In console navigate to folder elysium and run `gradlew desktop:run`.
+## Run
+In the root folder `gradlew desktop:run`.
 
 ## How to play
-Need two players to run the game and it will automatically pair the players in same room.
+Require two client two joint the server simultaneously. It will automatically put players in the same room.
 In your turn you can use trap to plant around the arena and move your character to bait enemy. 
 Enemy will never see your traps.
-One tile move equall one mana you must collect mana to use to plant a trap.
+One tile you move give you one mana. To plant a trap you must collect mana until you have it equall to that trap's cost.
